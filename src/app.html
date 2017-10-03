@@ -1,0 +1,17 @@
+<template>
+  <require from="bootstrap/css/bootstrap.css"></require>
+  <require from="font-awesome/css/font-awesome.css"></require>
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-blue.css"></require>
+  <require from="./header-view"></require>
+  <require from="./menu-bar"></require>
+  <div class="wrapper">
+    <header-view></header-view>
+    <!-- Left side column. contains the sidebar -->
+    <menu-bar></menu-bar>
+    <div class="content-wrapper">
+      <router-view></router-view>
+    </div>
+  </div>
+</template>

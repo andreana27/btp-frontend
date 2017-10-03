@@ -1,0 +1,110 @@
+<template>
+  <section class="content-header">
+    <h1>
+      Sidebar Collapsed
+      <small>Layout with collapsed sidebar on load</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="#">Layout</a></li>
+      <li class="active">Collapsed Sidebar</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-md-4">
+        <!-- Widget: user widget style 1 -->
+        <div class="box box-widget widget-user">
+          <!-- Add the bg color to the header using any of the bg-* classes -->
+          <div class="widget-user-header bg-aqua-active">
+            <div class="pull-right">
+              <a class="btn btn-xs btn-success" route-href="route: bot-list">
+                <i class="fa fa-save"></i> Save and Close
+              </a>
+            </div>
+            <h3 class="widget-user-username">Demo Bot 1</h3>
+            <h5 class="widget-user-desc">
+              <i class="fa fa-circle text-success"></i> Online
+            </h5>
+          </div>
+          <div class="widget-user-image">
+            <img class="img-circle" src="http://lorempixel.com/200/200/people/" alt="Bot Avatar">
+          </div>
+          <div class="box-footer">
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="text-center">Channel Settings</h4>
+                <a class="btn btn-app">
+                  <span class="badge bg-green">891</span>
+                  <i class="fa fa-whatsapp"></i> Whatsapp
+                </a>
+                <a class="btn btn-app">
+                  <span class="badge bg-blue">891</span>
+                  <i class="fa fa-facebook"></i> Messenger
+                </a>
+                <a class="btn btn-app">
+                  <span class="badge bg-blue">891</span>
+                  <i class="fa fa-send"></i> Telegram
+                </a>
+                <a class="btn btn-app" disabled>
+                  <span class="badge bg-blue">0</span>
+                  <i class="fa fa-comment"></i> Website
+                </a>
+                <a class="btn btn-app">
+                  <span class="badge bg-blue">0</span>
+                  <i class="fa fa-skype"></i> Skype
+                </a>
+              </div>
+            </div>
+            <hr />
+            <div class="row">
+              <div class="col-sm-12">
+                <h4 class="text-center">
+                  Default Context
+                  <span class="pull-right">
+                    <a class="btn btn-xs btn-default" disabled>
+                      <i class="fa fa-chevron-left"></i>
+                      Back
+                    </a>
+                  </span>
+                </h4>
+                <a class="btn btn-app">
+                  <i class="fa fa-plus"></i> New
+                </a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4 border-right">
+                <div class="description-block">
+                  <h5 class="description-header">3,200</h5>
+                  <span class="description-text">SALES</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-4 border-right">
+                <div class="description-block">
+                  <h5 class="description-header">13,000</h5>
+                  <span class="description-text">MESSAGES</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-4">
+                <div class="description-block">
+                  <h5 class="description-header">35</h5>
+                  <span class="description-text">USERS</span>
+                </div>
+                <!-- /.description-block -->
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+        </div>
+        <!-- /.widget-user -->
+      </div>
+      <router-view class="col-md-8"></router-view>
+    </div>
+  </section>
+</template>

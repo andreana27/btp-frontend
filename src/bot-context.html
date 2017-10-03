@@ -1,0 +1,106 @@
+<template>
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class=""><a href="#intents" data-toggle="tab" aria-expanded="false">Intents</a></li>
+      <li class="active"><a href="#timeline" data-toggle="tab" aria-expanded="true">Flow</a></li>
+      <li class=""><a href="#settings" data-toggle="tab" aria-expanded="false">Settings</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane" id="intents">
+        <h4>
+          Intents
+          <small>
+            Intents are the identified intended actions a user desired to say.
+          </small>
+        </h4>
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Example</th>
+              <th>Intent</th>
+              <th>Triggered Context</th>
+              <th>Actions</th>
+            </tr>
+            <tr>
+              <td>1.</td>
+              <td>Just about anything...</td>
+              <td>Other</td>
+              <td>
+                Default Context
+              </td>
+              <td>
+                <a class="btn btn-xs btn-default">edit</a>
+                <a class="btn btn-xs btn-default">delete</a>
+              </td>
+            </tr>
+            <tr>
+              <td>New</td>
+              <td><input type="text" class="form-control"></input></td>
+              <td>
+                <select id="selectbasic" name="selectbasic" class="form-control">
+                  <option value="1">Other</option>
+                  <option value="2">New...</option>
+                </select>
+              </td>
+              <td>
+                <select id="selectbasic" name="selectbasic" class="form-control">
+                  <option value="1">Default context</option>
+                  <option value="2">Context two</option>
+                </select>
+              </td>
+              <td>
+                <a class="btn btn-xs btn-default">save</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+          <!-- /.box-body -->
+          <div class="box-footer">
+            <button type="submit" class="btn btn-info pull-right">Save & Train</button>
+            <button type="submit" class="btn btn-default pull-right">Cancel</button>
+          </div>
+          <!-- /.box-footer -->
+      </div>
+      <!-- /.tab-pane -->
+      <div class="tab-pane active" id="timeline">
+        <!-- The timeline -->
+        <ul class="timeline timeline-inverse">
+          <!-- timeline time label -->
+          <li class="time-label">
+              <span class="bg-blue">
+                  Default
+              </span>
+          </li>
+          <!-- /.timeline-label -->
+          <!-- timeline item -->
+          <li>
+              <!-- timeline icon -->
+              <i class="fa fa-envelope bg-blue"></i>
+              <div class="timeline-item">
+                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+
+                  <h3 class="timeline-header"><a href="#">Support Team</a> ...</h3>
+
+                  <div class="timeline-body">
+                      ...
+                      Content goes here
+                  </div>
+
+                  <div class="timeline-footer">
+                      <a class="btn btn-primary btn-xs">...</a>
+                  </div>
+              </div>
+          </li>
+        </ul>
+      </div>
+      <!-- /.tab-pane -->
+
+      <div class="tab-pane" id="settings">
+        <p>Settings</p>
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
+  </div>
+</template>
