@@ -1,3 +1,34 @@
+import {WebAPI} from './web-api';
+import {inject} from 'aurelia-framework';
+import {EventAggregator} from 'aurelia-event-aggregator';
+import {BotUpdated,BotViewed,BotCreated} from './messages';
+
+@inject(WebAPI, EventAggregator)
+export class BotList{
+  constructor(api, ea){
+    this.api = api;
+    this.bots = [];
+    ea.subscribe(BotViewed, msg => this.select(msg.bot));
+    ea.subscribe(BotUpdated, msg => {
+      let id = msg.bot.id;
+      let found = this.bots.find(x => x.id == id);
+      Object.assign(found, msg.bot);
+    });
+    ea.subscribe(BotCreated, msg => {
+      this.bots.push(msg.bot);
+    });
+  }
+
+  created(){
+    this.api.getBotsList().then(bots => this.bots = bots);
+  }
+
+  select(bot){
+    this.selectedId = bot.id;
+    return true;
+  }
+}
+/*
 export class BotList{
   constructor(){
     this.bots = [
@@ -33,3 +64,4 @@ export class BotList{
   created(){
   }
 }
+*/

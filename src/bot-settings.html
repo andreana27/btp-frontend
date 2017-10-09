@@ -22,9 +22,10 @@
                 <i class="fa fa-save"></i> Save and Close
               </a>
             </div>
-            <h3 class="widget-user-username">Demo Bot 1</h3>
+            <h3 class="widget-user-username">${bot.name}</h3>
             <h5 class="widget-user-desc">
-              <i class="fa fa-circle text-success"></i> Online
+              <i class="fa fa-circle ${bot.enabled===true? 'text-success' : 'text-error'}"></i>
+              ${bot.enabled===true ? 'Online': 'Offline'}
             </h5>
           </div>
           <div class="widget-user-image">
@@ -68,8 +69,8 @@
                     </a>
                   </span>
                 </h4>
-                <a class="btn btn-app">
-                  <i class="fa fa-plus"></i> New
+                <a class="btn btn-app" route-href="route: create-bot-context; params.bind: {botid:bot.id}">
+                  <i class="fa fa-plus" ></i> New
                 </a>
               </div>
             </div>
