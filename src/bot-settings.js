@@ -16,9 +16,10 @@ export class BotSettings{
   activate(params, routeConfig){
     this.routeConfig = routeConfig;
     this.botid = params.id;    
-    
-     console.log("Botid");
-     console.log(this.botid);
+    this.contextos = [];
+
+    this.api.getContextList(this.botid).then(contextos => this.contextos = contextos);
+  
      
     return this.api.getBotDetails(params.id).then(bot => {
       this.bot = bot;

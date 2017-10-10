@@ -80,14 +80,23 @@ saveBot(bot){
         return data.content[0];
       });
   }
-  
+   getContextList(botid){
+	 this.isRequesting = true;
+	 return this.client.fetch(`bot-context/bot-id/${botid}.json`)
+		.then(response => response.json())
+		.then(data =>{
+				this.isRequesting = false;
+				return data.content;
+		});
+}
+
   createContext(context){
     this.isRequesting = true;
     let formData = new FormData();
     for (let key in context){
       formData.append(key, context[key]);
     }
-    return this.client.fetch('context.json',{
+    return this.client.fetch('bot_context.json',{
       method:'POST',
       body:formData
     })

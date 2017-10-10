@@ -25,8 +25,8 @@
 						<div class="form-group">
 						  <label class="col-sm-2 control-label">Type</label>
 						  <div class="col-sm-10">
-							<select value.bind="selectedValType" class="form-control" >
-								<option repeat.for="option of typeOptions" model.bind="option">${option.name}</option>
+							<select  value.bind="selectedValType" class="form-control"  change.delegate="DropdownChanged(selectedValType)">
+								<option repeat.for="option of typeOptions" model.bind="option.id">${option.name}</option>
 							</select>
 						  </div>
 						</div> 
@@ -34,25 +34,42 @@
 				</tr>
 				<tr>
 					<td>
-						<div show.bind="selectedValType == 1" class="form-group" id "text">
+						<div class="form-group" show.bind="istext" >
 						  <label class="col-sm-2 control-label">Content</label>
 						  <div class="col-sm-10">							
 							<textarea class="form-control" rows="5" value.bind="ContentValue"></textarea>
 						  </div>
 						</div> 
-						<div show.bind="selectedValType == 2" class="form-group" id "sa">
+						<div class="form-group" show.bind="isSA">
 						  <label class="col-sm-2 control-label">Sender Action</label>
 						  <div class="col-sm-10">							
 							<select value.bind="selectedValSA" class="form-control" >
-								<option repeat.for="option of SenderActionOptions" model.bind="option">${option.name}</option>
+								<option repeat.for="action of SenderActionOptions" model.bind="action.id">${action.name}</option>
 							</select>
 						  </div>
 						</div> 
-						<div show.bind="selectedValType == 3" class="form-group" id "qr">
-						  <label class="col-sm-2 control-label">Quick replay</label>
-						  <div class="col-sm-10">							
-							<textarea class="form-control" rows="5" value.bind="ContentValue"></textarea>
-						  </div>
+						<div class="form-group" show.bind="isQR">
+							<label class="col-sm-2 control-label">Content</label>
+							<div class="col-sm-10">							
+								<textarea class="form-control" rows="5" value.bind="ContentValueQR"></textarea>
+							</div>
+							<label class="col-sm-2 control-label">Quick replies</label>
+							<div class="col-sm-10">								   
+								<div class="form-inline" repeat.for="item of items">
+								<div class="form-group">
+									<label>Content Type</label>
+									<select class="form-control" value.bind="item.type">
+										<option>text</option>
+										<option>location</option>
+									</select>															
+									<label >Title</label>
+									<input class="form-control" type="text"  value.bind="item.text">
+									<label >Payload</label>
+									<input class="form-control" type="text"  change.delegate="addBlank($index, $event)" value.bind="item.payload">
+									<button click.delegate="removeItem($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>										
+								</div>
+							</div>	
+							</div>
 						</div> 
 					</td>					
 				</tr>
