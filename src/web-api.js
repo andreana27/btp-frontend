@@ -106,4 +106,32 @@ saveBot(bot){
         return data.content[0];
       });
   }
+  
+	getContextDetails(id){
+		this.isRequesting = true;
+		return this.client.fetch(`bot-context/id/${id}.json`)
+			.then(response => response.json())
+			.then(data => {
+				this.isRequesting = false;			
+				return data.content[0];
+				
+		});
+	}
+	
+	saveContext(context){
+		this.isRequesting = true;
+		let formData = new FormData();
+		for (let key in context){
+		  formData.append(key, context[key]);
+		}
+		return this.client.fetch(`bot_context/${context.id}.json`,{
+		  method:'PUT',
+		  body:formData
+		})
+		  .then(response => response.json())
+		  .then(data => {
+			this.isRequesting = false;
+			return data.content[0];
+		  });
+	}
 }

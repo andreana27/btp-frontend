@@ -29,7 +29,7 @@
             </h5>
           </div>
           <div class="widget-user-image">
-            <img class="img-circle" src="http://lorempixel.com/200/200/people/" alt="Bot Avatar">
+            <img class="img-circle" src="${bot.picture}" alt="Bot Avatar">
           </div>
           <div class="box-footer">
             <div class="row">
@@ -72,8 +72,8 @@
               </div>
               <div class="row">
 				<div class="col-sm-12">
-					<div repeat.for="context of contextos" class="col-sm-2">
-						<a class="btn btn-app" >
+					<div repeat.for="context of contextos" class="col-sm-2 ${context.id === $parent.selectedId ? 'active' : ''">
+						<a route-href="route: bot-context; params.bind: {contextid:context.id}" click.delegate="$parent.select(context)" class="btn btn-app" >
 							${context.name}
 						</a>
 					</div>

@@ -20,3 +20,13 @@ export class ContextCreated {
     this.context = context;
   }
 }
+export class ContextUpdated {
+  constructor(context) {
+    this.context = context;
+  }
+}
+export class ContextViewed {
+  constructor(context) {
+    this.context = context;
+  }
+}
