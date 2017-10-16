@@ -14,7 +14,7 @@ export class CreateBotContext{
     
     this.ea = ea;
    
-    this.context = {name:'', contextJson:'',bot_id:''}; 
+    this.context = {name:'', context_json:'',bot_id:''}; 
        
     
   }
@@ -27,7 +27,8 @@ export class CreateBotContext{
     this.botid = params.botid;
     this.context.bot_id = this.botid;
   }
-   get canSave(){    
+   get canSave(){  
+	   this.context.context_json = "{\"" + this.context.name + "\":[]}";  
 	return this.context.name && !this.api.isRequesting;
 }
 save(){
