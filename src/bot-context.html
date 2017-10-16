@@ -63,9 +63,9 @@
           <!-- /.box-footer -->
       </div>
       <!-- /.tab-pane -->
-      <div class="tab-pane active" id="timeline">
+      <div  class="tab-pane active" id="timeline">
         <!-- The timeline -->
-        <ul class="timeline timeline-inverse">
+        <ul  class="timeline timeline-inverse">
           <!-- timeline time label -->
           <li class="time-label">
               <span class="bg-blue">
@@ -74,17 +74,16 @@
           </li>
           <!-- /.timeline-label -->
           <!-- timeline item -->
-          <li>
+          <li repeat.for="element of json_Context[context.name]">
               <!-- timeline icon -->
               <i class="fa fa-envelope bg-blue"></i>
-              <div class="timeline-item">
+              <div  class="timeline-item">
                   <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
 
-                  <h3 class="timeline-header"><a href="#">Support Team</a> ...</h3>
+                  <h3 class="timeline-header"><a href="#">${element.type}</a></h3>
 
                   <div class="timeline-body">
-                      ...
-                      Content goes here
+					  ${element.content}
                   </div>
 
                   <div class="timeline-footer">
@@ -93,6 +92,7 @@
               </div>
           </li>
         </ul>
+        <!-- add text element-->
         <div class="panel panel-primary" show.bind="istext" >
 			<div class="panel-heading">Adding text element</div>
 			<div class="panel-body">
@@ -103,6 +103,8 @@
 				<button class="btn btn-primary" click.delegate="additem('text')">Add</button>
 			</div>
 		</div> 
+		<!-- ./add text element-->
+		<!-- add SA element-->
 		<div class="panel panel-primary" show.bind="isSA">
 			<div class="panel-heading">Adding sender action element</div>
 			<div class="panel-body">
@@ -115,6 +117,8 @@
 				<button class="btn btn-primary" click.delegate="additem('sender_action')">Add</button>
 			</div>
 		</div> 
+		<!-- ./add SA element-->
+		<!-- add QR element-->
 		<div class="panel panel-primary" show.bind="isQR">
 			<div class="panel-heading">Adding quick reply element</div>
 			<div class="panel-body">
@@ -142,6 +146,7 @@
 				<button class="btn btn-primary" click.delegate="additem('quick_reply')">Add</button>
 			</div>
 		</div> 
+		<!-- ./add QR element-->
             <div class="box-footer">
             <div class="row">
               <div class="col-sm-12">

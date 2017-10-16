@@ -19,7 +19,7 @@ export class BotContext{
 	ContentValueQR = '';
 	SenderActionValue = '';
 	
-	
+	json_Context;
 	
 	constructor(api, ea){
 		this.api = api;
@@ -65,7 +65,7 @@ export class BotContext{
 	additem(type)
 	{
 		var newElement = {};
-		var json_Context;
+		
 		var arrayLength;
 		
 		if(type=='text')
@@ -99,24 +99,20 @@ export class BotContext{
 			
 			//json_Context= "{\"" + this.context.name + "\":[]}";
 			
-			json_Context = JSON.parse(this.context.context_json);
-			arrayLength = json_Context[this.context.name].length;
-			json_Context[this.context.name][arrayLength] = newElement;
+			//this.json_Context = JSON.parse(this.context.context_json);
+			arrayLength = this.json_Context[this.context.name].length;
+			this.json_Context[this.context.name][arrayLength] = newElement;
 			
-			console.log(json_Context);
-			this.context.context_json = JSON.stringify(json_Context);
+			console.log(this.json_Context);
+			this.context.context_json = JSON.stringify(this.json_Context);
 			
-			this.api.saveContext(this.context).then(context => {
-				this.context = context;
-				this.routeConfig.navModel.setTitle(context.name);
-				this.originalContext= JSON.parse(JSON.stringify(context));
-				this.ea.publish(new ContextUpdated(this.context));
-				});		
+			this.save();
 	}
 	activate(params, routeConfig){
 		this.routeConfig = routeConfig;   
 		return this.api.getContextDetails(params.contextid).then(context => {
 		  this.context = context;
+		  this.json_Context = JSON.parse(this.context.context_json);
 		  this.routeConfig.navModel.setTitle(context.name);
 		  this.originalContext = JSON.parse(JSON.stringify(context));
 		  this.ea.publish(new ContextViewed(this.context));
@@ -126,7 +122,7 @@ export class BotContext{
 	get canSave(){    
 		return this.context.name && !this.api.isRequesting;
 	}
-
+	
 	save(){
 		this.api.saveContext(this.context).then(context => {
 		  this.context = context;
