@@ -3,16 +3,16 @@ import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {ContextCreated} from './messages';
 import {LogManager} from 'aurelia-framework';
-let logger = LogManager.getLogger('testItems');
+import {Router} from 'aurelia-router';
 
-@inject(WebAPI, EventAggregator)
+@inject(WebAPI, EventAggregator,Router)
 export class CreateBotContext{
 	
    
-  constructor(api, ea){
+  constructor(api, ea, router){
     this.api = api;
-    
     this.ea = ea;
+    this.router=router;
    
     this.context = {name:'', context_json:'',bot_id:''}; 
        
@@ -31,15 +31,13 @@ export class CreateBotContext{
 	   this.context.context_json = "{\"" + this.context.name + "\":[]}";  
 	return this.context.name && !this.api.isRequesting;
 }
-save(){
-	
-		
-	//alert(this.context.contextJson);
-    this.api.createContext(this.context).then(context => {
-      this.context = context;     
-      this.ea.publish(new ContextCreated(this.context));
-    });
-    
+	save(){
+			
+		this.api.createContext(this.context).then(context => {
+			this.context = context;     
+			this.ea.publish(new ContextCreated(this.context));
+		});
+    this.router.navigate('no-select');
   } 
   
 }

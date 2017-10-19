@@ -76,9 +76,30 @@
           <!-- timeline item -->
           <li repeat.for="element of json_Context[context.name]" ref="$root" index.bind="$index">
               <!-- timeline icon -->
+              <!--
+              <div class="row">
+				<div class="col-xs-6 col-md-8 col-lg-10 vcenter">
+					<div><i class="fa fa-caret-up"></i></div>
+					<div>
+						<i if.bind="element.type=='text'" class="fa fa-file-text-o bg-blue"></i>           
+						<i if.bind="element.type=='sender_action'" class="fa fa-send-o bg-blue"></i>
+						<i if.bind="element.type=='quick_reply'" class="fa fa-reply bg-blue"></i>
+					</div>
+					<div><i class="fa fa-caret-down"></i></div>
+				</div>
+			  </div>
+			  -->
+			 
+             <div class="row">
+				<div class="col-xs-6 col-md-8 col-lg-10 vcenter">
+					<div><i click.delegate="moveUp(json_Context[context.name],element)" class="fa fa-caret-up"></i></div>
+					<div><i click.delegate="moveDown(json_Context[context.name],element)"class="fa fa-caret-down"></i></div>
+				</div>
+			</div>
               <i if.bind="element.type=='text'" class="fa fa-file-text-o bg-blue"></i>           
               <i if.bind="element.type=='sender_action'" class="fa fa-send-o bg-blue"></i>
               <i if.bind="element.type=='quick_reply'" class="fa fa-reply bg-blue"></i>
+             
               
               <div if.bind="element.type=='text'"  class="timeline-item">
                   <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->

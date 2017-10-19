@@ -39,7 +39,7 @@ export class BotSettings{
 	configureRouter(config, router){
 		config.title = 'Bot Flow';
 		config.map([
-			{route: '',   moduleId: 'no-selection', name: 'bot-context', title: 'Select'},
+			{route: 'no-select',   moduleId: 'no-selection', name: 'bot-context', title: 'Select'},
 			{route: 'context/:contextid',   moduleId: 'bot-context',   name:'bot-context'},
 			{route: 'context/create/:botid',   moduleId: 'create-bot-context',   name:'create-bot-context'}
 		]);

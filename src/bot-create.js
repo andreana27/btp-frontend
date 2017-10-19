@@ -2,12 +2,15 @@ import {WebAPI} from './web-api';
 import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {BotUpdated,BotViewed,BotCreated} from './messages';
+import {Router} from 'aurelia-router';
 
-@inject(WebAPI, EventAggregator)
+
+@inject(WebAPI, EventAggregator,Router)
 export class CreateBot{
-  constructor(api, ea){
+  constructor(api, ea, router){
     this.api = api;
     this.ea = ea;
+    this.router = router;
     this.bot = {name:'', enabled:'True', id:'', picture:''};
   }
 
@@ -19,14 +22,10 @@ export class CreateBot{
       this.bot = bot;     
       this.ea.publish(new BotCreated(this.bot));
     });
-    
+    this.router.navigate('home');
   }
-
-  canDeactivate(){
-    if (this.bot !== this.originalBot){
-      let result = confirm('You have unsaved changes, are you sure you want to leave?');
-      return result;
-    }
-    return true;
-  }
+  
+  activate(routeConfig){
+		this.routeConfig = routeConfig;
+	}  
 }
