@@ -3,8 +3,10 @@ import {inject} from 'aurelia-framework';
 import {EventAggregator} from 'aurelia-event-aggregator';
 import {ContextUpdated,ContextViewed} from './messages';
 import {areEqual} from './utility';
+
 @inject(WebAPI, EventAggregator)
-export class BotContext{	
+export class BotContext{
+		
 	SenderActionOptions = [
         {id: 'mark_seen', name: 'Mark seen'},
         {id: 'typing_on', name: 'Typing on'},
@@ -21,11 +23,15 @@ export class BotContext{
 	
 	json_Context;
 	
-	constructor(api, ea){
+	items = [{title:'',content_type:'text',payload: ''}];
+	
+	constructor(api, ea)
+	{
 		this.api = api;
-		this.ea = ea;
+		this.ea = ea;			
 	}
-	elementSelected(selectedValType) {	 
+	elementSelected(selectedValType) 
+	{	 
 		if(selectedValType == 'sa')
 			{
 				if (!this.isSA)
@@ -70,11 +76,9 @@ export class BotContext{
 		
 		if(type=='text')
 		{
-			
-                                
+      
 			newElement.type= type;
-			newElement.content = this.ContentValue;
-			console.log(newElement);					
+			newElement.content = this.ContentValue;					
 			this.ContentValue = "";
 			this.istext = false;
 			alert('Text element added');	
@@ -84,32 +88,37 @@ export class BotContext{
 			if(type=='sender_action')
 			{				
 				newElement.type= type;
-				newElement.content = this.selectedValSA;
-				this.selectedValSA = [];
-				console.log(newElement);
+				newElement.sender_action = this.selectedValSA;
+				this.selectedValSA = [];				
 				this.isSA = false;
-				alert('Sender action element added');                          
+				alert('Sender action element added');
+				              
 			}
 		else
 			if(type=='quick_reply')
 			{
 				newElement.type= type;
-				newElement.content = this.ContentValueQR;
+				newElement.content = this.ContentValueQR;				
+				newElement.quick_replies = this.items;
+				this.ContentValueQR = "";
+				this.items = [{title:'',content_type:'text',payload: ''}];
+				this.isQR = false;
+				alert('Quick reply element added');
 			}
-			
-			//json_Context= "{\"" + this.context.name + "\":[]}";
-			
-			//this.json_Context = JSON.parse(this.context.context_json);
+						
 			arrayLength = this.json_Context[this.context.name].length;
-			this.json_Context[this.context.name][arrayLength] = newElement;
+			//this.json_Context[this.context.name][arrayLength] = newElement;
+			this.json_Context[this.context.name].push(newElement);
 			
-			console.log(this.json_Context);
-			this.context.context_json = JSON.stringify(this.json_Context);
-			
-			this.save();
+			//console.log(JSON.stringify(this.json_Context));
+			this.context.context_json = JSON.stringify(this.json_Context);			
+			this.save();	
+			//this.activate(this.params,this.routeConfig);		
 	}
-	activate(params, routeConfig){
+	activate(params, routeConfig)
+	{
 		this.routeConfig = routeConfig;   
+		this.params = params;
 		return this.api.getContextDetails(params.contextid).then(context => {
 		  this.context = context;
 		  this.json_Context = JSON.parse(this.context.context_json);
@@ -119,11 +128,18 @@ export class BotContext{
 		});
 	}
 	
-	get canSave(){    
+	get canSave()
+	{    
 		return this.context.name && !this.api.isRequesting;
 	}
 	
-	save(){
+	get canRemove()
+	{ 
+		return this.items.length>1;
+	}
+	
+	save()
+	{
 		this.api.saveContext(this.context).then(context => {
 		  this.context = context;
 		  this.routeConfig.navModel.setTitle(context.name);
@@ -131,4 +147,67 @@ export class BotContext{
 		  this.ea.publish(new ContextUpdated(this.context));
 		});
 	  }
+	 select(context)
+	{
+		this.selectedId = context.id;
+		return true;
+	}	
+	
+	changedItem(idx,item)
+	{
+		this.items[idx].content_type = item.content_type;
+		this.items[idx].title = item.title;
+		this.items[idx].payload = item.payload;
+		
+		//console.log(JSON.stringify(this.items));
+	}
+	addBlank() 
+	{
+
+		if (this.items[this.items.length-1]) {
+		  this.items.push({title:'',content_type:'text',payload: ''});
+		}		
+	}  
+	removeItem(idx) 
+	{
+		if(this.items.length > 1)
+		{
+			this.items.splice(idx, 1);
+			//console.log(JSON.stringify(this.items));
+			//logger.debug('Items: ', this.items);
+		}
+	}
+	removeElement(idx) 
+	{
+		this.json_Context[this.context.name].splice(idx,1);
+		this.context.context_json = JSON.stringify(this.json_Context);			
+		this.save();
+	}
+	elementChanged(idx,element)
+	{		
+		this.json_Context[this.context.name][idx] = element;
+		this.context.context_json = JSON.stringify(this.json_Context);			
+		this.save();
+	}
+	editing_addBlank(idx)
+	{
+		this.json_Context[this.context.name][idx].quick_replies.push({title:'',content_type:'text',payload: ''});
+		console.log(idx);
+		
+	}
+	editing_removeItem(idx,rootidx)
+	{		
+		if(this.json_Context[this.context.name][rootidx].quick_replies.length>1)
+		{
+			this.json_Context[this.context.name][rootidx].quick_replies.splice(idx,1)
+			this.context.context_json = JSON.stringify(this.json_Context);			
+			this.save();
+		}
+	}
+	editing_changedItem(idx,rootidx,item)
+	{
+		this.json_Context[this.context.name][rootidx].quick_replies[idx] = item;
+		this.context.context_json = JSON.stringify(this.json_Context);
+		this.save();
+	}
 }
