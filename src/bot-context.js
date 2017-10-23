@@ -111,7 +111,7 @@ export class BotContext{
 			this.json_Context[this.context.name].push(newElement);
 			
 			//console.log(JSON.stringify(this.json_Context));
-			this.context.context_json = JSON.stringify(this.json_Context);			
+			this.context.context_json this.json_Context;			
 			this.save();	
 			//this.activate(this.params,this.routeConfig);		
 	}
@@ -121,7 +121,7 @@ export class BotContext{
 		this.params = params;
 		return this.api.getContextDetails(params.contextid).then(context => {
 		  this.context = context;
-		  this.json_Context = JSON.parse(this.context.context_json);
+		  this.json_Context = this.context.context_json;
 		  this.routeConfig.navModel.setTitle(context.name);
 		  this.originalContext = JSON.parse(JSON.stringify(context));
 		  this.ea.publish(new ContextViewed(this.context));
@@ -180,13 +180,13 @@ export class BotContext{
 	removeElement(idx) 
 	{
 		this.json_Context[this.context.name].splice(idx,1);
-		this.context.context_json = JSON.stringify(this.json_Context);			
+		this.context.context_json = this.json_Context;			
 		this.save();
 	}
 	elementChanged(idx,element)
 	{		
 		this.json_Context[this.context.name][idx] = element;
-		this.context.context_json = JSON.stringify(this.json_Context);			
+		this.context.context_json = this.json_Context;			
 		this.save();
 	}
 	editing_addBlank(idx)
@@ -200,14 +200,14 @@ export class BotContext{
 		if(this.json_Context[this.context.name][rootidx].quick_replies.length>1)
 		{
 			this.json_Context[this.context.name][rootidx].quick_replies.splice(idx,1)
-			this.context.context_json = JSON.stringify(this.json_Context);			
+			this.context.context_json = this.json_Context;
 			this.save();
 		}
 	}
 	editing_changedItem(idx,rootidx,item)
 	{
 		this.json_Context[this.context.name][rootidx].quick_replies[idx] = item;
-		this.context.context_json = JSON.stringify(this.json_Context);
+		this.context.context_json = this.json_Context;
 		this.save();
 	}
 	move(array, element, delta) {
@@ -216,7 +216,7 @@ export class BotContext{
 		if (newIndex < 0  || newIndex == array.length) return; //Already at the top or bottom.
 		var indexes = [index, newIndex].sort(); //Sort the indixes
 		array.splice(indexes[0], 2, array[indexes[1]], array[indexes[0]]); //Replace from lowest index, two elements, reverting the order
-		this.context.context_json = JSON.stringify(this.json_Context);			
+		this.context.context_json = this.json_Context;			
 		this.save();
 	}
 
