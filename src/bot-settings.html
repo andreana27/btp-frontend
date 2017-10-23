@@ -68,22 +68,20 @@
 						Back
 						</a>
 					</span>
-                </h4>              						
+                </h4>
               </div>
-              <div class="row">
+      <div class="row">
 				<div class="col-sm-12">
-					<div repeat.for="context of contextos" class="col-sm-2 ${context.id === $parent.selectedId ? 'active' : ''">
-						<a route-href="route: bot-context; params.bind: {contextid:context.id}" click.delegate="$parent.select(context)" class="btn btn-app" >
-							${context.name}
-						</a>
-					</div>
-					<div class="col-sm-2">
-						<a class="btn btn-app" route-href="route: create-bot-context; params.bind: {botid:bot.id}">
-							 <i class="fa fa-plus" ></i> New
-						</a>
-					</div>					
-					</div>
-                </div>
+					<a repeat.for="context of contextos" class="btn btn-app ${context.id === $parent.selectedId ? 'active' : ''"
+             route-href="route: bot-context; params.bind: {contextid:context.id}"
+             click.delegate="$parent.select(context)" class="btn btn-app">
+             ${context.name}
+					</a>
+					<a class="btn btn-app" route-href="route: create-bot-context; params.bind: {botid:bot.id}">
+						 <i class="fa fa-plus" ></i> New
+					</a>
+				</div>
+      </div>
             </div>
             <div class="row">
               <div class="col-sm-4 border-right">

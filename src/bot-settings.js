@@ -24,22 +24,22 @@ export class BotSettings{
 	}
 	activate(params, routeConfig){
 		this.routeConfig = routeConfig;
-		this.botid = params.id;    
+		this.botid = params.id;
 		this.contextos = [];
 		this.api.getContextList(this.botid).then(contextos => this.contextos = contextos);
-	  
+
 		return this.api.getBotDetails(params.id).then(bot => {
 			this.bot = bot;
 			this.routeConfig.navModel.setTitle(bot.name);
 			this.originalBot = JSON.parse(JSON.stringify(bot));
 			this.ea.publish(new BotViewed(this.bot));
 		});
-       
+
 	}
 	configureRouter(config, router){
 		config.title = 'Bot Flow';
 		config.map([
-			{route: 'no-select',   moduleId: 'no-selection', name: 'bot-context', title: 'Select'},
+			{route: '',   moduleId: 'no-selection', name: 'bot-context', title: 'Select'},
 			{route: 'context/:contextid',   moduleId: 'bot-context',   name:'bot-context'},
 			{route: 'context/create/:botid',   moduleId: 'create-bot-context',   name:'create-bot-context'}
 		]);
@@ -49,5 +49,5 @@ export class BotSettings{
 		this.selectedId = context.id;
 		return true;
 	}
-	
+
 }
