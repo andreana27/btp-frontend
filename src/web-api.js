@@ -5,7 +5,7 @@ export class WebAPI {
     this.client = new HttpClient();
     this.client.configure(config => {
       config
-        .withBaseUrl('http://localhost:8000/backend/v1/api/')
+        .withBaseUrl('https://developer.innovare.es/backend/v1/api/')
         .withDefaults({
           credentials: 'same-origin',
           headers: {

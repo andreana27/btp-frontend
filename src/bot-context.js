@@ -121,7 +121,7 @@ export class BotContext{
 		this.params = params;
 		return this.api.getContextDetails(params.contextid).then(context => {
 		  this.context = context;
-		  this.json_Context = JSON.parse(this.context.context_json);
+		  this.json_Context = this.context.context_json;
 		  this.routeConfig.navModel.setTitle(context.name);
 		  this.originalContext = JSON.parse(JSON.stringify(context));
 		  this.ea.publish(new ContextViewed(this.context));
