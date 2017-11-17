@@ -1,6 +1,4 @@
-export class MenuBar{
-  constructor(){
-  }
-  created(){
-  }
+export class MenuBar {
+  constructor() {}
+  created() {}
 }

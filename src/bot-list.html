@@ -1,8 +1,8 @@
 <template>
   <section class="content-header">
     <h1>
-      Sidebar Collapsed
-      <small>Layout with collapsed sidebar on load</small>
+      Bots
+      <small>Bot Management</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -21,15 +21,25 @@
               <a class="btn btn-xs btn-default" route-href="route: bot-flow; params.bind: {id:bot.id}">
                 <i class="fa fa-cog"></i>
               </a>
+              <button type="button"
+                      class="btn btn-xs btn-danger"
+                      data-toggle="modal"
+                      data-target="#modal-danger"
+                      click.delegate="confirmdelete(bot)">
+                <i class="fa fa-remove"></i>
+              </button>
             </div>
             <h3 class="widget-user-username">${bot.name}</h3>
             <h5 class="widget-user-desc">
-              <i class="fa fa-circle ${bot.enabled===true? 'text-success' : 'text-error'}"></i>
-              ${bot.enabled===true ? 'Online': 'Offline'}
+              <a class="btn btn-xs
+                        ${bot.enabled===true? 'btn-success' : 'btn-danger'}" click.delegate="toggleEnabled(bot)">
+                <i class="fa fa-circle ${bot.enabled===true? 'text-success' : 'text-danger'}"></i>
+                ${bot.enabled===true ? 'Online': 'Offline'}
+              </a>
             </h5>
           </div>
           <div class="widget-user-image">
-            <img class="img-circle" src="${bot.picture}" alt="Bot Avatar">
+            <img class="img-circle" src="${api.backend + 'default/download/' + bot.picture}" alt="Bot Avatar">
           </div>
           <div class="box-footer">
             <div class="row">
@@ -68,4 +78,26 @@
      <i class="fa fa-plus fa-5" aria-hidden="true" ></i> New
   </a>
   </section>
+  <div class="modal modal-danger fade" id="modal-danger">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">${delete_message.title}</h4>
+          </div>
+          <div class="modal-body">
+            <p>${delete_message.content}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline"
+                    data-dismiss="modal"
+                    click.delegate="delete(delete_message.bot)">Delete</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
 </template>

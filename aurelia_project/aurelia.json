@@ -93,6 +93,15 @@
             ]
           },
           {
+            "name": "toastr",
+            "path": "../node_modules/toastr",
+            "main": "toastr",
+            "deps": ["jquery"],
+            "resources": [
+              "build/toastr.css"
+            ]
+          },
+          {
             "name": "admin-lte",
             "path": "../node_modules/admin-lte/dist",
             "main": "js/adminlte",

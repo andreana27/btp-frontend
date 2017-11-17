@@ -1,6 +1,4 @@
-export class HeaderView{
-  constructor(){
-  }
-  created(){
-  }
+export class HeaderView {
+  constructor() {}
+  created() {}
 }

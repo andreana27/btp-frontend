@@ -1,67 +1,83 @@
-import {WebAPI} from './web-api';
-import {inject} from 'aurelia-framework';
-import {EventAggregator} from 'aurelia-event-aggregator';
-import {BotUpdated,BotViewed,BotCreated} from './messages';
+import {
+  WebAPI
+} from './web-api';
+import {
+  inject
+} from 'aurelia-framework';
+import {
+  EventAggregator
+} from 'aurelia-event-aggregator';
+import {
+  BotUpdated,
+  BotViewed,
+  BotCreated,
+  BotDeleted
+} from './messages';
+import * as toastr from 'toastr';
 
 @inject(WebAPI, EventAggregator)
-export class BotList{
-  constructor(api, ea){
+export class BotList {
+  constructor(api, ea) {
+    this.ea = ea;
     this.api = api;
     this.bots = [];
-    ea.subscribe(BotViewed, msg => this.select(msg.bot));
-    ea.subscribe(BotUpdated, msg => {
+    this.suscriptions = [];
+  }
+
+  attached(){
+    this.suscriptions.push(this.ea.subscribe(BotViewed, msg => this.select(msg.bot)));
+    this.suscriptions.push(this.ea.subscribe(BotUpdated, msg => {
       let id = msg.bot.id;
       let found = this.bots.find(x => x.id == id);
       Object.assign(found, msg.bot);
-    });
-    ea.subscribe(BotCreated, msg => {
+      toastr.success(`Bot ${found.name} updated.`);
+      console.log('hola');
+    }));
+    this.suscriptions.push(this.ea.subscribe(BotDeleted, msg => {
+      this.api.getBotsList().then(bots => this.bots = bots);
+      toastr.warning(`Bot ${msg.bot.name} deleted.`);
+    }));
+    this.suscriptions.push(this.ea.subscribe(BotCreated, msg => {
       this.bots.push(msg.bot);
-    });
+    }));
   }
 
-  created(){
+  detached(){
+    for (let subscription = 0; subscription < this.suscriptions.length; subscription += 1){
+      this.suscriptions[subscription].dispose();
+    }
+  }
+
+  created() {
     this.api.getBotsList().then(bots => this.bots = bots);
   }
 
-  select(bot){
+  confirmdelete(bot){
+    this.delete_message = {};
+    this.delete_message.title = `Delete Bot ${bot.name}?`;
+    this.delete_message.content = `
+    You are about to delete ${bot.name}.
+    This can't be reversed.
+    Continue?`;
+    this.delete_message.bot = bot;
+  }
+
+  toggleEnabled(bot){
+    bot.enabled = !bot.enabled;
+    //bot.connectors = JSON.stringify(bot.connectors);
+    this.api.saveBot(bot).then(answer => this.ea.publish(new BotUpdated(bot)));
+  }
+
+  delete(bot){
+    let idx = this.bots.indexOf(bot);
+    delete this.bots[idx];
+    this.api.deleteBot(bot).then(
+      answer => this.ea.publish(new BotDeleted(bot))
+    );
+  }
+
+  select(bot) {
     this.selectedId = bot.id;
     return true;
   }
 }
-/*
-export class BotList{
-  constructor(){
-    this.bots = [
-                  {
-                    id: 1,
-                    name:'bot 1',
-                    enabled:true,
-                    picture:'http://lorempixel.com/200/200/people/',
-                    messages:'23',
-                    users: '12',
-                    data: '3'
-                  },
-                  {
-                    id: 2,
-                    name:'bot 2',
-                    enabled:true,
-                    picture:'http://lorempixel.com/200/200/people/',
-                    messages:'13',
-                    users: '12',
-                    data: '2'
-                  },
-                  {
-                    id: 3,
-                    name:'bot 3',
-                    enabled:false,
-                    picture:'http://lorempixel.com/200/200/people/',
-                    messages:'3',
-                    users: '12',
-                    data: '23'
-                  },
-                ];
-  }
-  created(){
-  }
-}
-*/

@@ -1,0 +1,22 @@
+<template>
+  <require from="./header-view"></require>
+  <require from="./menu-bar"></require>
+  <div class="wrapper">
+    <header-view></header-view>
+    <!-- Left side column. contains the sidebar -->
+    <menu-bar></menu-bar>
+    <div class="content-wrapper" style="min-height:574px;">
+      <router-view></router-view>
+    </div>
+    <footer class="main-footer">
+      <div class="pull-right hidden-xs">
+        <b>Version</b> MVP 0.1
+      </div>
+      <strong>
+        Copyright © 2017
+        <a href="https://botprotec.com">BotPro</a>.
+      </strong>
+      All rights reserved.
+    </footer>
+  </div>
+</template>
