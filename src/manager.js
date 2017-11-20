@@ -19,6 +19,11 @@ export class Manager {
         route: 'bot/create/',
         moduleId: 'bot-create',
         name: 'bot-create'
+      },
+      {
+        route: 'bot/data-management/',
+        moduleId: 'bot-data-management',
+        name: 'bot-data-management'
       }
     ]);
     this.router = router;

@@ -6,8 +6,8 @@
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-      <li><a href="#">Layout</a></li>
-      <li class="active">Collapsed Sidebar</li>
+      <li><a href="#">Bots</a></li>
+      <li class="active">Settings</li>
     </ol>
   </section>
   <section class="content">
@@ -36,22 +36,24 @@
               <div class="col-sm-12">
                 <h4 class="text-center">Channel Settings</h4>
                 <a class="btn btn-app">
-                  <span class="badge bg-blue">1</span>
+                  <!-- Badge value must be specified below-->
+                  <span class="badge bg-blue">0</span>
                   <i class="fa fa-facebook"></i> Messenger
                 </a>
                 <a class="btn btn-app">
-                  <span class="badge bg-blue">1</span>
+                  <!-- Badge value must be specified below-->
+                  <span class="badge bg-blue">0</span>
                   <i class="fa fa-send"></i> Telegram
                 </a>
-                <a class="btn btn-app">
+                <a class="btn btn-app" disabled style="display:none">
                   <span class="badge bg-blue"></span>
                   <i class="fa fa-skype"></i> Skype
                 </a>
-                <a class="btn btn-app" disabled>
+                <a class="btn btn-app" disabled style="display:none">
                   <span class="badge bg-green"></span>
                   <i class="fa fa-whatsapp"></i> Whatsapp
                 </a>
-                <a class="btn btn-app" disabled>
+                <a class="btn btn-app" disabled style="display:none">
                   <span class="badge bg-blue"></span>
                   <i class="fa fa-comment"></i> Website
                 </a>
@@ -86,24 +88,24 @@
             <div class="row">
               <div class="col-sm-4 border-right">
                 <div class="description-block">
-                  <h5 class="description-header">3,200</h5>
-                  <span class="description-text">SALES</span>
+                  <h5 class="description-header"><label id="lblSalesCount"></h5>
+                  <span class="description-text">MESSAGES</span>
                 </div>
                 <!-- /.description-block -->
               </div>
               <!-- /.col -->
               <div class="col-sm-4 border-right">
                 <div class="description-block">
-                  <h5 class="description-header">13,000</h5>
-                  <span class="description-text">MESSAGES</span>
+                  <h5 class="description-header"><label id="lblMessagesCount"></h5>
+                  <span class="description-text">USERS</span>
                 </div>
                 <!-- /.description-block -->
               </div>
               <!-- /.col -->
               <div class="col-sm-4">
                 <div class="description-block">
-                  <h5 class="description-header">35</h5>
-                  <span class="description-text">USERS</span>
+                  <h5 class="description-header"><label id="lblUsersCount"></h5>
+                  <span class="description-text">FIELDS</span>
                 </div>
                 <!-- /.description-block -->
               </div>
