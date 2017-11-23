@@ -154,6 +154,31 @@ export class WebAPI {
       });
   }
 
+  //function that gets the list of contexts for an specified context parent
+  getContextListByParentContext(botid,parentContextId) {
+    this.isRequesting = true;
+    return this.client.fetch(`bot-context/bot-id/${botid}.json`)
+      .then(response => response.json())
+      .then(data => {
+        this.isRequesting = false;
+        //return data.content;
+        if (data.content != null)
+        {
+          let arr = data.content;
+          let filteredeContexts = [];
+          for(var i = arr.length - 1; i >= 0; i--) {
+            var obj = arr[i];
+            if (obj.parent_context == parentContextId)
+            {
+              filteredeContexts.push(obj);
+            }
+          }
+          //The return value only contains an array of matching parent context
+          return filteredeContexts;
+        }
+      });
+  }
+
   createContext(context) {
     this.isRequesting = true;
     let formData = new FormData();

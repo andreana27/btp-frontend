@@ -44,7 +44,6 @@ export class ConnectorTelegramDetail {
     if (params.token != null)
     {
       return this.telegramConnectors.getConnectorDetails(params.token).then(connector => {
-        console.log(connector);
         this.connector = connector;
         //this.routeConfig.navModel.setTitle(contact.firstName);
         this.originalConnector = JSON.parse(JSON.stringify(connector));

@@ -49,12 +49,6 @@ export class ConnectorMessenger {
   getConnectorList()
   {
     return this.api.getConnectorList(this.bot.id,'messenger').then(connectors => this.connectors = connectors);
-    /*
-    return new Promise(resolve => {
-
-      resolve(this.api.getConnectorList(this.bot.id,'messenger').then(connectors => this.connectors = connectors));
-      this.isRequesting = false;
-    });*/
   }
 
   getConnectorDetails(token)
@@ -68,10 +62,6 @@ export class ConnectorMessenger {
       });
     }
     return [];
-    /*
-    let connector = this.bot.connectors.filter(x => x.token == token)[0];
-    return(connector);*/
-
   }
 
   get canSave() {
@@ -153,16 +143,4 @@ export class ConnectorMessenger {
       this.bot = bot;
       return true;
     }
-
-/*
-  activate(params, routeConfig) {
-    this.routeConfig = routeConfig;
-    //this.botid = this.bot[id];
-    this.connectortype = params.connectortype;
-    let subscription = this.ea.subscribe('BotViewed', response => {
-      console.log(response);
-    });
-    console.log(this.connectortype);
-    console.log(subscription);
-  }*/
 }

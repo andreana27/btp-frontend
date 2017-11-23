@@ -44,7 +44,6 @@ export class ConnectorMessengerDetail {
     if (params.token != null)
     {
       return this.messengerConnectors.getConnectorDetails(params.token).then(connector => {
-        console.log(connector);
         this.connector = connector;
         //this.routeConfig.navModel.setTitle(contact.firstName);
         this.originalConnector = JSON.parse(JSON.stringify(connector));
@@ -100,14 +99,6 @@ export class ConnectorMessengerDetail {
       }
     }
   }
-/*
-  delete(bot){
-    let idx = this.bots.indexOf(bot);
-    delete this.bots[idx];
-    this.api.deleteBot(bot).then(
-      answer => this.ea.publish(new BotDeleted(bot))
-    );
-  }*/
 
   //function that clears the form controls
   clearform() {

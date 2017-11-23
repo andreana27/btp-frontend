@@ -8,7 +8,8 @@ import {
   EventAggregator
 } from 'aurelia-event-aggregator';
 import {
-  ContextCreated
+  ContextCreated,
+  ContextViewed
 } from './messages';
 import {
   LogManager
@@ -29,16 +30,22 @@ export class CreateBotContext {
     this.context = {
       name: '',
       context_json: '',
-      bot_id: ''
+      bot_id: '',
+      parent_context: ''
     };
-
-
+    ea.subscribe(ContextViewed, msg => this.selectParentContext(msg.context));
+    this.subscriptions = [];
   }
 
+  attached()
+  {
+    this.subscriptions.push(this.ea.subscribe(ContextViewed, msg => this.selectParentContext(msg.context)));
+  }
 
   created() {}
   activate(params, routeConfig) {
     this.routeConfig = routeConfig;
+    this.selectedContextId = params.contextid;
     this.botid = params.botid;
     this.context.bot_id = this.botid;
   }
@@ -48,12 +55,18 @@ export class CreateBotContext {
     return this.context.name && !this.api.isRequesting;
   }
   save() {
+    this.context.parent_context = this.selectedContextId;
 
     this.api.createContext(this.context).then(context => {
       this.context = context;
       this.ea.publish(new ContextCreated(this.context));
     });
-    this.router.navigate('');
+    //this.router.navigate('');
+  }
+  selectParentContext(context)
+  {
+    this.selectedContextId= context.id;
+    console.log(context.id);
   }
 
 }
