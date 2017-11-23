@@ -35,12 +35,13 @@
             <div class="row">
               <div class="col-sm-12">
                 <h4 class="text-center">Channel Settings</h4>
-                <a class="btn btn-app">
+                <!--<a class="btn btn-app" route-href="route: bot-connector-setup; params.bind: {botid:bot.id,connectortype:'messenger'}">-->
+                <a class="btn btn-app" route-href="route: connector-messenger; params.bind:{connectortype:'messenger'}">
                   <!-- Badge value must be specified below-->
                   <span class="badge bg-blue">0</span>
                   <i class="fa fa-facebook"></i> Messenger
                 </a>
-                <a class="btn btn-app">
+                <a class="btn btn-app" route-href="route: connector-telegram; params.bind:{connectortype:'telegram'}">
                   <!-- Badge value must be specified below-->
                   <span class="badge bg-blue">0</span>
                   <i class="fa fa-send"></i> Telegram

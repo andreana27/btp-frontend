@@ -1,0 +1,15 @@
+<template>
+  <div class="connector-messenger-list">
+    <h4>Existing Connectors</h4>
+    <div class="connector-list">
+      <ul class="connector-group">
+        <li repeat.for="connector of connectors" class="list-group-item ${connector.token === $parent.token }">
+          <a if.bind="connector" route-href="route: connector-messenger-detail; params.bind: {token:connector.token}" click.delegate="$parent.selectConnector(connector)">
+            <h4 class="">Token: ${connector.token}</h4>
+            <p class="">Challenge: ${connector.challenge}</p>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>

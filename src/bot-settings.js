@@ -16,11 +16,14 @@ import {
 import {
   areEqual
 } from './utility';
+import {
+  Router
+} from 'aurelia-router';
 
 
 @inject(WebAPI, EventAggregator)
 export class BotSettings {
-  constructor(api, ea) {
+  constructor(api, ea,router) {
     this.api = api;
     this.ea = ea;
     ea.subscribe(ContextViewed, msg => this.select(msg.context));
@@ -32,6 +35,8 @@ export class BotSettings {
     ea.subscribe(ContextCreated, msg => {
       this.contextos.push(msg.context);
     });
+    //router setup
+    this.router = router;
   }
   selectedContext = null;
   created() {}
@@ -66,6 +71,18 @@ export class BotSettings {
         route: 'context/create/:botid',
         moduleId: 'create-bot-context',
         name: 'create-bot-context'
+      },
+      {
+        route:'connector/setup/messenger',
+        moduleId: 'connector-messenger',
+        name:'connector-messenger',
+        title: 'messenger'
+      },
+      {
+        route:'connector/setup/telegram',
+        moduleId: 'connector-telegram',
+        name:'connector-telegram',
+        title: 'telegram'
       }
     ]);
     this.router = router;
@@ -76,6 +93,18 @@ export class BotSettings {
     this.selectedId = context.id;
     //TODO:get the children of the current context
     return true;
+  }
+
+  //Router setup
+
+
+  //Connectors setup
+  //---------------------------
+  //facebook
+  setupFacebookConnector()
+  {
+    console.log("jue la gran");
+    this.router.navigate('bot/connector/setup');
   }
 
 }

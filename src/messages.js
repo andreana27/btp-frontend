@@ -36,3 +36,24 @@
      this.context = context;
    }
  }
+//Connectors
+export class ConnectorUpdated {
+  constructor(connector) {
+    this.connector = connector;
+  }
+}
+export class ConnectorDeleted {
+  constructor(connector) {
+    this.connector = connector;
+  }
+}
+export class ConnectorCreated {
+  constructor(connector) {
+    this.connector = connector;
+  }
+}
+export class ConnectorViewed {
+  constructor(connector) {
+    this.connector = connector;
+  }
+}

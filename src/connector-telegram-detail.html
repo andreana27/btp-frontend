@@ -1,0 +1,42 @@
+<template>
+  <h4>Setup an existing  or new Telegram connector</h4>
+  <form role="form" class="form-horizontal" submit.delegate="save()">
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Token</label>
+      <div class="col-sm-10">
+        <input type="text" placeholder="Enter token value" class="form-control" value.bind="connector.token">
+      </div>
+    </div>
+  </form>
+  <div class="box-footer">
+    <button type="submit"  click.delegate="save()" disabled.bind="!canSave" class="btn btn-info pull-right">Save</button>
+    <button type="submit" class="btn btn-default pull-right" click.delegate="clearform()">Cancel</button>
+    <button type="submit" class="btn btn-xs btn-danger"
+                          data-toggle="modal"
+                          data-target="#modal-danger"
+                          click.delegate="confirmdelete()">Delete</button>
+  </div>
+  <!--modal for delete warning-->
+  <div class="modal modal-danger fade" id="modal-danger" ref="mdlDeleteConnector">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">${delete_message.title}</h4>
+          </div>
+          <div class="modal-body">
+            <p>${delete_message.content}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline"
+                    data-dismiss="modal"
+                    click.delegate="delete()">Delete</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+</template>

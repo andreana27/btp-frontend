@@ -1,0 +1,30 @@
+<template>
+  <require from="./connector-telegram-list"></require>
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#connectors" data-toggle="tab" aria-expanded="true">Telegram Connectors</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="connectors">
+        <h4>
+          Telegram Connectors
+          <br>
+          <small>
+            Here are shown the Telegam connectors associated to the selected bot.
+          </small>
+        </h4>
+        <div class="row">
+          <div class="col-sm-12">
+            <connector-telegram-list></connector-telegram-list>
+          </div>
+        </div>
+        <div class="box-footer">
+          <router-view></router-view>
+        </div>
+          <!-- /.box-body -->
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
+  </div>
+</template>

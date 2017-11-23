@@ -204,4 +204,31 @@ export class WebAPI {
         return data.content[0];
       });
   }
+
+  //Connectors
+
+  //Function that returns a list of the existing connectors of a bot (via botid as parameter)
+  getConnectorList(botId,connectorType) {
+    this.isRequesting = true;
+    //call to backend api
+    return this.client.fetch(`bot/id/${botId}.json`)
+      .then(response => response.json())
+      .then(data => {
+        this.isRequesting = false;
+        if (data.content[0].connectors != null)
+        {
+          let arr = data.content[0].connectors;
+          let filteredConnectors = arr.filter(function( obj ) {
+            //connectos are filtred based on their type
+            return obj.type == connectorType;
+          });
+          //checking if null
+          if (filteredConnectors === null) filteredConnectors = [];
+          //The return value only contains an array of existing connectors
+          return filteredConnectors;
+        }
+        return [];
+
+      });
+  }
 }
