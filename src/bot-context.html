@@ -160,6 +160,21 @@
                  <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
               </div>
             </div>
+            <div if.bind="element.type=='end'"  class="timeline-item">
+              <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
+              <h3 class="timeline-header"><a href="#">Flow Return/End</a></h3>
+              <div class="timeline-body">
+                <label class="col-sm-2 control-label">Action</label>
+                <div class="col-sm-10">
+                  <select value.bind="element.end" class="form-control" change.delegate="elementChanged($index, element)" >
+                    <option repeat.for="option of EndRepeatOptions" model.bind="option.id">${option.name}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="timeline-footer">
+                <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
           </li>
         </ul>
         <!-- add text element-->
@@ -220,6 +235,50 @@
     			</div>
     		</div>
         <!-- ./add QR element-->
+        <!-- add end/repeat element -->
+        <div class="panel panel-primary" show.bind="isRest">
+          <div class="panel-heading">JSON API</div>
+          <div class="panel-body">
+            <div>
+              <h4>
+                Use this plugin to create various integrations with your server - generate dynamic content
+                or send data. You can apply user attributes in either the URL or the USER ATTRIBUTES fiel.
+                With POST request type, user attributes will be sent in a standard way. With GET request,
+                they will be added to the URL as GET parameters.
+              </h4>
+            </div>
+            <div class="row">
+              <label class="col-sm-2 ">Type:</label>
+              <label class="col-sm-10">URL</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">
+      					<select value.bind="selectedValMethod" class="form-control" >
+      						<option repeat.for="option of RestTypeOptions" model.bind="option.id">${option.id}</option>
+      					</select>
+      				</div>
+              <div class="col-sm-10">
+                <input type="text" placeholder="Enter the service URL" class="form-control" value.bind="serviceURL">
+              </div>
+            </div>
+            <button class="btn btn-primary" click.delegate="additem('rest')">Add</button>
+          </div>
+        </div>
+        <!-- /add end/repeat element -->
+        <!-- add end/repeat element -->
+        <div class="panel panel-primary" show.bind="isEnd">
+          <div class="panel-heading">Adding an repeat/return flow element </div>
+          <div class="panel-body">
+            <label class="col-sm-2 ">Flow Action</label>
+            <div class="col-sm-10">
+    					<select value.bind="selectedValEnd" class="form-control" >
+    						<option repeat.for="option of EndRepeatOptions" model.bind="option.id">${option.id}</option>
+    					</select>
+    				</div>
+            <button class="btn btn-primary" click.delegate="additem('end')">Add</button>
+          </div>
+        </div>
+        <!-- /add end/repeat element -->
         <div class="box-footer">
           <div class="row">
             <div class="col-sm-12">
@@ -232,6 +291,12 @@
               </a>
               <a class="btn btn-app" click.delegate="elementSelected('qr')">
                 <i class="fa fa-reply"></i> Quick Reply
+              </a>
+              <a class="btn btn-app" click.delegate="elementSelected('rest')">
+                <i class="fa fa-exchange"></i> JSON API
+              </a>
+              <a class="btn btn-app" click.delegate="elementSelected('end')">
+                <i class="fa fa-circle-o-notch"></i> Flow End/Repeat
               </a>
             </div>
           </div>

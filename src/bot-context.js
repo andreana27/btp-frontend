@@ -31,14 +31,42 @@ export class BotContext {
       name: 'Typing off'
     }
   ];
+
+  //Elements for the end/repeat combo
+  EndRepeatOptions = [{
+      id: 'return',
+      name: 'Return'
+    },
+    {
+      id: 'repeat',
+      name: 'Repeat Flow'
+    }
+  ];
+  //Elements for the type property of the REST element
+  RestTypeOptions = [
+    {
+      id:'POST',
+      name: 'POST'
+    },
+    {
+      id:'GET',
+      name: 'GET'
+    }
+  ];
+
   isSA = false;
   istext = false;
   isQR = false;
+  isEnd = false;
+  isRest = false;
 
   selectedValSA = [];
   ContentValue = '';
   ContentValueQR = '';
   SenderActionValue = '';
+  //Contains the value of the selected option for flow (repeat/return)
+  selectedValEnd =[];
+  selectedValMethod = [];
 
   json_Context;
 
@@ -58,6 +86,8 @@ export class BotContext {
         this.isSA = true;
         this.istext = false;
         this.isQR = false
+        this.isEnd = false;
+        this.isRest = false;
       } else {
         this.isSA = false;
       }
@@ -67,6 +97,8 @@ export class BotContext {
         this.isSA = false;
         this.istext = true;
         this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
       } else {
         this.istext = false;
       }
@@ -76,8 +108,32 @@ export class BotContext {
         this.isSA = false;
         this.istext = false;
         this.isQR = true;
+        this.isEnd = false;
+        this.isRest = false;
       } else {
         this.isQR = false;
+      }
+    } else
+    if (selectedValType == 'end') {
+      if (!this.isRptRet) {
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = true;
+        this.isRest = false;
+      } else {
+        this.isEnd = false;
+      }
+    }  else
+    if (selectedValType == 'rest') {
+      if (!this.isRptRet) {
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = true;
+      } else {
+        this.isRest = false;
       }
     }
   }
@@ -116,6 +172,14 @@ export class BotContext {
       }];
       this.isQR = false;
       alert('Quick reply element added');
+    } else
+    if (type == 'end') {
+      newElement.type = type;
+      newElement.action = this.selectedValEnd;
+      this.selectedValEnd = [];
+      this.items = [];
+      this.isEnd = false;
+      alert('End element added');
     }
 
     arrayLength = this.json_Context[this.context.name].length;
@@ -124,7 +188,7 @@ export class BotContext {
 
     //console.log(JSON.stringify(this.json_Context));
     this.context.context_json = JSON.stringify(this.json_Context);
-    this.save();
+    //this.save();
     //this.activate(this.params,this.routeConfig);
   }
   activate(params, routeConfig) {
