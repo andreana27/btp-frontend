@@ -77,10 +77,11 @@ export class ConnectorTelegram {
     //creating a new array element for the connectors array
     let newConnector = {"token" : token, "type": 'telegram'};
     //checking if the connector already exists
-    let exists = this.bot.connectors.filter(x => x.token == token)[0];
+    let exists = this.bot.connectors.filter(x => x.token == token);
+    let index = this.bot.connectors.length;
     if(exists){
       //if the connector exists the value is updated
-      let index = this.bot.connectors.indexOf(exists);
+      index = this.bot.connectors.indexOf(exists);
       this.bot.connectors[index] = newConnector;
     }else{
       this.bot.connectors.push(newConnector);
@@ -88,8 +89,10 @@ export class ConnectorTelegram {
     //calling backend to update the bots connectors array
     this.api.saveBot(this.bot).then(bot => {
       this.bot = bot;
-      this.ea.publish(new BotUpdated(this.bot));
-      this.ea.publish(new ConnectorUpdated(newConnector));
+      this.api.activateConnector(this.bot.id, index).then(r => {
+        this.ea.publish(new BotUpdated(this.bot));
+        this.ea.publish(new ConnectorUpdated(newConnector));
+      })
     });
   }
 
@@ -120,12 +123,14 @@ export class ConnectorTelegram {
       let index = this.bot.connectors.indexOf(exists);
       //deleting the connector from the array
       this.bot.connectors.splice(index,1);
+      this.api.saveBot(this.bot).then(bot => {
+        this.bot = bot;
+        this.api.deactivateConnector(this.bot.id, index).then(r => {
+          this.ea.publish(new BotUpdated(this.bot));
+          this.ea.publish(new ConnectorUpdated(newConnector));
+        });
+      });
     }
-    this.api.saveBot(this.bot).then(bot => {
-      this.bot = bot;
-      this.ea.publish(new BotUpdated(this.bot));
-      this.ea.publish(new ConnectorUpdated(newConnector));
-    });
   }
 
   //function called when the view is activated

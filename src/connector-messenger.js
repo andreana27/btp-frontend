@@ -76,9 +76,10 @@ export class ConnectorMessenger {
     let newConnector = {"token" : token, "challenge":challenge,"type": 'messenger'};
     //checking if the connector already exists
     let exists = this.bot.connectors.filter(x => x.token == token)[0];
+    let index = this.bot.connectors.length;
     if(exists){
       //if the connector exists the value is updated
-      let index = this.bot.connectors.indexOf(exists);
+      index = this.bot.connectors.indexOf(exists);
       this.bot.connectors[index] = newConnector;
     }else{
       this.bot.connectors.push(newConnector);
@@ -86,8 +87,10 @@ export class ConnectorMessenger {
     //calling backend to update the bots connectors array
     this.api.saveBot(this.bot).then(bot => {
       this.bot = bot;
-      this.ea.publish(new BotUpdated(this.bot));
-      this.ea.publish(new ConnectorUpdated(newConnector));
+      this.api.activateConnector(this.bot.id, index).then(r => {
+        this.ea.publish(new BotUpdated(this.bot));
+        this.ea.publish(new ConnectorUpdated(newConnector));
+      });
     });
   }
 
@@ -112,18 +115,20 @@ export class ConnectorMessenger {
       this.bot.connectors = [];
     }
     let newConnector = {"token" : token,"type": 'messenger'};
-    let exists = this.bot.connectors.filter(x => x.token == token)[0];
+    let exists = this.bot.connectors.filter(x => x.token == token);
     if(exists){
       //getting the selected connector index
       let index = this.bot.connectors.indexOf(exists);
       //deleting the connector from the array
       this.bot.connectors.splice(index,1);
+      this.api.saveBot(this.bot).then(bot => {
+        this.bot = bot;
+        this.api.deactivateConnector(this.bot.id, index).then(r => {
+          this.ea.publish(new BotUpdated(this.bot));
+          this.ea.publish(new ConnectorUpdated(newConnector));
+        });
+      });
     }
-    this.api.saveBot(this.bot).then(bot => {
-      this.bot = bot;
-      this.ea.publish(new BotUpdated(this.bot));
-      this.ea.publish(new ConnectorUpdated(newConnector));
-    });
   }
 
   activate(params, routeConfig) {

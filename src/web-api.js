@@ -256,4 +256,28 @@ export class WebAPI {
 
       });
   }
+
+  activateConnector(botId, connectoridx){
+    this.isRequesting = true;
+    return this.client_auth.fetch(`bot_register/${botId}/${connectoridx}.json`, {
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then(data => {
+        this.isRequesting = false;
+        return data.content[0];
+    });
+  }
+
+    deactivateConnector(botId, connectoridx){
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_register/${botId}/${connectoridx}.json`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.content[0];
+      });
+    }
 }
