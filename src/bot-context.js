@@ -188,7 +188,7 @@ export class BotContext {
 
     //console.log(JSON.stringify(this.json_Context));
     this.context.context_json = JSON.stringify(this.json_Context);
-    //this.save();
+    this.save();
     //this.activate(this.params,this.routeConfig);
   }
   activate(params, routeConfig) {
