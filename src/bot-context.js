@@ -53,6 +53,8 @@ export class BotContext {
       name: 'GET'
     }
   ];
+  //Child contexts of the current context
+  contextChlidContexts = [];
 
   isSA = false;
   istext = false;
@@ -66,14 +68,17 @@ export class BotContext {
   SenderActionValue = '';
   //Contains the value of the selected option for flow (repeat/return)
   selectedValEnd =[];
+  //Contains the value of the selected method(POST/GET) for the JSON api
   selectedValMethod = [];
+  //Contains the value selected fot the context to sent the action-reply property
+  selectedValContext  = [];
 
   json_Context;
 
   items = [{
     title: '',
     content_type: 'text',
-    payload: ''
+    sendTo: ''
   }];
 
   constructor(api, ea) {
@@ -81,6 +86,8 @@ export class BotContext {
     this.ea = ea;
   }
   elementSelected(selectedValType) {
+    console.log(JSON.stringify(this.contextChlidContexts));
+    console.log((this.contextChlidContexts));
     if (selectedValType == 'sa') {
       if (!this.isSA) {
         this.isSA = true;
@@ -147,6 +154,7 @@ export class BotContext {
 
       newElement.type = type;
       newElement.content = this.ContentValue;
+      newElement.store = this.StoreOnText;
       this.ContentValue = "";
       this.istext = false;
       alert('Text element added');
@@ -163,12 +171,13 @@ export class BotContext {
     if (type == 'quick_reply') {
       newElement.type = type;
       newElement.content = this.ContentValueQR;
+      newElement.store = this.StoreOnQR;
       newElement.quick_replies = this.items;
       this.ContentValueQR = "";
       this.items = [{
         title: '',
         content_type: 'text',
-        payload: ''
+        sendTo: ''
       }];
       this.isQR = false;
       alert('Quick reply element added');
@@ -196,6 +205,9 @@ export class BotContext {
     this.params = params;
     return this.api.getContextDetails(params.contextid).then(context => {
       this.context = context;
+      //getting the child contexts for the current contexts
+      this.api.getContextListByParentContext(this.context.bot_id,this.context.id).then(Childcontexts => this.contextChlidContexts = Childcontexts);
+
       this.json_Context = this.context.context_json;
       this.routeConfig.navModel.setTitle(context.name);
       this.originalContext = JSON.parse(JSON.stringify(context));
@@ -212,6 +224,7 @@ export class BotContext {
   }
 
   save() {
+
     this.api.saveContext(this.context).then(context => {
       this.context = context;
       this.routeConfig.navModel.setTitle(context.name);
@@ -227,9 +240,9 @@ export class BotContext {
   changedItem(idx, item) {
     this.items[idx].content_type = item.content_type;
     this.items[idx].title = item.title;
-    this.items[idx].payload = item.payload;
+    this.items[idx].sendTo = item.sendTo;
 
-    //console.log(JSON.stringify(this.items));
+
   }
   addBlank() {
 
@@ -237,7 +250,7 @@ export class BotContext {
       this.items.push({
         title: '',
         content_type: 'text',
-        payload: ''
+        sendTo: ''
       });
     }
   }
@@ -262,9 +275,9 @@ export class BotContext {
     this.json_Context[this.context.name][idx].quick_replies.push({
       title: '',
       content_type: 'text',
-      payload: ''
+      sendTo: ''
     });
-    console.log(idx);
+    //console.log(idx);
 
   }
   editing_removeItem(idx, rootidx) {
@@ -276,7 +289,8 @@ export class BotContext {
   }
   editing_changedItem(idx, rootidx, item) {
     this.json_Context[this.context.name][rootidx].quick_replies[idx] = item;
-    this.context.context_json = this.json_Context;
+    this.context.context_json = JSON.stringify(this.json_Context);
+    //console.log(JSON.stringify(this.context.context_json));
     this.save();
   }
   move(array, element, delta) {
