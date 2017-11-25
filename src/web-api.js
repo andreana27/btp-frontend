@@ -265,7 +265,7 @@ export class WebAPI {
       .then(response => response.json())
       .then(data => {
         this.isRequesting = false;
-        return data.content[0];
+        return data;
     });
   }
 
@@ -277,7 +277,7 @@ export class WebAPI {
         .then(response => response.json())
         .then(data => {
           this.isRequesting = false;
-          return data.content[0];
+          return data;
       });
     }
 }
