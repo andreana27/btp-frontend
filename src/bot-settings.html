@@ -63,34 +63,45 @@
             <div class="row">
               <div class="col-sm-12">
                 <h4 class="text-center">
-					${selectedContext.name} Context
-          <!--<button type="submit" disabled.bind="isDefaultContext"
-                                route-href="route: bot-context; params.bind: {contextid:selectedContext.parent_context}"
-                                class="btn btn-xs btn-defaulto pull-right">
-              <i class="fa fa-chevron-left"></i>
-              Back
-          </button>-->
+                  <a if.bind="selectedContext"
+                     class="btn btn-xs btn-default"
+                     route-href="route: bot-context; params.bind: {contextid:selectedContext.id}">
+                        ${selectedContext.name}
+                  </a>
+                  Context
+                  <!--<button type="submit" disabled.bind="isDefaultContext"
+                                        route-href="route: bot-context; params.bind: {contextid:selectedContext.parent_context}"
+                                        class="btn btn-xs btn-defaulto pull-right">
+                      <i class="fa fa-chevron-left"></i>
+                      Back
+                  </button>-->
 
-					<span class="pull-right" disabled.bind="isDefaultContext">
-						<a class="btn btn-xs btn-default" route-href="route: bot-context; params.bind: {contextid:selectedContext.parent_context}">
-						<i class="fa fa-chevron-left"></i>
-						Back
-          </a>
-					</span>
+        					<span class="pull-right" disabled.bind="isDefaultContext">
+                    <a if.bind="validParentContext()"
+                       class="btn btn-xs btn-default"
+                       route-href="route: bot-context; params.bind: {contextid:selectedContext.parent_context}">
+        						         <i class="fa fa-chevron-left"></i>
+        						      Back
+                    </a>
+        					</span>
                 </h4>
               </div>
-      <div class="row">
-				<div class="col-sm-12">
-					<a repeat.for="context of contextos" class="btn btn-app ${context.id === $parent.selectedId ? 'active' : ''"
-             route-href="route: bot-context; params.bind: {contextid:context.id}"
-             click.delegate="$parent.select(context)" class="btn btn-app">
-             ${context.name}
-					</a>
-					<a class="btn btn-app" route-href="route: create-bot-context; params.bind: {botid:bot.id, contextid:selectedId}">
-						 <i class="fa fa-plus" ></i> New
-					</a>
-				</div>
-      </div>
+            </div>
+            <div class="row">
+      				<div class="col-sm-12">
+        					<a
+                  if.bind="selectedContext"
+                  repeat.for="context of contextos" class="btn btn-app ${context.id === $parent.selectedId ? 'active' : ''"
+                     route-href="route: bot-context; params.bind: {contextid:context.id}"
+                     click.delegate="$parent.select(context)" class="btn btn-app">
+                     ${context.name}
+        					</a>
+      					<a class="btn btn-app"
+                   if.bind="selectedId"
+                   route-href="route: create-bot-context; params.bind: {botid:bot.id, contextid:selectedId}">
+      						 <i class="fa fa-plus" ></i> New
+      					</a>
+      				</div>
             </div>
             <div class="row">
               <div class="col-sm-4 border-right">

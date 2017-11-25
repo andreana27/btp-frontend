@@ -25,20 +25,9 @@ import {
 
 @inject(WebAPI, EventAggregator)
 export class BotSettings {
-  constructor(api, ea,router) {
+  constructor(api, ea) {
     this.api = api;
     this.ea = ea;
-    ea.subscribe(ContextViewed, msg => this.select(msg.context));
-    ea.subscribe(ContextUpdated, msg => {
-      let id = msg.context.id;
-      let found = this.contextos.find(x => x.id == id);
-      Object.assign(found, msg.context);
-    });
-    ea.subscribe(ContextCreated, msg => {
-      this.contextos.push(msg.context);
-    });
-    //router setup
-    this.router = router;
     //subscriptions
     this.subscriptions = [];
   }
@@ -49,24 +38,25 @@ export class BotSettings {
     this.botid = params.id;
     this.contextos = [];
     //getting the full context list
-    this.api.getContextList(this.botid).then(contextos => this.fullContextList = contextos);
-    this.getConnectorCounters();
-    return this.api.getBotDetails(params.id).then(bot => {
-      this.bot = bot;
-      this.routeConfig.navModel.setTitle(bot.name);
-      this.originalBot = JSON.parse(JSON.stringify(bot));
-      this.ea.publish(new BotViewed(this.bot));
-      //show the default context view
-      this.sendToDefaultContext();
+    this.api.getContextList(this.botid).then(contextos => {
+      this.fullContextList = contextos;
+      this.api.getBotDetails(params.id).then(bot => {
+        this.bot = bot;
+        this.routeConfig.navModel.setTitle(bot.name);
+        this.originalBot = JSON.parse(JSON.stringify(bot));
+        this.ea.publish(new BotViewed(this.bot));
+        //show the default context view
+        this.sendToDefaultContext();
+      });
     });
-
+    this.getConnectorCounters();
   }
   configureRouter(config, router) {
     config.title = 'Bot Flow';
     config.map([{
         route: '',
         moduleId: 'no-selection',
-        name: 'bot-context',
+        name: 'no-selection',
         title: 'Select'
       },
       {
@@ -112,7 +102,7 @@ export class BotSettings {
     //getting the botit
     let botId = this.botid;
     //setting up the default context route
-    this.router.navigate("manager/bot/"+botId+"/context/"+defaultContextId);
+    this.router.navigate(`/manager/bot/${botId}/context/${defaultContextId}`);
     //console.log(this.api.getContextListByParentContext(botId,defaultContextId));
     this.api.getContextListByParentContext(this.botid,defaultContextId).then(contextos => this.contextos = contextos);
     //disables Back button is the default context is selected
@@ -120,14 +110,28 @@ export class BotSettings {
   }
 
   //attached subscriptions
-  attached()
-  {
+  attached(){
+    this.subscriptions.push(this.ea.subscribe(ContextViewed, msg => this.select(msg.context)));
+    this.subscriptions.push(this.ea.subscribe(ContextUpdated, msg => {
+      let id = msg.context.id;
+      let found = this.contextos.find(x => x.id == id);
+      Object.assign(found, msg.context);
+    }));
+    this.subscriptions.push(this.ea.subscribe(ContextCreated, msg => {
+      this.contextos.push(msg.context);
+    }));
     this.subscriptions.push(this.ea.subscribe(ConnectorDeleted, msg => {
         this.getConnectorCounters();
     }));
     this.subscriptions.push(this.ea.subscribe(ConnectorUpdated, msg => {
         this.getConnectorCounters();
     }));
+  }
+
+  detached(){
+    for (let subscription = 0; subscription < this.subscriptions.length; subscription += 1){
+      this.subscriptions[subscription].dispose();
+    }
   }
 
   //function that gets and sets the connector count badges
@@ -144,6 +148,14 @@ export class BotSettings {
   gotoParentContext(){
     let bot = this.botid;
     let parent = this.selectedContext.parent_context;
-    this.router.navigate("manager/bot/"+bot+"/context/"+parent);
+    this.router.navigate(`manager/bot/${bot}/context/${parent}`);
+  }
+  validParentContext(){
+    if (this.selectedContext){
+      if(this.selectedContext.parent_context){
+        return true;
+      }
+    }
+    return false;
   }
 }
