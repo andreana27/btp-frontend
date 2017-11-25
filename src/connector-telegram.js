@@ -78,13 +78,10 @@ export class ConnectorTelegram {
     let newConnector = {"token" : token, "type": 'telegram'};
     //checking if the connector already exists
     let exists = this.bot.connectors.filter(x => x.token == token)[0];
-    console.log(exists);
     let index = this.bot.connectors.length;
     if(exists){
       //if the connector exists the value is updated
       index = this.bot.connectors.indexOf(exists);
-      console.log(exists);
-      console.log(index);
       this.bot.connectors[index] = newConnector;
     }else{
       this.bot.connectors.push(newConnector);
@@ -93,8 +90,6 @@ export class ConnectorTelegram {
     //calling backend to update the bots connectors array
     this.api.saveBot(this.bot).then(bot => {
       this.bot = bot;
-      console.log(this.bot.id);
-      console.log(index);
       this.api.activateConnector(this.bot.id, index).then(r => {
         this.ea.publish(new BotUpdated(this.bot));
         this.ea.publish(new ConnectorUpdated(newConnector));
