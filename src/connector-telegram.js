@@ -89,6 +89,8 @@ export class ConnectorTelegram {
     //calling backend to update the bots connectors array
     this.api.saveBot(this.bot).then(bot => {
       this.bot = bot;
+      console.log(this.bot.id);
+      console.log(index);
       this.api.activateConnector(this.bot.id, index).then(r => {
         this.ea.publish(new BotUpdated(this.bot));
         this.ea.publish(new ConnectorUpdated(newConnector));

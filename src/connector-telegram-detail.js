@@ -81,7 +81,7 @@ export class ConnectorTelegramDetail {
 
     if (typeof this.connector === "undefined") {
       //close modal in case there is no connector selected
-      $(this.mdlDeleteConnector).modal('hide');
+      $("#modal-danger").modal('hide');
     }
     else {
       if (this.telegramConnectors.existsConnector(this.connector.token))
@@ -92,10 +92,12 @@ export class ConnectorTelegramDetail {
         You are about to delete the connector with token value: ${this.connector.token}.
         This can't be reversed.
         Continue?`;
-        $(this.mdlDeleteConnector).modal('open');
+        $("#modal-danger").modal('show');
+        //$(this.mdlDeleteConnector).modal('open');
       }
       else {
-        $(this.mdlDeleteConnector).modal('hide');
+        $("#modal-danger").modal('hide');
+        //$(this.mdlDeleteConnector).modal('hide');
       }
     }
   }
