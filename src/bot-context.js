@@ -86,8 +86,8 @@ export class BotContext {
     this.ea = ea;
   }
   elementSelected(selectedValType) {
-    console.log(JSON.stringify(this.contextChlidContexts));
-    console.log((this.contextChlidContexts));
+    //console.log(JSON.stringify(this.contextChlidContexts));
+    //console.log((this.contextChlidContexts));
     if (selectedValType == 'sa') {
       if (!this.isSA) {
         this.isSA = true;
@@ -186,7 +186,6 @@ export class BotContext {
       newElement.type = type;
       newElement.action = this.selectedValEnd;
       this.selectedValEnd = [];
-      this.items = [];
       this.isEnd = false;
       alert('End element added');
     }
@@ -263,7 +262,7 @@ export class BotContext {
   }
   removeElement(idx) {
     this.json_Context[this.context.name].splice(idx, 1);
-    this.context.context_json = json.stringify(this.json_Context);
+    this.context.context_json = JSON.stringify(this.json_Context);
     this.save();
   }
   elementChanged(idx, element) {
