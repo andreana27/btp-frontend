@@ -151,6 +151,14 @@
             "name": "fetch",
             "path": "../node_modules/whatwg-fetch",
             "main": "fetch"
+          },
+          {
+            "name": "aurelia-table",
+            "path": "../node_modules/au-table/dist/amd",
+            "main": "index",
+            "resources": [
+              "au-table-pagination.html"
+            ]
           }
         ]
       }

@@ -148,7 +148,10 @@ export class BotSettings {
   gotoParentContext(){
     let bot = this.botid;
     let parent = this.selectedContext.parent_context;
-    this.router.navigate(`manager/bot/${bot}/context/${parent}`);
+    //this.router.navigateToRoute(`manager/bot/${bot}/context/${parent}`);
+    //this.router.navigateToRoute('bot-context','contextid':parent);
+    this.router.navigateToRoute('bot-context', { 'contextid': parent }, // route parameters object
+            { trigger: true, replace: true }); // options
   }
   validParentContext(){
     if (this.selectedContext){

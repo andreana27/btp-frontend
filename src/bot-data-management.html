@@ -1,2 +1,56 @@
 <template>
+  <section class="content-header">
+    <h1>
+      Data
+      <small>Bot Data Management</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="../../index.html">Data Management</a></li>
+      <li class="active">Bot Data Management</li>
+    </ol>
+  </section>
+  <section class="content">
+
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">Bot</div>
+      <div class="panel-body">
+        <div class="row">
+          <label align="right" class="col-sm-2">Select a Bot</label>
+          <div class="col-sm-6">
+            <select value.bind="selectedBotId" class="form-control">
+              <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+            </select>
+          </div>
+          <div class="cols-sm-4">
+            <button class="btn btn-primary" type="submit" click.delegate="getVariables()">Get Variables</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary" show.bind="botSelected">
+      <div class="panel-heading">Bot Variables</div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <table class="table table-striped">
+              <thead>
+                <th>User</th>
+                <th repeat.for="variable of variable_list">${variable.storage_key}</th>
+              </thead>
+              <thbody>
+                <tr>
+                  <td>Owner</td>
+                  <td repeat.for="variable of variable_list">${variable.storage_key}</td>
+                </tr>
+              </thbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </template>

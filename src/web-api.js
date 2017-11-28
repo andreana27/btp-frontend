@@ -280,4 +280,17 @@ export class WebAPI {
           return data;
       });
     }
+
+    //Function that gets the variable list for a bot
+    getVariableList(botId) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_variables/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.data;
+      });
+    }
 }

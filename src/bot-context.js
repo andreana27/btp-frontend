@@ -78,7 +78,7 @@ export class BotContext {
   items = [{
     title: '',
     content_type: 'text',
-    sendTo: ''
+    sendTo: null
   }];
 
   constructor(api, ea) {
@@ -177,7 +177,7 @@ export class BotContext {
       this.items = [{
         title: '',
         content_type: 'text',
-        sendTo: ''
+        sendTo: null
       }];
       this.isQR = false;
       alert('Quick reply element added');
@@ -205,8 +205,13 @@ export class BotContext {
     return this.api.getContextDetails(params.contextid).then(context => {
       this.context = context;
       //getting the child contexts for the current contexts
-      this.api.getContextListByParentContext(this.context.bot_id,this.context.id).then(Childcontexts => this.contextChlidContexts = Childcontexts);
-
+      this.api.getContextListByParentContext(this.context.bot_id,this.context.id).then(Childcontexts => {
+        //Setting up the context child contexts
+        this.contextChlidContexts = Childcontexts;
+        let defaultEmptyContext = {id:null,name:'No Context'}
+        //Adding the default empty context option at the first position of the array
+        this.contextChlidContexts.unshift(defaultEmptyContext);
+      });
       this.json_Context = this.context.context_json;
       this.routeConfig.navModel.setTitle(context.name);
       this.originalContext = JSON.parse(JSON.stringify(context));
@@ -274,7 +279,7 @@ export class BotContext {
     this.json_Context[this.context.name][idx].quick_replies.push({
       title: '',
       content_type: 'text',
-      sendTo: ''
+      sendTo: null
     });
     //console.log(idx);
 
@@ -282,7 +287,7 @@ export class BotContext {
   editing_removeItem(idx, rootidx) {
     if (this.json_Context[this.context.name][rootidx].quick_replies.length > 1) {
       this.json_Context[this.context.name][rootidx].quick_replies.splice(idx, 1)
-      this.context.context_json = this.json_Context;
+      this.context.context_json = JSON.stringify(this.json_Context);
       this.save();
     }
   }

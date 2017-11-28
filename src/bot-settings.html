@@ -63,19 +63,19 @@
             <div class="row">
               <div class="col-sm-12">
                 <h4 class="text-center">
-                  <a if.bind="selectedContext"
+                  <!--<a if.bind="selectedContext"
                      class="btn btn-xs btn-default"
-                     route-href="route: bot-context; params.bind: {contextid:selectedContext.id}">
+                     route-href="route: bot-context; params.bind: {contextid:selectedContext.id}">-->
                         ${selectedContext.name}
-                  </a>
+                  <!--</a>-->
                   Context
-                  <!--<button type="submit" disabled.bind="isDefaultContext"
-                                        route-href="route: bot-context; params.bind: {contextid:selectedContext.parent_context}"
+                  <button type="submit" disabled.bind="isDefaultContext"
+                                        click.delegate="gotoParentContext()"
                                         class="btn btn-xs btn-defaulto pull-right">
                       <i class="fa fa-chevron-left"></i>
                       Back
-                  </button>-->
-
+                  </button>
+                  <!--
         					<span class="pull-right" disabled.bind="isDefaultContext">
                     <a if.bind="validParentContext()"
                        class="btn btn-xs btn-default"
@@ -83,7 +83,7 @@
         						         <i class="fa fa-chevron-left"></i>
         						      Back
                     </a>
-        					</span>
+        					</span>-->
                 </h4>
               </div>
             </div>
