@@ -35,15 +35,15 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-sm-12">
-            <table class="table table-striped">
+            <table class="table table-striped" aurelia-table="page-size.bind: pageSize;">
               <thead>
                 <th>User</th>
                 <th repeat.for="variable of variable_list">${variable.storage_key}</th>
               </thead>
               <thbody>
-                <tr>
-                  <td>Owner</td>
-                  <td repeat.for="variable of variable_list">${variable.storage_key}</td>
+                <tr repeat.for="record of tableRecords">
+                  <td>${record.owner}</td>
+                  <td repeat.for="variable of record.vars">${variable.value}</td>
                 </tr>
               </thbody>
             </table>

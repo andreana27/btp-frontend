@@ -293,4 +293,30 @@ export class WebAPI {
           return data.data;
       });
     }
+
+    //Gets the record count for the variables registered to a bot
+    getVariableRecordsCount(botId) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_variables_recordcount/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.data;
+      });
+    }
+
+    //Returns a segment of the variable records stored fot the selected bot
+    getBotVariablesRecords(botId,startLimit,endLimit) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_variables_records/${botId}/${startLimit}/${endLimit}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.data;
+      });
+    }
 }
