@@ -57,3 +57,9 @@ export class ConnectorViewed {
     this.connector = connector;
   }
 }
+
+export class TableFilterUpdated {
+  constructor(filter) {
+    this.filter = filter;
+  }
+}

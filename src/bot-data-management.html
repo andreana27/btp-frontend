@@ -1,4 +1,5 @@
 <template>
+
   <section class="content-header">
     <h1>
       Data
@@ -11,8 +12,6 @@
     </ol>
   </section>
   <section class="content">
-
-
     <div class="panel panel-primary">
       <div class="panel-heading">Bot</div>
       <div class="panel-body">
@@ -35,13 +34,25 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-sm-12">
-            <table class="table table-striped" aurelia-table="page-size.bind: pageSize;">
+            <table class="table table-striped"
+                    aurelia-table="data.bind:tableRecords; display-data.bind: $displayData;
+                    current-page.bind: currentPage; page-size.bind: pageSize;
+                    total-items.bind:totalRecords; filters.bind:tableFilters;">
               <thead>
                 <th>User</th>
                 <th repeat.for="variable of variable_list">${variable.storage_key}</th>
               </thead>
               <thbody>
-                <tr repeat.for="record of tableRecords">
+                <tr disabled.bind="!hasRecords">
+                  <td>
+                    <input ype="text" placeholder="Enter filter text" class="form-control" value.bind="tableFilters[0].value">
+                  </td>
+                  <td repeat.for="var of variable_list">
+                    <input ype="text" placeholder="Enter filter text" class="form-control" value.bind="tableFilters[$index+1].value">
+                  </td>
+                  <!--<td repeat.for="var of variable_list"><input ype="text" placeholder="Enter filter text" class="form-control" value.bind="getFilter($index)"></td>-->
+                </tr>
+                <tr repeat.for="record of $displayData">
                   <td>${record.owner}</td>
                   <td repeat.for="variable of record.vars">${variable.value}</td>
                 </tr>
@@ -49,8 +60,26 @@
             </table>
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-9">
+             <aut-pagination current-page.bind="currentPage" page-size.bind="pageSize" total-items.bind="totalRecords"
+                                    pagination-size.bind="pageSize" boundary-links.bind="true"> </aut-pagination>
+         </div>
+         <div class="col-md-3">
+             <div class="form-inline">
+                 <div class="form-group pull-right">
+                     <label for="pageSize">Page Size: </label>
+                     <select value.bind="pageSize" id="pageSize" class="form-control">
+                         <option model.bind="5">5</option>
+                         <option model.bind="10">10</option>
+                         <option model.bind="20">20</option>
+                         <option model.bind="50">50</option>
+                     </select>
+                 </div>
+             </div>
+         </div>
+        </div>
       </div>
     </div>
   </section>
-
 </template>

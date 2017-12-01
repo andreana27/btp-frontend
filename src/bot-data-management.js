@@ -8,8 +8,9 @@ import {
   EventAggregator
 } from 'aurelia-event-aggregator';
 import {
-  HttpClient
-} from "aurelia-fetch-client";
+  TableFilterUpdated
+} from './messages';
+
 
 @inject(WebAPI, EventAggregator)
 export class BotDataManagment {
@@ -18,19 +19,31 @@ export class BotDataManagment {
   //bool indicator enables the bot variable table
   botSelected = false;
   //petition package size
-  recordsPerPetition = 2;
+  recordsPerPetition = 50;
   //owners list
   ownersList = [];
   //records array
   tableRecords = [];
   //pagination size
-  pageSize = 1;
+  pageSize = 10;
+  totalRecords = 0;
+  //filters settings
+  tableFilters = [];
+
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
     this.api = api;
+    this.subscriptions = [];
   }
 
+  //attached functionallity
+  attached(){
+    this.subscriptions.push(this.ea.subscribe(TableFilterUpdated, msg => {
+      this.tableFilters = msg.filter;
+    }));
+
+  }
   //Function gets called whenever the class is created
   created() {
   }
@@ -40,11 +53,13 @@ export class BotDataManagment {
       this.routeConfig = routeConfig;
       //getting the bot list
       return this.api.getBotsList().then(bots => this.bot_list = bots);
+      //this.filters = [{value: '', keys: ['owner']}];
     }
     //------------------------
     //User defined funtcions
     //------------------------
     getVariables() {
+      //
       this.api.getVariableList(this.selectedBotId).then(variable_list => {
         this.variable_list = variable_list;
         if(this.variable_list.length > 0)
@@ -58,6 +73,9 @@ export class BotDataManagment {
             else {
               //setting the number of petitions to make to the backend depending of the number of records of variables
               this.numberOfPetitions = this.toInteger(this.numberOfRecords / this.recordsPerPetition);
+              if (this.numberOfPetitions == 0) {
+                this.numberOfPetitions = 1;
+              }
               //start getting the records
               for(let iteration = 0; iteration < this.numberOfPetitions;iteration++) {
                 let inf_limit = this.recordsPerPetition * iteration;
@@ -73,9 +91,19 @@ export class BotDataManagment {
                   for(let n = 0;n<recordList.length;n++) {
                     let record = recordList[n];
                     this.addValueToTable(record.storage_owner,record.storage_key,record.storage_value);
+                    //this.addRecord(record.storage_owner,record.storage_key,record.storage_value);
                   }
+                  this.totalRecords = this.tableRecords.length;
+                  this.tableFilters = [{ value:'', keys:['owner'] }];
+                  //setting up the table Filters
+                  for (let i = 0; i < this.variable_list.length; i++) {
+                    let filter = { value:'', keys:'' };
+                    filter.keys = ['vars['+i.toString()+'].value'];
+                    this.tableFilters.push(filter);
+                  }
+                  this.ea.publish(new TableFilterUpdated(this.tableFilters));
+                  this.hasRecords = true;
                 });
-                //this.getVariableRecords(inf_limit,sup_limit);
               }
             }
           });
