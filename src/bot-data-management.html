@@ -37,7 +37,7 @@
             <table class="table table-striped"
                     aurelia-table="data.bind:tableRecords; display-data.bind: $displayData;
                     current-page.bind: currentPage; page-size.bind: pageSize;
-                    total-items.bind:totalRecords; filters.bind:tableFilters;">
+                    total-items.bind:totalRecords;">
               <thead>
                 <th>User</th>
                 <th repeat.for="variable of variable_list">${variable.storage_key}</th>
@@ -45,12 +45,12 @@
               <thbody>
                 <tr disabled.bind="!hasRecords">
                   <td>
-                    <input ype="text" placeholder="Enter filter text" class="form-control" value.bind="tableFilters[0].value">
+                    <input type="text" placeholder="Enter filter text" class="form-control" value.bind="filters[0].value" input.delegate="filterRecords()" >
                   </td>
                   <td repeat.for="var of variable_list">
-                    <input ype="text" placeholder="Enter filter text" class="form-control" value.bind="tableFilters[$index+1].value">
+                    <input type="text" placeholder="Enter filter text"
+                          class="form-control" value.bind="filters[$index+1].value" input.delegate="filterRecords()">
                   </td>
-                  <!--<td repeat.for="var of variable_list"><input ype="text" placeholder="Enter filter text" class="form-control" value.bind="getFilter($index)"></td>-->
                 </tr>
                 <tr repeat.for="record of $displayData">
                   <td>${record.owner}</td>

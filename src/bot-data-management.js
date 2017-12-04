@@ -28,21 +28,20 @@ export class BotDataManagment {
   pageSize = 10;
   totalRecords = 0;
   //filters settings
-  tableFilters = [];
+  filters = [];
+  //
+  filteredRecords = [];
+  //
+  allRecords = [];
 
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
     this.api = api;
-    this.subscriptions = [];
   }
 
   //attached functionallity
   attached(){
-    this.subscriptions.push(this.ea.subscribe(TableFilterUpdated, msg => {
-      this.tableFilters = msg.filter;
-    }));
-
   }
   //Function gets called whenever the class is created
   created() {
@@ -59,7 +58,10 @@ export class BotDataManagment {
     //User defined funtcions
     //------------------------
     getVariables() {
-      //
+      //clearing values
+      this.allRecords = [];
+      this.tableRecords = [];
+      this.totalRecords = 0;
       this.api.getVariableList(this.selectedBotId).then(variable_list => {
         this.variable_list = variable_list;
         if(this.variable_list.length > 0)
@@ -93,15 +95,15 @@ export class BotDataManagment {
                     this.addValueToTable(record.storage_owner,record.storage_key,record.storage_value);
                     //this.addRecord(record.storage_owner,record.storage_key,record.storage_value);
                   }
+                  this.allRecords = this.tableRecords;
                   this.totalRecords = this.tableRecords.length;
-                  this.tableFilters = [{ value:'', keys:['owner'] }];
-                  //setting up the table Filters
-                  for (let i = 0; i < this.variable_list.length; i++) {
-                    let filter = { value:'', keys:'' };
-                    filter.keys = ['vars['+i.toString()+'].value'];
-                    this.tableFilters.push(filter);
+                  //Setting up the dynamics filter settings
+                  this.filters = [{ key:'owner', value:''}];
+                  for (let x = 0; x < this.variable_list.length; x++) {
+                    let filter = { key:'', value:''};
+                    filter.key = ['vars['+x.toString()+'].value'];
+                    this.filters.push(filter);
                   }
-                  this.ea.publish(new TableFilterUpdated(this.tableFilters));
                   this.hasRecords = true;
                 });
               }
@@ -157,6 +159,33 @@ export class BotDataManagment {
         //adding up the record to the table
         this.tableRecords.push(record);
       }
+    }
+
+    //Filter the existing records in accordance to the selected row and entered value
+    filterRecords(){
+      //clearing the records
+      this.tableRecords = [];
+      let searchTable = this.allRecords;
+      let resultsTable = [];
+      //for every column
+      for (let i = 0; i < this.filters.length; i++) {
+        //getting the filter value
+        let filterValue = this.filters[i].value.toLowerCase();
+        // for every row
+        for (let j = 0; j < searchTable.length; j++){
+          let propertyValue;
+          if (i == 0) { propertyValue = searchTable[j].owner.toLowerCase(); } //search by owner
+          else { propertyValue = searchTable[j].vars[i - 1].value.toLowerCase(); } //search by variable
+          if(propertyValue.indexOf(filterValue)!=-1) {  //if there is any match
+            resultsTable.push(searchTable[j]);
+          }
+        }
+        searchTable = resultsTable;
+        resultsTable = [];
+      }
+      this.tableRecords = searchTable;
+      //setting the new table lenght
+      this.totalRecords = this.tableRecords.length;
     }
 
     toInteger(number){
