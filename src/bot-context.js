@@ -72,6 +72,12 @@ export class BotContext {
   selectedValMethod = [];
   //Contains the value selected fot the context to sent the action-reply property
   selectedValContext  = [];
+  //contains the list of variables for the selected bot
+  variable_list = [];
+  variableIndex = null;
+  suggestionService = null;
+  variableService = null;
+  selVar = null;
 
   json_Context;
 
@@ -204,6 +210,8 @@ export class BotContext {
     this.params = params;
     return this.api.getContextDetails(params.contextid).then(context => {
       this.context = context;
+
+
       //getting the child contexts for the current contexts
       this.api.getContextListByParentContext(this.context.bot_id,this.context.id).then(Childcontexts => {
         //Setting up the context child contexts
@@ -212,10 +220,30 @@ export class BotContext {
         //Adding the default empty context option at the first position of the array
         this.contextChlidContexts.unshift(defaultEmptyContext);
       });
-      this.json_Context = this.context.context_json;
-      this.routeConfig.navModel.setTitle(context.name);
-      this.originalContext = JSON.parse(JSON.stringify(context));
-      this.ea.publish(new ContextViewed(this.context));
+
+      //getting the vairable list for the selected bot
+      this.api.getVariableList(this.context.bot_id).then(variable_list => {
+        this.variable_list = variable_list;
+        this.variableIndex = variable_list;
+        this.variableService = new VaribaleSuggestionService(variable_list);
+        //this.suggestionService = new SuggestionService(variable_list);
+
+        this.vars =  [];
+        for (let i = 0; i < this.variable_list.length; i++)
+        {
+          let variable = this.variable_list[i].storage_key;
+          this.vars.push(variable);
+        }
+
+        this.json_Context = this.context.context_json;
+        this.routeConfig.navModel.setTitle(context.name);
+        this.originalContext = JSON.parse(JSON.stringify(context));
+        this.ea.publish(new ContextViewed(this.context));
+
+
+      }).catch(console.log.bind(console));  //in case something goes wrong
+
+
     });
   }
 
@@ -228,7 +256,6 @@ export class BotContext {
   }
 
   save() {
-
     this.api.saveContext(this.context).then(context => {
       this.context = context;
       this.routeConfig.navModel.setTitle(context.name);
@@ -313,5 +340,27 @@ export class BotContext {
 
   moveDown(array, element) {
     this.move(array, element, 1);
+  }
+}
+//--------------------------------------------
+//class for the vairable autocomplete control
+//--------------------------------------------
+export class VaribaleSuggestionService {
+  constructor(variables) {
+    this.variables = variables;
+  }
+
+  suggest(value) {
+    if (value === '') {
+      return Promise.resolve([]);
+    }
+    value = value.toLowerCase();
+    const suggestions = this.variables.filter(x => x.storage_key.toLowerCase().indexOf(value) === 0)
+      .map(x => x.storage_key);
+    return Promise.resolve(suggestions);
+  }
+
+  getName(suggestion) {
+    return suggestion;
   }
 }

@@ -115,7 +115,9 @@ export class BotSettings {
     this.subscriptions.push(this.ea.subscribe(ContextUpdated, msg => {
       let id = msg.context.id;
       let found = this.contextos.find(x => x.id == id);
-      Object.assign(found, msg.context);
+      if ((found != null)||(found!=undefined)){
+        Object.assign(found, msg.context);
+      }
     }));
     this.subscriptions.push(this.ea.subscribe(ContextCreated, msg => {
       this.contextos.push(msg.context);
