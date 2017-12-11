@@ -176,8 +176,21 @@ export class BotDataManagment {
           let propertyValue;
           if (i == 0) { propertyValue = searchTable[j].owner.toLowerCase(); } //search by owner
           else { propertyValue = searchTable[j].vars[i - 1].value.toLowerCase(); } //search by variable
-          if(propertyValue.indexOf(filterValue)!=-1) {  //if there is any match
-            resultsTable.push(searchTable[j]);
+          //in case the value introduced by the user starts with = , a full match comparisson is made
+          if (filterValue.startsWith("=")) {
+            if (filterValue.length > 1) {
+              //if it is an exact match the row is added to the resultsTable
+              if (propertyValue === filterValue.substr(1)) {
+                resultsTable.push(searchTable[j]);
+              }
+            }
+            else {
+              resultsTable.push(searchTable[j]);
+            }
+          } else {
+            if(propertyValue.indexOf(filterValue)!=-1) {  //if there is any match
+              resultsTable.push(searchTable[j]);
+            }
           }
         }
         searchTable = resultsTable;
