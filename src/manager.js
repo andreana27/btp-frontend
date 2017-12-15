@@ -24,6 +24,11 @@ export class Manager {
         route: 'bot/data-management/',
         moduleId: 'bot-data-management',
         name: 'bot-data-management'
+      },
+      {
+        route: 'bot/chat-center/',
+        moduleId: 'bot-chat-center',
+        name: 'bot-chat-center'
       }
     ]);
     this.router = router;

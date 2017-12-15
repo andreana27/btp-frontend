@@ -1,0 +1,112 @@
+<template>
+  <require from="./resources/elements/bot-chat.css"></require>
+  <section class="content-header">
+    <h1>
+      Data
+      <small>Bot Chat Center</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="../../index.html">Chat Center</a></li>
+      <li class="active">Bot Chat Center</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="box box-widget widget-user">
+              <!-- Add the bg color to the header using any of the bg-* classes -->
+              <div class="widget-user-header bg-aqua-active">
+                <h3 class="widget-user-username">${bot.name}</h3>
+                <h5 class="widget-user-desc">
+                  <i class="fa fa-circle ${bot.enabled===true? 'text-success' : 'text-error'}"></i>
+                  ${bot.enabled===true ? 'Online': 'Offline'}
+                </h5>
+              </div>
+              <div class="widget-user-image">
+                <img class="img-circle" src="${api.backend + 'default/download/' + bot.picture}" alt="Bot Avatar">
+              </div>
+              <div class="box-footer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h4 class="text-center">Channels</h4>
+                    <a class="btn btn-app" click.delegate="setChannel(0)">
+                      <i class="fa fa-address-book"></i> All Channels
+                    </a>
+                    <a class="btn btn-app" click.delegate="setChannel(1)">
+                      <i class="fa fa-facebook"></i> Messenger
+                    </a>
+                    <a class="btn btn-app" click.delegate="setChannel(2)">
+                      <i class="fa fa-send"></i> Telegram
+                    </a>
+                  </div>
+                </div>
+                <hr />
+                <div>
+                  <h4 class="text-center">Select another Bot</h4>
+                </div>
+                <div>
+                  <select value.bind="selectedBotId" class="form-control">
+                    <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+                  </select>
+                </div>
+                <br>
+                <div>
+                  <center>
+                    <button class="btn btn-primary" type="submit" click.delegate="getChats()">Get Messages</button>
+                  </center>
+                </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div><!-- bot section -->
+      <div class="col-sm-4">
+        <div class="box box-widget widget-user">
+          <div class="widget-user-header bg-yellow">
+            <h3>Contacts</h3>
+            <h4 innerhtml.bind="contactGroup"><h4>
+          </div>
+          <div class="box-footer">
+            <div class="row">
+              <div class="col-sm-12">
+                <ul class="list-group" show.bind="botSelected">
+                  <li repeat.for="contact of contactList" class="list-group-item">
+                    <a click.delegate="getMessagerByContact(contact.id)">
+                      <h4 class="list-group-item-heading">${contact.id}</h4>
+                      <p class="list-group-item-text">${contact.id}</p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- contacts section -->
+      <div class="col-sm-5">
+        <div class="box box-widget widget-user">
+          <div class="widget-user-header bg-lime-active">
+            <h3 innerhtml.bind="selectedContactName"><h3>
+            <h4>Message History</h4>
+          </div>
+          <div class="box-footer">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="wrap">
+                  <main>
+                    <aside>
+                      <ul class="chat" innerhtml.bind="messagesHTML">
+                      </ul>
+                    </aside>
+                  </main>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- messages section -->
+    </div>
+  </section>
+</template>
