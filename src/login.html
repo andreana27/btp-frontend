@@ -1,8 +1,15 @@
 <template>
+  <require from="bootstrap/css/bootstrap.css"></require>
+  <require from="font-awesome/css/font-awesome.css"></require>
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-black.css"></require>
+  <require from="toastr/build/toastr.css"></require>
+  <loading-indicator loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
   <div>
     <div style="width:360px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
       <div class="login-logo">
-        <a href="/#/">
+        <a href="https://botprotec.com">
           <img src="assets/images/logo-wide.png" height="80px">
         </a>
       </div>
@@ -29,9 +36,8 @@
             <!-- /.col -->
           </div>
         </form>
-        <a href="#">I forgot my password</a><br>
-        <a href="register.html" class="text-center">Register a new membership</a>
-
+        <a click.delegate="gotoRegister()">I forgot my password</a>
+        <a click.delegate="gotoRegister()">Register a new membership</a>
       </div>
       <!-- /.login-box-body -->
     </div>

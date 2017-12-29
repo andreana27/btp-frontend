@@ -29,6 +29,11 @@ export class Manager {
         route: 'bot/chat-center/',
         moduleId: 'bot-chat-center',
         name: 'bot-chat-center'
+      },
+      {
+        route: 'user/profle',
+        moduleId: 'user-profile',
+        name: 'user-profile'
       }
     ]);
     this.router = router;

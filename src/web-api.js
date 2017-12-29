@@ -1,11 +1,17 @@
-import {
-  HttpClient
-} from 'aurelia-fetch-client';
+import { HttpClient } from 'aurelia-fetch-client';
+import { Aurelia, inject } from 'aurelia-framework';
 
+@inject(Aurelia)
 export class WebAPI {
   backend = 'https://developer.innovare.es/backend/';
   isRequesting = false;
-  constructor() {
+  sessionUser = null;
+
+  constructor(Aurelia) {
+    this.app = Aurelia;
+    localStorage.isRegister = false;
+    //setting the session
+    this.session = sessionStorage.sessionToken || null;
     this.client_auth = new HttpClient();
     this.client_auth.configure(config => {
       config
@@ -19,11 +25,11 @@ export class WebAPI {
         })
         .withInterceptor({
           request(request) {
-            console.log(`Requesting ${request.method} ${request.url}`);
+            //console.log(`Requesting ${request.method} ${request.url}`);
             return request;
           },
           response(response) {
-            console.log(`Received ${response.status} ${response.url}`);
+            //console.log(`Received ${response.status} ${response.url}`);
             return response;
           }
         });
@@ -41,31 +47,127 @@ export class WebAPI {
         })
         .withInterceptor({
           request(request) {
-            console.log(`Requesting ${request.method} ${request.url}`);
+            //console.log(`Requesting ${request.method} ${request.url}`);
             return request;
           },
           response(response) {
-            console.log(`Received ${response.status} ${response.url}`);
+            //console.log(`Received ${response.status} ${response.url}`);
             return response;
           }
         });
     });
   }
 
-  logIn(datum) {
+  logIn(data) {
+    let loginData = new FormData();
+    for (let key in data) {
+      if (typeof(data[key]) === 'object'){
+        loginData.append(key, JSON.stringify(data[key]));
+      }else{
+        loginData.append(key, data[key]);
+      }
+    }
+    this.isRequesting = true;
+    return this.client_auth.fetch(`authk.json`, {
+      method: 'PUT',
+      body: loginData
+    })
+      .then(response => response.json())
+      .then((session) => {
+        let response = {'type':0,'msg':''};
+        try {
+          if (session.token[0].api_token.length > 3)
+          {
+            response.msg = this.session;
+            response.type = 200;
+            //getting the information
+            sessionStorage.sessionToken = session.token[0].api_token;
+            sessionStorage.userFirstName = session.token[0].first_name;
+            sessionStorage.userLastName = session.token[0].last_name;
+            // .. and set root to app.
+            this.app.setRoot('app');
+          } else {
+            response.msg = 'The login data is not valid';
+            response.type = 500;
+          }
+        }
+        catch(err){
+          response.msg = 'The login data is not valid';
+          response.type = 500;
+        }
+        return response;
+      });
+  }
+
+  isAuthenticated() {
+		return this.session !== null;
+	}
+
+  isRegister(){
+    return localStorage.isRegister;
+  }
+
+  setRegister(value){
+    localStorage.isRegister = value;
+    if(!value)
+    {
+      this.app.setRoot('login');
+    }
+    else
+    {
+      this.app.setRoot('register');
+    }
+  }
+
+	can(permission) {
+    //TODO set roles or permission
+		return true;
+  }
+
+  logout() {
+  	// Clear from sessionStorage
+    sessionStorage.clear();
+  	// .. and from the session object
+  	this.session = null;
+  	// .. and set root to login.
+  	this.app.setRoot('login')
+    return true;
+  }
+
+  getUserName()
+  {
+    return sessionStorage.userFirstName + ' ' + sessionStorage.userLastName;
+  }
+
+  getUserData()
+  {
+      let data = {firstName: sessionStorage.userFirstName, lastName: sessionStorage.userLastName}
+      return data;
+  }
+
+  recoverPassword(email,new_password) {
+    //TODO Validation of email and renewal of password
+    return true;
+  }
+
+  registerUser(userData) {
     this.isRequesting = true;
     let formData = new FormData();
-    for (let key in datum) {
-      formData.append(key, datum[key]);
+    for (let key in userData) {
+      if (typeof(userData[key]) === 'object'){
+        formData.append(key, JSON.stringify(userData[key]));
+      }else{
+        formData.append(key, userData[key]);
+      }
     }
-    return this.client_auth.fetch('authk.json', {
-        method: 'POST',
+    return this.client_auth.fetch(`user.json`, {
+        method: 'PUT',
         body: formData
       })
       .then(response => response.json())
       .then(data => {
-        this.isRequesting = false;
-        return data.content;
+        this.app.setRoot('app')
+        return data;
       });
   }
 
@@ -115,7 +217,7 @@ export class WebAPI {
     let formData = new FormData();
     for (let key in bot) {
       if ((key === 'picture') && (bot[key]!== undefined)){
-        console.log('sending picture');
+        //console.log('sending picture');
         for (let i = 0; i < bot[key].length; i++) {
           formData.append(key, bot[key][i]);
         }
