@@ -73,17 +73,17 @@ export class WebAPI {
       body: loginData
     })
       .then(response => response.json())
-      .then((session) => {
+      .then((responseData) => {
         let response = {'type':0,'msg':''};
         try {
-          if (session.token[0].api_token.length > 3)
+          if (responseData.data[0].length > 3)
           {
-            response.msg = this.session;
+            response.msg = '';
             response.type = 200;
             //getting the information
-            sessionStorage.sessionToken = session.token[0].api_token;
-            sessionStorage.userFirstName = session.token[0].first_name;
-            sessionStorage.userLastName = session.token[0].last_name;
+            sessionStorage.sessionToken = responseData.data[0]
+            sessionStorage.userFirstName = responseData.data[1];
+            sessionStorage.userLastName = responseData.data[2];
             // .. and set root to app.
             this.app.setRoot('app');
           } else {
