@@ -87,6 +87,11 @@ export class BotContext {
     sendTo: null
   }];
 
+  keys = [{
+    in: '',
+    out: ''
+  }];
+
   constructor(api, ea) {
     this.api = api;
     this.ea = ea;
@@ -194,6 +199,21 @@ export class BotContext {
       this.selectedValEnd = [];
       this.isEnd = false;
       alert('End element added');
+    } else
+    if (type == 'rest') {
+      newElement.type = type;
+      newElement.url  = this.serviceURL;
+      newElement.keys = this.keys;
+      newElement.method = this.selectedValMethod;
+      //clean variables
+      this.selectedValMethod = [];
+      this.keys = [{
+        in: '',
+        out: null
+      }];
+      this.serviceURL = '';
+      this.isRest = false;
+      alert('REST Plugin element added');
     }
 
     arrayLength = this.json_Context[this.context.name].length;
@@ -225,7 +245,7 @@ export class BotContext {
       this.api.getVariableList(this.context.bot_id).then(variable_list => {
         this.variable_list = variable_list;
         this.variableIndex = variable_list;
-        this.variableService = new VaribaleSuggestionService(variable_list);
+        this.variableService = new VariableSuggestionService(variable_list);
         //this.suggestionService = new SuggestionService(variable_list);
 
         this.vars =  [];
@@ -341,11 +361,65 @@ export class BotContext {
   moveDown(array, element) {
     this.move(array, element, 1);
   }
+
+  //PARAMETERS FOR THE REST PLUGIN
+  addBlankParameter() {
+    if (this.keys[this.keys.length - 1]) {
+      this.keys.push({
+        in: '',
+        out: ''
+      });
+    }
+  }
+
+  changedParameter(idx, item) {
+    this.keys[idx].in = item.in;
+    this.keys[idx].out = item.out;
+  }
+
+  get canRemoveParameter() {
+    return this.keys.length > 1;
+  }
+
+  removeParameter(idx) {
+    if (this.keys.length > 1) {
+      this.keys.splice(idx, 1);
+    }
+  }
+
+  editing_addKey(idx) {
+    this.json_Context[this.context.name][idx].keys.push({
+      in: '',
+      out: ''
+    });
+  }
+
+  editing_addBlankKey(idx) {
+    this.json_Context[this.context.name][idx].keys.push({
+      in: '',
+      out: ''
+    });
+  }
+
+  editing_removeKey(idx, rootidx) {
+    if (this.json_Context[this.context.name][rootidx].keys.length > 1) {
+      this.json_Context[this.context.name][rootidx].keys.splice(idx, 1)
+      this.context.context_json = JSON.stringify(this.json_Context);
+      this.save();
+    }
+  }
+  editing_changedKey(idx, rootidx, item) {
+    this.json_Context[this.context.name][rootidx].keys[idx] = item;
+    this.context.context_json = JSON.stringify(this.json_Context);
+    //console.log(JSON.stringify(this.context.context_json));
+    this.save();
+  }
+
 }
 //--------------------------------------------
-//class for the vairable autocomplete control
+//class for the variable autocomplete control
 //--------------------------------------------
-export class VaribaleSuggestionService {
+export class VariableSuggestionService {
   constructor(variables) {
     this.variables = variables;
   }

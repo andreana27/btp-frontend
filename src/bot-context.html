@@ -126,6 +126,86 @@
                 <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
               </div>
             </div>
+            <!-- REST PLUGIN-->
+            <div if.bind="element.type=='rest'"  class="timeline-item">
+              <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
+              <h3 class="timeline-header"><a href="#">REST PLUGIN</a></h3>
+              <div class="timeline-body">
+                <div class="panel-heading">REST API Plugin</div>
+                <div class="panel-body">
+                  <div>
+                    <h4>
+                      Use this plugin to create various integrations with your server - generate dynamic content
+                      or send data. You can apply user attributes in either the URL or the USER ATTRIBUTES field.
+                      With POST request type, user attributes will be sent in a standard way. With GET request,
+                      they will be added to the URL as GET parameters.
+                    </h4>
+                  </div>
+                  <div class="row">
+                    <label class="col-sm-2 ">Type</label>
+                    <label class="col-sm-10">URL</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-2">
+            					<select value.bind="element.method" class="form-control" change.delegate="elementChanged($index, element)">
+            						<option repeat.for="option of RestTypeOptions" model.bind="option.id">${option.id}</option>
+            					</select>
+            				</div>
+                    <div class="col-sm-10">
+                      <input type="text" placeholder="Enter the service URL" class="form-control" value.bind="element.url" change.delegate="elementChanged($index, element)">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <label>Parameters</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-11">
+                      <div repeat.for="parameter of element.keys" ref="$keys" index.bind="$index">
+                        <div class="row">
+                          <div class="col-sm-5">
+                            <label>Parameter Name</label>
+                          </div>
+                          <div class="col-sm-5">
+                            <label>Variable Name</label>
+                          </div>
+                          <div class="col-sm-2"></div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-5">
+                            <input class="form-control" type="text" placeholder="Enter parameter name" value.bind="parameter.in" change.delegate="editing_changedKey($keys.index, $root.index, parameter)">
+                          </div>
+                          <div class="col-sm-5">
+                            <select value.bind="parameter.out" class="form-control" change.delegate="editing_changedKey($keys.index, $root.index, parameter)">
+                              <option repeat.for="variable of variable_list" model.bind="variable.storage_key">${variable.storage_key}</option>
+                  					</select>
+                          </div>
+                          <div class="col-sm-2">
+                            <button type="button" class="btn btn-default btn-circle"
+                                    click.delegate="editing_removeKey($keys.index,$root.index)"
+                                    disabled.bind="!(element.keys.length>1)">
+                              <i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-1">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <button type="button" class="btn btn-default btn-circle" click.delegate="editing_addBlankKey($index)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-footer">
+                <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <!-- END REST PLUGIN-->
             <div if.bind="element.type=='quick_reply'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
               <h3 class="timeline-header"><a href="#">Quick Reply</a></h3>
@@ -286,9 +366,9 @@
     			</div>
     		</div>
         <!-- ./add QR element-->
-        <!-- add end/repeat element -->
+        <!-- add rest-plugin  element -->
         <div class="panel panel-primary" show.bind="isRest">
-          <div class="panel-heading">JSON API</div>
+          <div class="panel-heading">REST API Plugin</div>
           <div class="panel-body">
             <div>
               <h4>
@@ -299,7 +379,7 @@
               </h4>
             </div>
             <div class="row">
-              <label class="col-sm-2 ">Type:</label>
+              <label class="col-sm-2 ">Type</label>
               <label class="col-sm-10">URL</label>
             </div>
             <div class="row">
@@ -312,10 +392,60 @@
                 <input type="text" placeholder="Enter the service URL" class="form-control" value.bind="serviceURL">
               </div>
             </div>
-            <button class="btn btn-primary" click.delegate="additem('rest')">Add</button>
+            <div class="row">
+              <div class="col-sm-12">
+                <label>Parameters</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-11">
+                <div repeat.for="parameter of keys">
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <label>Parameter Name</label>
+                    </div>
+                    <div class="col-sm-5">
+                      <label>Variable Name</label>
+                    </div>
+                    <div class="col-sm-2"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-5">
+                      <input class="form-control" type="text" placeholder="Enter parameter name" value.bind="parameter.in" change.delegate="changedParameter($index, parameter)">
+                    </div>
+                    <div class="col-sm-5">
+                      <select value.bind="parameter.out" class="form-control" change.delegate="changedParameter($index, parameter)" >
+                        <option repeat.for="variable of variable_list" model.bind="variable.storage_key">${variable.storage_key}</option>
+            					</select>
+                    </div>
+                    <div class="col-sm-2">
+                      <button type="button" class="btn btn-default btn-circle" click.delegate="removeParameter($index)" disabled.bind="!canRemoveParameter" >
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-1">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <button type="button" class="btn btn-default btn-circle" click.delegate="addBlankParameter()">
+                      <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <br>
+                <br>
+                <button class="btn btn-primary" click.delegate="additem('rest')">Add</button>
+              </div>
+            </div>
           </div>
         </div>
-        <!-- /add end/repeat element -->
+        <!-- /add rest-plugin element -->
         <!-- add end/repeat element -->
         <div class="panel panel-primary" show.bind="isEnd">
           <div class="panel-heading">Adding an repeat/return flow element </div>
@@ -344,7 +474,7 @@
                 <i class="fa fa-reply"></i> Quick Reply
               </a>
               <a class="btn btn-app" click.delegate="elementSelected('rest')">
-                <i class="fa fa-exchange"></i> JSON API
+                <i class="fa fa-exchange"></i> REST API Plugin
               </a>
               <a class="btn btn-app" click.delegate="elementSelected('end')">
                 <i class="fa fa-circle-o-notch"></i> Flow End/Repeat
