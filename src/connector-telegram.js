@@ -152,4 +152,11 @@ export class ConnectorTelegram {
       this.bot = bot;
       return true;
     }
+
+    //returns to bot flow
+    closeConnectorPane(){
+      let bot = this.bot.id;
+      this.router.navigateToRoute('bot-flow', { 'id': bot }, // route parameters object
+              { trigger: true, replace: true }); // options
+    }
 }

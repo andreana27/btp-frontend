@@ -17,7 +17,7 @@ import {
 } from 'aurelia-router';
 
 
-@inject(WebAPI, EventAggregator)
+@inject(WebAPI, EventAggregator,Router)
 export class ConnectorMessenger {
   //constructor funtion for the BotConnectorSetup class
   constructor(api, ea,router) {
@@ -40,6 +40,12 @@ export class ConnectorMessenger {
         route: 'token/:token',
         moduleId: 'connector-messenger-detail',
         name: 'connector-messenger-detail',
+      },
+      {
+        route: 'no-selection',
+        moduleId: 'no-selection',
+        name: 'no-selection',
+        title: 'Select'
       }
     ]);
     this.router = router;
@@ -147,5 +153,11 @@ export class ConnectorMessenger {
     select(bot) {
       this.bot = bot;
       return true;
+    }
+    //returns to bot flow
+    closeConnectorPane(){
+      let bot = this.bot.id;
+      this.router.navigateToRoute('bot-flow', { 'id': bot }, // route parameters object
+              { trigger: true, replace: true }); // options
     }
 }
