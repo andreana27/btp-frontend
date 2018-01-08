@@ -61,7 +61,7 @@ export class CreateBotContext {
       this.context = context;
       this.ea.publish(new ContextCreated(this.context));
     });
-    //this.router.navigate('');
+    this.router.navigate('');
   }
   selectParentContext(context)
   {
