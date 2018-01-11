@@ -81,6 +81,13 @@ export class BotSettings {
         name:'connector-telegram',
         title: 'telegram'
       }
+      ,
+      {
+        route:'connector/setup/website',
+        moduleId: 'connector-website',
+        name:'connector-website',
+        title: 'website'
+      }
     ]);
     this.router = router;
   }
@@ -145,6 +152,10 @@ export class BotSettings {
     this.api.getConnectorList(this.botid,'telegram').then(connectors => {
       this.telegramConnectorCount = connectors.length;
     });
+    this.api.getConnectorList(this.botid,'website').then(connectors => {
+      this.websiteConnectorCount = connectors.length;
+    });
+
   }
   //function that navigates a level up on the context tree
   gotoParentContext(){

@@ -1,0 +1,129 @@
+<template>
+  <div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+      <li class="active">
+        <a href="#connectors" data-toggle="tab" aria-expanded="true">
+          Website Connectors
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="connectors">
+        <div class="pull-right">
+          <a class="btn btn-xs btn-success" click.delegate="closeConnectorPane()">
+            <i class="fa fa-close"></i> Close
+          </a>
+        </div>
+        <h4>
+          Website Connectors
+          <br>
+          <small>
+            Here are shown the Website connectors associated to the selected bot.
+          </small>
+        </h4>
+        <div class="row">
+          <div class="col-sm-12">
+            <h4>List of Active Connectors<h4>
+              <table  class="table table-striped"
+                aurelia-table="data.bind:connector_list;
+                display-data.bind: $displayData;
+                current-page.bind:currentPage;">
+              <thead>
+              <tr>
+                <th>Website</th>
+                <th>Token</th>
+                <th></th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr repeat.for="connector of $displayData">
+                <td>${connector.website}</td>
+                <td>${connector.token}</td>
+                <td>
+                  <a class="btn btn-xs btn-info" click.delegate="editConnector(connector.token)">
+                    <i class="fa fa-pencil"></i> Edit
+                  </a>
+                </td>
+                <td>
+                  <a class="btn btn-xs btn-danger" click.delegate="confirmDelete(connector.token)">
+                    <i class="fa fa-trash"></i> Delete
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            <hr>
+            <h4>Create or Edit a Website Connector</h4>
+            <div class="row">
+              <div class="col-sm-12">
+                <label>Website Name</label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group has-feedback">
+                  <input type="text" class="form-control" placeholder="Website Name" value.bind="connector.website">
+                  <span class="fa fa-globe form-control-feedback"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <label>Access Token</label>
+              </div>
+            </div>
+            <div class="row">
+            <!--<div class="col-sm-3">
+                <button type="button" class="btn btn-primary btn-block btn-flat" click.delegate="generateToken()">
+                  Generate a Token
+                </button>
+              </div>-->
+              <div class="col-sm-12">
+                <div class="form-group has-feedback">
+                  <input type="text" class="form-control" placeholder="Token" value.bind="connector.token" readonly>
+                  <span class="fa fa-key form-control-feedback"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-9">
+              </div>
+              <div class="col-sm-3">
+                <button type="button" class="btn btn-primary btn-block btn-flat" disabled.bind="!canSaveConnector" click.delegate="saveConnector()">
+                  Save Connector
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+          <!-- /.box-body -->
+      </div>
+      <!-- /.tab-pane -->
+    </div>
+    <!-- /.tab-content -->
+  </div>
+  <!--modal for delete warning-->
+  <div class="modal modal-danger fade" id="modal-danger" ref="mdlDeleteConnector">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">${delete_message.title}</h4>
+          </div>
+          <div class="modal-body">
+            <p>${delete_message.content}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline"
+                    data-dismiss="modal"
+                    click.delegate="deleteConnector()">Delete</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+</template>

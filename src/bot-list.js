@@ -74,6 +74,9 @@ export class BotList {
     this.api.deleteBot(bot).then(
       answer => this.ea.publish(new BotDeleted(bot))
     );
+    //delete all bot web-site connectors
+    let parameters = {bot_id:bot.id ,token:0};
+    this.api.deleteWebsiteConnector(parameters);
   }
 
   select(bot) {

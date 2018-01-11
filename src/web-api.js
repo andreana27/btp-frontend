@@ -460,4 +460,70 @@ export class WebAPI {
           return data.data;
       });
     }
+
+    //Generates and stores a website connector for the specified bot
+    saveWebsiteConnector(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`website_connector.json`, {
+        method: 'PUT',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    //Updates a website connector for the specified bot
+    updateWebsiteConnector(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`website_connector.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    //Deletes a website connector for the specified bot
+    deleteWebsiteConnector(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`website_connector.json`, {
+        method: 'DELETE',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
 }
