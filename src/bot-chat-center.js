@@ -109,7 +109,8 @@ export class BotChatCenter {
                   record.origin,
                   record.medium,
                   record.message_date,
-                  record.message_time
+                  record.message_time,
+                  record.content_type
                 );
               }
               this.totalRecords = this.tableRecords.length;
@@ -120,7 +121,7 @@ export class BotChatCenter {
       });
     }
 
-    addRecord(id,owner,type,content,origin,medium,message_date,message_time) {
+    addRecord(id,owner,type,content,origin,medium,message_date,message_time,content_type) {
       let record = { id:'', owner:'', ctype:'', ccontent:'',origin:'',channel:'',date:'',time:''};
       //setting the owner
       record.owner = owner;
@@ -131,6 +132,7 @@ export class BotChatCenter {
       record.channel = medium;
       record.date = message_date;
       record.time = message_time;
+      record.content_type = content_type;
       //adding the Contacts
       let foundRecord = this.contactList.filter(x => x.id == owner)[0];
       if (!foundRecord) {
@@ -162,7 +164,8 @@ export class BotChatCenter {
                   this.tableRecords[currentRowPosition].origin,
                   this.tableRecords[currentRowPosition].ccontent,
                   this.tableRecords[currentRowPosition].date,
-                  this.tableRecords[currentRowPosition].time
+                  this.tableRecords[currentRowPosition].time,
+                  this.tableRecords[currentRowPosition].content_type,
                 );
             }
             else
@@ -174,7 +177,8 @@ export class BotChatCenter {
                     this.tableRecords[currentRowPosition].origin,
                     this.tableRecords[currentRowPosition].ccontent,
                     this.tableRecords[currentRowPosition].date,
-                    this.tableRecords[currentRowPosition].time
+                    this.tableRecords[currentRowPosition].time,
+                    this.tableRecords[currentRowPosition].content_type
                   );
                 }
             }
@@ -183,13 +187,24 @@ export class BotChatCenter {
       }
     }
 
-    appendHTMLMessage(type, contact, origin, message, date, time) {
+    appendHTMLMessage(type, contact, origin, message, date, time,content_type) {
+      let message_html = '<p>'+ message+'</p>';
+      if (content_type == 'attachment')
+      {
+        message_html = '<img src="' + message + '" alt="recieved attachment" width="300" height="300">';
+        message_html += '<a href="'+ message +'" target="_blank">View original</a> ';
+      }
+      if (message == '<repeat>')
+      {
+        message_html = 'flow repetition';
+      }
       if (type == 'sent')
       {
         this.messagesHTML += '<li class="right clearfix">';
         this.messagesHTML += '<div class="chat-body clearfix">';
         this.messagesHTML += '<div class="header">';
         this.messagesHTML += '<strong class="primary-font">' + origin + '</strong>';
+
       }
       else {
         this.messagesHTML += '<li class="left clearfix">';
@@ -199,7 +214,7 @@ export class BotChatCenter {
       }
       this.messagesHTML += '<small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + date + ' ' + time + '</small>';
       this.messagesHTML += '</div>';
-      this.messagesHTML += '<p>'+ message+'</p>';
+      this.messagesHTML += message_html;//
       this.messagesHTML += '</div>';
       this.messagesHTML += '</li>';
     }
