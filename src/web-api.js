@@ -166,7 +166,18 @@ export class WebAPI {
       })
       .then(response => response.json())
       .then(data => {
-        this.app.setRoot('app')
+        //this.app.setRoot('app')
+        return data;
+      });
+  }
+
+  validateNewUserEmail(email) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`user/${email}.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
         return data;
       });
   }
