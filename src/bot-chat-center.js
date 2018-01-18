@@ -201,6 +201,9 @@ export class BotChatCenter {
       if (type == 'sent')
       {
         this.messagesHTML += '<li class="right clearfix">';
+        this.messagesHTML += '<span class="chat-img pull-right">'
+        this.messagesHTML += '<img src="assets/images/logo-no-text.png" alt="User Avatar">'
+        this.messagesHTML += '</span>'
         this.messagesHTML += '<div class="chat-body clearfix">';
         this.messagesHTML += '<div class="header">';
         this.messagesHTML += '<strong class="primary-font">' + origin + '</strong>';
@@ -208,6 +211,9 @@ export class BotChatCenter {
       }
       else {
         this.messagesHTML += '<li class="left clearfix">';
+        this.messagesHTML += '<span class="chat-img pull-left">'
+    		this.messagesHTML += '<img src="assets/images/person_64.png" alt="User Avatar">'
+    	  this.messagesHTML += '</span>'
         this.messagesHTML += '<div class="chat-body clearfix">';
         this.messagesHTML += '<div class="header">';
         this.messagesHTML += '<strong class="primary-font">' + origin + '</strong>';

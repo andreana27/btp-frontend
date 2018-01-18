@@ -72,14 +72,25 @@
           <div class="box-footer">
             <div class="row">
               <div class="col-sm-12">
-                <ul class="list-group" show.bind="botSelected">
+                <ul class="friend-list" show.bind="botSelected">
+                  <li class="active bounceInDown"  repeat.for="contact of contactList">
+                  	<a click.delegate="getMessagerByContact(contact.id)" class="clearfix">
+                  		<img src="assets/images/person_64.png" alt="" class="img-circle">
+                  		<div class="friend-name">
+                  			<strong>${contact.id}</strong>
+                  		</div>
+                  	</a>
+                  </li>
+                </ul>
+                <!--<ul class="list-group" show.bind="botSelected">
                   <li repeat.for="contact of contactList" class="list-group-item">
                     <a click.delegate="getMessagerByContact(contact.id)">
+                      <label>${contact.id}</label>
                       <h4 class="list-group-item-heading">${contact.id}</h4>
                       <p class="list-group-item-text">${contact.id}</p>
                     </a>
                   </li>
-                </ul>
+                </ul>-->
               </div>
             </div>
           </div>
