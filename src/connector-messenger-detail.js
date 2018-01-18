@@ -102,8 +102,10 @@ export class ConnectorMessengerDetail {
 
   //function that clears the form controls
   clearform() {
-    this.connector.token="";
-    this.connector.challenge="";
+    if(this.connector != null){
+      this.connector.token="";
+      this.connector.challenge="";
+    }
   }
 
   //function for selected the selected bot

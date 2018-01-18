@@ -47,12 +47,12 @@ main {
   display: flex;
 }
 
-aside, article {
+.scrollable, article {
   overflow-y: scroll;
   padding: 2em;
 }
 
-aside {
+.scrollable {
   flex: 1;
   background: #dbef69;
 }

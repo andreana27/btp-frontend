@@ -104,7 +104,9 @@ export class ConnectorTelegramDetail {
 
   //function that clears the form controls
   clearform() {
-    this.connector.token="";
+    if(this.connector != null){
+        this.connector.token="";
+    }
   }
 
   //function for selected the selected bot
