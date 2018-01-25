@@ -15,6 +15,7 @@ export class WidgetSetup {
   botId = 0;
   isSample = false;
   qualifiesForDemo = false;
+  jsReference = '<script src="https://developer.innovare.es/backend/static/_2.16.1/widget/js/ChatWidget.js"></script>';
   //List of bots
   selectedBotId = [];
   //bool indicator enables the bot variable table
@@ -78,8 +79,6 @@ export class WidgetSetup {
 
   SelectBot(botId) {
     this.selectedBotId = botId;
-    var bot = this.bot_list.filter(function (bot) { return bot.id === botId; });
-    this.botNameValue = bot[0].name;
     this.getConnectors();
   }
 
