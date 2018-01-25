@@ -31,6 +31,11 @@ export class Manager {
         name: 'bot-chat-center'
       },
       {
+        route: 'chat/widget-setup',
+        moduleId: 'widget-setup',
+        name: 'widget-setup'
+      },
+      {
         route: 'user/profle',
         moduleId: 'user-profile',
         name: 'user-profile'
