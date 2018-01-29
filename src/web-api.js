@@ -537,4 +537,93 @@ export class WebAPI {
           return data;
       });
     }
+
+    //Gets the record count for the variables registered to a bot
+    getIntentCount(botId) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intent_recordcount/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.data;
+      });
+    }
+
+    //Returns a segment of the intent records stored fot the selected bot
+    getBotIntents(botId,startLimit,endLimit) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents/${botId}/${startLimit}/${endLimit}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    updateBotIntent(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents.json`, {
+        method: 'PUT',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    deleteBotIntent(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents.json`, {
+        method: 'DELETE',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    insertBotIntent(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
 }

@@ -39,6 +39,11 @@ export class Manager {
         route: 'user/profle',
         moduleId: 'user-profile',
         name: 'user-profile'
+      },
+      {
+        route: 'bot/intents',
+        moduleId: 'bot-intents',
+        name: 'bot-intents'
       }
     ]);
     this.router = router;

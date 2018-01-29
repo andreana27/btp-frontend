@@ -1,0 +1,139 @@
+<template>
+  <section class="content-header">
+    <h1>
+      <small>Bot Intents Management</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="../../index.html">My Bots</a></li>
+      <li class="active">Bot Intents Management</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Intent Management</div>
+      <div class="panel-body">
+        <div class="row">
+          <label align="right" class="col-sm-2">Selected Bot</label>
+          <div class="col-sm-6">
+            <select value.bind="selectedBotId" class="form-control" change.delegate="getData(selectedBotId)">
+              <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="nav-tabs-custom">
+              <div class="tab-content">
+                <div class="tab-pane active" id="intents">
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <label innerHTML.bind="countLabel"></label>
+                      <h4>List of Intents<h4>
+                        <table class="table table-striped"
+                                aurelia-table="data.bind:tableRecords; display-data.bind: $displayData;
+                                current-page.bind: currentPage; page-size.bind: pageSize;
+                                total-items.bind:totalRecords;">
+                          <thead>
+                            <th>Intent ID</th>
+                            <th>Name</th>
+                            <th>Context</th>
+                          </thead>
+                          <thbody>
+                            <tbody>
+                            <tr repeat.for="intent of $displayData">
+                              <td>${intent.id}</td>
+                              <td>${intent.name}</td>
+                              <td>${intent.context_name}</td>
+                              <td>
+                                <a class="btn btn-xs btn-info" click.delegate="editIntent(intent)">
+                                  <i class="fa fa-pencil"></i> Edit
+                                </a>
+                              </td>
+                              <td>
+                                <a class="btn btn-xs btn-danger" click.delegate="confirmDelete(intent)">
+                                  <i class="fa fa-trash"></i> Delete
+                                </a>
+                              </td>
+                            </tr>
+                            </tbody>
+                          </thbody>
+                        </table>
+                      <hr>
+                      <h4>Create or Edit an Intent</h4>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <label>Intent Name</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="form-group has-feedback">
+                            <input type="text" class="form-control" placeholder="Intent Name" value.bind="intentName">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <label>Context</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div class="form-group has-feedback">
+                            <select value.bind="selectedContextId" class="form-control">
+                              <option repeat.for="context of context_list" model.bind="context.id">${context.name}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                        </div>
+                        <div class="col-sm-3">
+                          <button type="button" class="btn btn-primary btn-block btn-flat" show.bind="isEditing" click.delegate="cancelEdit()">
+                            Discard Changes
+                          </button>
+                        </div>
+                        <div class="col-sm-3">
+                          <button type="button" innerHTML.bind="txtSaveButton" class="btn btn-success btn-block btn-flat" disabled.bind="!canSaveIntent" click.delegate="saveIntent()">
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.tab-pane -->
+              </div>
+              <!-- /.tab-content -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--modal for delete warning-->
+  <div class="modal modal-danger fade" id="modal-danger" ref="mdlDeleteIntent">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">${delete_message.title}</h4>
+          </div>
+          <div class="modal-body">
+            <p>${delete_message.content}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline pull-left" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-outline"
+                    data-dismiss="modal"
+                    click.delegate="deleteIntent()">Delete</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+</template>
