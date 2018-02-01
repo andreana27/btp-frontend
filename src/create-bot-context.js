@@ -66,7 +66,6 @@ export class CreateBotContext {
   selectParentContext(context)
   {
     this.selectedContextId= context.id;
-    console.log(context.id);
   }
 
 }
