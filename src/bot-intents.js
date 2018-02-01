@@ -7,6 +7,7 @@ export class BotDataManagment {
   //Local variables
   selectedBotId = [];
   selectedContextId = [];
+  selectedTrigContextId = [];
   //bool indicator enables the bot variable table
   botSelected = false;
   //petition package size
@@ -15,9 +16,12 @@ export class BotDataManagment {
   intentList = [];
   //records array
   tableRecords = [];
+  intentExamples = [];
   //pagination size
   pageSize = 10;
   totalRecords = 0;
+  intentExPageSize = 10;
+  intentExampleCount = 0;
   //filters settings
   filters = [];
   //
@@ -30,14 +34,20 @@ export class BotDataManagment {
   context_list = [];
   //
   intentName = '';
+  exampleText = '';
+  triggeredContext = 0;
   intentId = 0;
+  intentExampleId = 0;
   countLabel = '';
   //attached functionallity
   attached(){}
   //Function gets called whenever the class is created
   created() {}
   isEditing = false;
+  isEditingExample = false;
+  hasExamples = false;
   txtSaveButton = 'Save New Intent';
+  txtSaveExButton = 'Save New Example';
 
   //Class constructor
   constructor(api, ea) {
@@ -75,6 +85,7 @@ export class BotDataManagment {
       //clearing values
       this.allRecords = [];
       this.tableRecords = [];
+      this.intentList =  [];
       this.totalRecords = 0;
       this.api.getIntentCount(this.selectedBotId).then(numberOfRecords => {
         this.numberOfRecords = numberOfRecords;
@@ -124,6 +135,7 @@ export class BotDataManagment {
     record.context_name = this.context_list.filter(x => x.id == context_id)[0].name;
     record.name = name;
     this.tableRecords.push(record);
+    this.intentList.push(record);
   }
 
   get canSaveIntent() {
@@ -145,7 +157,6 @@ export class BotDataManagment {
         this.getIntents(this.selectedBotId);
       });
     }
-
   }
 
   //get the selected connector and set's it up to view/edit
@@ -154,6 +165,7 @@ export class BotDataManagment {
     this.intentId = intent.id;
     this.selectedContextId = this.context_list.filter(x => x.id == intent.context_id)[0].id;
     this.isEditing = true;
+    this.getExamples(intent.id);
     this.txtSaveButton = 'Save Changes';
   }
 
@@ -176,15 +188,133 @@ export class BotDataManagment {
   confirmDelete(intent){
     if (typeof intent === "undefined") {
       //close modal in case there is no connector selected
-      $("#modal-danger").modal('hide');
+      $("#mdlDeleteIntent").modal('hide');
     }
     else {
       this.intentId = intent.id;
       this.delete_message = {};
       this.delete_message.title = `Delete Intent ${intent.name}?`;
       this.delete_message.content = `You are about to delete the intent ${intent.name}.\r\nBeware you cannot undo this action, do you wish to proceed?`;
-      $("#modal-danger").modal('show');
+      $("#mdlDeleteIntent").modal('show');
     }
   }
 
+  get canSaveIntentExample(){
+    return this.exampleText && !this.api.isRequesting;
+  }
+
+  saveExample() {
+    let intentExample = {intent_id: this.intentId, example_text: this.exampleText, triggered_context: this.selectedTrigContextId, id:this.intentExampleId };
+    if (this.isEditingExample) {
+      this.api.intentExampleCRUD(3,intentExample).then(response => {
+        this.exampleText = '';
+        this.getExamples(this.intentId);
+      });
+    } else {
+      this.api.intentExampleCRUD(1,intentExample).then(response => {
+        this.exampleText = '';
+        this.getExamples(this.intentId);
+      });
+    }
+  }
+  cancelEditExample(){
+    this.isEditingExample = false;
+    this.exampleText = '';
+    this.txtSaveExButton = 'Save New Intent Example';
+  }
+
+  editExample(example) {
+    this.exampleText = example.example_text;
+    this.intentExampleId = example.id;
+    this.selectedTrigContextId = this.context_list.filter(x => x.id == example.triggered_context)[0].id;
+    this.isEditingExample = true;
+    this.txtSaveExButton = 'Save Changes';
+  }
+
+  deleteExample() {
+    let example = {id: this.intentExampleId};
+    this.api.intentExampleCRUD(2, example).then(response => {
+      this.exampleText = '';
+      this.selectedTrigContextId = 0;
+      this.intentExampleId = 0;
+      this.getExamples(this.intentId);
+      this.isEditingExample = false;
+    });
+  }
+
+  confirmExampleDelete (example) {
+    if (typeof example === "undefined") {
+      //close modal in case there is no connector selected
+      $("#mdlDeleteExample").modal('hide');
+    }
+    else {
+      this.intentExampleId = example.id;
+      this.deleteEx_message = {};
+      this.deleteEx_message.title = `Delete Example ${example.id}?`;
+      this.deleteEx_message.content = `You are about to delete the example that contains the text ${example.example_text}.\r\nBeware you cannot undo this action, do you wish to proceed?`;
+      $("#mdlDeleteExample").modal('show');
+    }
+  }
+
+
+  getExamples(intent_id) {
+    try {
+      //clearing values
+      this.intentExamples = [];
+      this.intentExampleCount = 0;
+      this.selectedTrigContextId = this.context_list[0];
+      this.api.getIntentExampleCount(intent_id).then(numberOfRecords => {
+        this.intentExampleCount = numberOfRecords;
+        this.hasExamples = true;
+        if(this.numberOfRecords <= 0) {
+          this.countLabel = "The selected intent has no examples";
+        }
+        else {
+          this.countLabel = "";
+          //setting the number of petitions to make to the backend depending of the number of records of variables
+          this.numberOfPetitions = (this.numberOfRecords / this.recordsPerPetition)+1;
+          if (this.numberOfPetitions == 0) {
+            this.numberOfPetitions = 1;
+          }
+          //start getting the records
+          for(let iteration = 0; iteration < this.numberOfPetitions;iteration++) {
+            let inf_limit = this.recordsPerPetition * iteration;
+            let sup_limit = inf_limit + this.recordsPerPetition;
+            this.api.getIntentExamples(intent_id,inf_limit,sup_limit).then(response => {
+              //getting all the contacts from the logged Messages
+              for(let n = 0;n<response.examples.length;n++) {
+                let record = response.examples[n];
+                this.addExampleToTable(
+                  record.id,
+                  intent_id,
+                  record.example_text,
+                  record.triggered_context
+                );
+              }
+              this.intentExampleCount = this.intentExamples.length;
+              this.hasExamples = true;
+            });
+          }
+        }
+      });
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+  addExampleToTable(id,intent_id,example_text,triggered_context) {
+    try{
+      let record = { id:'', intent_id:'', example_text:'', triggered_context:''};
+      record.id = id;
+      record.intent_id = intent_id;
+      record.example_text = example_text;
+      record.context_name = this.context_list.filter(x => x.id == triggered_context)[0].name;
+      record.triggered_context = triggered_context;
+      this.intentExamples.push(record);
+    }
+    catch(err){
+      console.log("error: " + err);
+    }
+
+  }
 }//END BotDataManagment

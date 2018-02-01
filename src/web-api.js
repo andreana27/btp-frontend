@@ -626,4 +626,72 @@ export class WebAPI {
           return data;
       });
     }
+    /*------------------------------------*/
+    /*INTENT EXAMPLES*/
+    //Gets the record count for the variables registered to a bot
+    getIntentExampleCount(intent_id) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`intent_example_count/${intent_id}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.data;
+      });
+    }
+
+    //Returns a segment of the intent records stored fot the selected bot
+    getIntentExamples(intent_id,startLimit,endLimit) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`intent_example/${intent_id}/${startLimit}/${endLimit}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    //Returns a segment of the intent records stored fot the selected bot
+    intentExampleCRUD(operationType,parameters){
+      //operation types:
+      //  1 - insert
+      //  2 - delete
+      //  3 - update
+      let method = '';
+      switch(operationType) {
+        case 1:
+            method = 'POST';
+            break;
+        case 3:
+            method = 'PUT';
+            break;
+        case 2:
+            method = 'DELETE';
+            break;
+      }
+      //Setting up the parameters
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //sending the data
+      this.isRequesting = true;
+      return this.client_auth.fetch(`intent_example.json`, {
+        method: method,
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    /*------------------------------------*/
 }
