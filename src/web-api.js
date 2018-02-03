@@ -119,6 +119,19 @@ export class WebAPI {
     }
   }
 
+  setPasswordRecovery(value){
+    localStorage.isRegister = value;
+    if(!value)
+    {
+      this.app.setRoot('login');
+    }
+    else
+    {
+      this.app.setRoot('password-reset');
+    }
+  }
+
+
 	can(permission) {
     //TODO set roles or permission
 		return true;
@@ -174,6 +187,17 @@ export class WebAPI {
   validateNewUserEmail(email) {
     this.isRequesting = true;
     return this.client_auth.fetch(`user/${email}.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
+        return data;
+      });
+  }
+
+  resetPassword(email) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`password_reset/${email}.json`, {
         method: 'GET'
       })
       .then(response => response.json())

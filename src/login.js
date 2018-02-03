@@ -23,6 +23,11 @@ export class Login {
         moduleId: 'register',
         name: 'register',
         generationUsesHref: true
+      },
+      {
+        route: 'password-reset',
+        moduleId: 'password-reset',
+        name: 'password-reset'
       }
     ]);
     this.router = router;
@@ -46,6 +51,10 @@ export class Login {
 
   gotoRegister(){
     this.api.setRegister(true);
+  }
+
+  gotoPasswordReset(){
+    this.api.setPasswordRecovery(true);
   }
 
 }
