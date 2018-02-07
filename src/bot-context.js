@@ -61,6 +61,8 @@ export class BotContext {
   isQR = false;
   isEnd = false;
   isRest = false;
+  isSmartText = false;
+  isSmartReply = false;
 
   selectedValSA = [];
   ContentValue = '';
@@ -106,6 +108,8 @@ export class BotContext {
         this.isQR = false
         this.isEnd = false;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isSA = false;
       }
@@ -117,6 +121,8 @@ export class BotContext {
         this.isQR = false;
         this.isEnd = false;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.istext = false;
       }
@@ -128,6 +134,8 @@ export class BotContext {
         this.isQR = true;
         this.isEnd = false;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isQR = false;
       }
@@ -139,6 +147,8 @@ export class BotContext {
         this.isQR = false;
         this.isEnd = true;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isEnd = false;
       }
@@ -150,8 +160,38 @@ export class BotContext {
         this.isQR = false;
         this.isEnd = false;
         this.isRest = true;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isRest = false;
+      }
+    }
+    else
+    if (selectedValType == 'smartText') {
+      if (!this.isRptRet) {
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = true;
+        this.isSmartReply = false;
+      } else {
+        this.isSmartText = false;
+      }
+    }
+    else
+    if (selectedValType == 'smartReply') {
+      if (!this.isRptRet) {
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = true;
+      } else {
+        this.isSmartReply = false;
       }
     }
   }
@@ -214,6 +254,12 @@ export class BotContext {
       this.serviceURL = '';
       this.isRest = false;
       alert('REST Plugin element added');
+    } else
+    if(type == 'smartText'){
+      newElement.type = type;
+      newElement.store = this.StoreOnSmartText;
+      this.isSmartText = false;
+      alert('Smart Text element added');
     }
 
     arrayLength = this.json_Context[this.context.name].length;
