@@ -7,7 +7,7 @@ export class BotDataManagment {
   //Local variables
   selectedBotId = [];
   selectedContextId = [];
-  selectedTrigContextId = [];
+  selectedTrigContext = [];
   //bool indicator enables the bot variable table
   botSelected = false;
   //petition package size
@@ -32,6 +32,7 @@ export class BotDataManagment {
   hasIntents = false;
   //
   context_list = [];
+  exampleContextList = [];
   //
   intentName = '';
   exampleText = '';
@@ -74,6 +75,11 @@ export class BotDataManagment {
   getContexts(bot_id) {
     this.api.getContextList(bot_id).then(context_list => {
       this.context_list = context_list;
+      this.exampleContextList = context_list;
+      let defaultEmptyContext = {id:null,name:'No Context'}
+      //Adding the default empty context option at the first position of the array
+      this.exampleContextList.unshift(defaultEmptyContext);
+
     });
   }
 
@@ -204,7 +210,11 @@ export class BotDataManagment {
   }
 
   saveExample() {
-    let intentExample = {intent_id: this.intentId, example_text: this.exampleText, triggered_context: this.selectedTrigContextId, id:this.intentExampleId };
+    let triggeredContextId = null;
+    if (!(this.selectedTrigContext == "null")) {
+        triggeredContextId = this.selectedTrigContext;
+    }
+    let intentExample = {intent_id: this.intentId, example_text: this.exampleText, triggered_context: triggeredContextId, id:this.intentExampleId };
     if (this.isEditingExample) {
       this.api.intentExampleCRUD(3,intentExample).then(response => {
         this.exampleText = '';
@@ -226,7 +236,11 @@ export class BotDataManagment {
   editExample(example) {
     this.exampleText = example.example_text;
     this.intentExampleId = example.id;
-    this.selectedTrigContextId = this.context_list.filter(x => x.id == example.triggered_context)[0].id;
+    let SelectedContext = {name: "No Context", id: null};
+    if (!(example.triggered_context == 'null')) {
+      SelectedContext = this.exampleContextList.filter(x => x.id == example.triggered_context)[0];
+    }
+    this.selectedTrigContext = SelectedContext;
     this.isEditingExample = true;
     this.txtSaveExButton = 'Save Changes';
   }
@@ -235,7 +249,7 @@ export class BotDataManagment {
     let example = {id: this.intentExampleId};
     this.api.intentExampleCRUD(2, example).then(response => {
       this.exampleText = '';
-      this.selectedTrigContextId = 0;
+      this.selectedTrigContext = 0;
       this.intentExampleId = 0;
       this.getExamples(this.intentId);
       this.isEditingExample = false;
@@ -262,7 +276,7 @@ export class BotDataManagment {
       //clearing values
       this.intentExamples = [];
       this.intentExampleCount = 0;
-      this.selectedTrigContextId = this.context_list[0];
+      //this.selectedTrigContext = this.context_list[0];
       this.api.getIntentExampleCount(intent_id).then(numberOfRecords => {
         this.intentExampleCount = numberOfRecords;
         this.hasExamples = true;
@@ -304,12 +318,18 @@ export class BotDataManagment {
   }
   addExampleToTable(id,intent_id,example_text,triggered_context) {
     try{
+      let contextId = null;
+      let contextName = "No Context";
+      if (!(triggered_context == 'null')) {
+        contextId = triggered_context;
+        contextName = this.exampleContextList.filter(x => x.id == triggered_context)[0].name;
+      }
       let record = { id:'', intent_id:'', example_text:'', triggered_context:''};
       record.id = id;
       record.intent_id = intent_id;
       record.example_text = example_text;
-      record.context_name = this.context_list.filter(x => x.id == triggered_context)[0].name;
-      record.triggered_context = triggered_context;
+      record.context_name = contextName;
+      record.triggered_context = contextId;
       this.intentExamples.push(record);
     }
     catch(err){
