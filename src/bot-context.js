@@ -66,6 +66,8 @@ export class BotContext {
 
   selectedValSA = [];
   ContentValue = '';
+  SmartContentValue = '';
+  SmartReplyContentValue = '';
   ContentValueQR = '';
   SenderActionValue = '';
   //Contains the value of the selected option for flow (repeat/return)
@@ -258,8 +260,24 @@ export class BotContext {
     if(type == 'smartText'){
       newElement.type = type;
       newElement.store = this.StoreOnSmartText;
+      newElement.content = this.SmartContentValue;
       this.isSmartText = false;
+      this.SmartContentValue = '';
       alert('Smart Text element added');
+    } else
+    if (type == 'smartReply') {
+      newElement.type = type;
+      newElement.content = this.SmartReplyContentValue;
+      newElement.store = this.StoreOnSR;
+      newElement.quick_replies = this.items;
+      this.SmartReplyContentValue = "";
+      this.items = [{
+        title: '',
+        content_type: 'text',
+        sendTo: null
+      }];
+      this.isSmartReply = false;
+      alert('Smart reply element added');
     }
 
     arrayLength = this.json_Context[this.context.name].length;
