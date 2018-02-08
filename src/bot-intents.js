@@ -210,15 +210,20 @@ export class BotDataManagment {
   }
 
   saveExample() {
-    let triggeredContextId = null;
+    //Remove comment for triggeredContext re-activation
+    /*let triggeredContextId = null;
     if (!(this.selectedTrigContext == "null")) {
         triggeredContextId = this.selectedTrigContext;
     }
     let intentExample = {intent_id: this.intentId, example_text: this.exampleText, triggered_context: triggeredContextId, id:this.intentExampleId };
+    */
+    let intentExample = {intent_id: this.intentId, example_text: this.exampleText, id:this.intentExampleId };
     if (this.isEditingExample) {
       this.api.intentExampleCRUD(3,intentExample).then(response => {
         this.exampleText = '';
         this.getExamples(this.intentId);
+        this.cancelEditExample();
+
       });
     } else {
       this.api.intentExampleCRUD(1,intentExample).then(response => {
@@ -236,11 +241,12 @@ export class BotDataManagment {
   editExample(example) {
     this.exampleText = example.example_text;
     this.intentExampleId = example.id;
+    /*
     let SelectedContext = {name: "No Context", id: null};
     if (!(example.triggered_context == 'null')) {
       SelectedContext = this.exampleContextList.filter(x => x.id == example.triggered_context)[0];
     }
-    this.selectedTrigContext = SelectedContext;
+    this.selectedTrigContext = SelectedContext;*/
     this.isEditingExample = true;
     this.txtSaveExButton = 'Save Changes';
   }
@@ -249,7 +255,7 @@ export class BotDataManagment {
     let example = {id: this.intentExampleId};
     this.api.intentExampleCRUD(2, example).then(response => {
       this.exampleText = '';
-      this.selectedTrigContext = 0;
+      //this.selectedTrigContext = 0;
       this.intentExampleId = 0;
       this.getExamples(this.intentId);
       this.isEditingExample = false;
@@ -301,8 +307,8 @@ export class BotDataManagment {
                 this.addExampleToTable(
                   record.id,
                   intent_id,
-                  record.example_text,
-                  record.triggered_context
+                  record.example_text
+                  //record.triggered_context
                 );
               }
               this.intentExampleCount = this.intentExamples.length;
@@ -316,8 +322,9 @@ export class BotDataManagment {
       console.log(err);
     }
   }
-  addExampleToTable(id,intent_id,example_text,triggered_context) {
+  addExampleToTable(id,intent_id,example_text) {
     try{
+      /*
       let contextId = null;
       let contextName = "No Context";
       if (!(triggered_context == 'null')) {
@@ -325,11 +332,13 @@ export class BotDataManagment {
         contextName = this.exampleContextList.filter(x => x.id == triggered_context)[0].name;
       }
       let record = { id:'', intent_id:'', example_text:'', triggered_context:''};
+      */
+      let record = { id:'', intent_id:'', example_text:''};
       record.id = id;
       record.intent_id = intent_id;
       record.example_text = example_text;
-      record.context_name = contextName;
-      record.triggered_context = contextId;
+      //record.context_name = contextName;
+      //record.triggered_context = contextId;
       this.intentExamples.push(record);
     }
     catch(err){
