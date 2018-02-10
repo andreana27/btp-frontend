@@ -267,6 +267,9 @@ export class WebAPI {
       .then(response => response.json())
       .then(data => {
         this.isRequesting = false;
+        /*call the method that creates the ai file*/
+        //console.log(JSON.stringify(data.content[0].id));
+        this.createAIFile(data.content[0].id,'');
         return data.content[0];
       });
   }
@@ -716,6 +719,32 @@ export class WebAPI {
           this.isRequesting = false;
           return data;
       });
+    }
+    /*------------------------------------*/
+    /*------------------------------------*/
+    /*AI ENGINE - FILE HANDLING*/
+    createAIFile(bot_id,file_content){
+      let parameters = {bot_id: bot_id, file_content:file_content}
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //bot_ai
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_ai.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+
     }
     /*------------------------------------*/
 }

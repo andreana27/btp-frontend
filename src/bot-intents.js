@@ -49,7 +49,8 @@ export class BotDataManagment {
   hasExamples = false;
   txtSaveButton = 'Save New Intent';
   txtSaveExButton = 'Save New Example';
-
+  HTMLError = '';
+  file_content = '';
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
@@ -76,11 +77,17 @@ export class BotDataManagment {
     this.api.getContextList(bot_id).then(context_list => {
       this.context_list = context_list;
       this.exampleContextList = context_list;
-      let defaultEmptyContext = {id:null,name:'No Context'}
+      /*let defaultEmptyContext = {id:null,name:'No Context'}
       //Adding the default empty context option at the first position of the array
       this.exampleContextList.unshift(defaultEmptyContext);
-
+      */
     });
+  }
+
+  //validates the intent name, with an RE with allowance only for letters, numbers and -/_
+  validateIntentName(name){
+    var regex = /[a-zA-Z\-0-9]+([_]|[-]|[a-zA-Z\-0-9])*$/;
+    return regex.test(name);
   }
 
   //gets all the intents relative to a bot
@@ -149,19 +156,27 @@ export class BotDataManagment {
   }
 
   saveIntent() {
-    let intent = {bot_id: this.selectedBotId, context_id: this.selectedContextId, name: this.intentName, id:this.intentId };
-    if (this.isEditing) {
-      intent.id =
-      this.api.updateBotIntent(intent).then(response => {
-        this.intentName = '';
-        this.getIntents(this.selectedBotId);
-        this.isEditing = false;
-      });
-    } else {
-      this.api.insertBotIntent(intent).then(response => {
-        this.intentName = '';
-        this.getIntents(this.selectedBotId);
-      });
+    if (this.validateIntentName(this.intentName)) {
+      this.HTMLError = '';
+      let intent = {bot_id: this.selectedBotId, context_id: this.selectedContextId, name: this.intentName, id:this.intentId };
+      if (this.isEditing) {
+        intent.id =
+        this.api.updateBotIntent(intent).then(response => {
+          this.intentName = '';
+          this.getIntents(this.selectedBotId);
+          this.isEditing = false;
+          this.generateJSONFile();
+        });
+      } else {
+        this.api.insertBotIntent(intent).then(response => {
+          this.intentName = '';
+          this.getIntents(this.selectedBotId);
+          this.generateJSONFile();
+        });
+      }
+    }
+    else {
+      this.HTMLError = '<br><label>Allowed name characters: Letters A-9, Numbrers:0-9, Underscore: _ and Hyphen: -<label>';
     }
   }
 
@@ -223,15 +238,18 @@ export class BotDataManagment {
         this.exampleText = '';
         this.getExamples(this.intentId);
         this.cancelEditExample();
-
+        this.generateJSONFile();
       });
     } else {
       this.api.intentExampleCRUD(1,intentExample).then(response => {
         this.exampleText = '';
         this.getExamples(this.intentId);
+        this.generateJSONFile();
       });
     }
   }
+
+
   cancelEditExample(){
     this.isEditingExample = false;
     this.exampleText = '';
@@ -259,6 +277,7 @@ export class BotDataManagment {
       this.intentExampleId = 0;
       this.getExamples(this.intentId);
       this.isEditingExample = false;
+      this.generateJSONFile();
     });
   }
 
@@ -346,4 +365,50 @@ export class BotDataManagment {
     }
 
   }
-}//END BotDataManagment
+
+  generateJSONFile() {
+    this.file_content = {
+      rasa_nlu_data : {
+        common_examples : [],
+        regex_features : [],
+        entity_synonyms : []
+      }
+    };
+    //adding Examples
+    let i = 0;
+    for (i=0;i<this.intentList.length;i++){
+      //getting the intent
+      let intent = this.intentList[i];
+      //getting the Examples
+      this.api.getIntentExampleCount(intent.id).then(numberOfRecords => {
+        if(numberOfRecords <= 0) { }
+        else {
+          let nPetitions = (numberOfRecords / 50) +1;
+          if (nPetitions == 0) { nPetitions = 1; }
+          for(let iteration = 0; iteration < nPetitions;iteration++) {
+            let inf_limit = this.recordsPerPetition * iteration;
+            let sup_limit = inf_limit + this.recordsPerPetition;
+            this.api.getIntentExamples(intent.id,inf_limit,sup_limit).then(response => {
+              //getting all the contacts from the logged Messages
+              for(let n = 0;n<response.examples.length;n++) {
+                let record = response.examples[n];
+                //creating the example structure
+                let example = {
+                  text:record.example_text,
+                  intent:intent.name,
+                  entities:[]
+                }
+                this.file_content.rasa_nlu_data.common_examples.push(example);
+                //console.log(JSON.stringify(file_content));
+              }
+              this.api.createAIFile(this.selectedBotId, JSON.stringify(this.file_content));
+            });
+          }
+        }
+      });
+    }
+    return JSON.stringify(this.file_content);
+  }
+
+
+}//END BotIntentManagment
