@@ -51,6 +51,9 @@ export class BotDataManagment {
   txtSaveExButton = 'Save New Example';
   HTMLError = '';
   file_content = '';
+  intentsQualify = false;
+  exampleCount = 0;
+  bot_language = 'en';
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
@@ -60,6 +63,7 @@ export class BotDataManagment {
   //Function gets called whenever the view is activated
   activate(routeConfig) {
     this.routeConfig = routeConfig;
+    this.intentsQualify = false;
     //getting the bot list
     return this.api.getBotsList().then(bots => {
       this.bot_list = bots
@@ -95,6 +99,8 @@ export class BotDataManagment {
     try {
       //setting the selected bot
       this.bot = this.bot_list.filter(x => x.id == this.selectedBotId)[0];
+      //getting the language
+      this.bot_language = this.bot.bot_language;
       //clearing values
       this.allRecords = [];
       this.tableRecords = [];
@@ -374,6 +380,7 @@ export class BotDataManagment {
         entity_synonyms : []
       }
     };
+    this.exampleCount = 0;
     //adding Examples
     let i = 0;
     for (i=0;i<this.intentList.length;i++){
@@ -398,6 +405,13 @@ export class BotDataManagment {
                   intent:intent.name,
                   entities:[]
                 }
+                this.exampleCount++;
+                if (this.exampleCount > 2){
+                    this.intentsQualify = true;
+                }
+                else {
+                  this.intentsQualify = false;
+                }
                 this.file_content.rasa_nlu_data.common_examples.push(example);
                 //console.log(JSON.stringify(file_content));
               }
@@ -408,6 +422,11 @@ export class BotDataManagment {
       });
     }
     return JSON.stringify(this.file_content);
+  }
+
+  generateTrainningFiles(){
+    this.api.createAIConfigFile(this.selectedBotId, this.bot_language);
+    this.intentsQualify = false;
   }
 
 

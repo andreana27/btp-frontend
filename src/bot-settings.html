@@ -33,6 +33,16 @@
           </div>
           <div class="box-footer">
             <div class="row">
+      				<div class="col-sm-2">
+                <label>Bot Language</label>
+              </div>
+              <div class="col-sm-9">
+                <select value.bind="selectedLanguage" class="form-control" change.delegate="setLanguage()">
+                  <option repeat.for="language of languages" value.bind="language.key">${language.name}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-sm-12">
                 <h4 class="text-center">Channel Settings</h4>
                 <a class="btn btn-app" route-href="route: connector-messenger;">

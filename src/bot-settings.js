@@ -25,6 +25,8 @@ import {
 
 @inject(WebAPI, EventAggregator)
 export class BotSettings {
+  selectedLanguage = 'en';
+  languages = [{name:'English', key:'en'}, {name:'Spanish', key:'es'}];
   constructor(api, ea) {
     this.api = api;
     this.ea = ea;
@@ -36,6 +38,8 @@ export class BotSettings {
   activate(params, routeConfig) {
     this.routeConfig = routeConfig;
     this.botid = params.id;
+    //adding language value
+    this.selectedLanguage = params.bot_language;
     this.contextos = [];
     //getting the full context list
     this.api.getContextList(this.botid).then(contextos => {
@@ -173,5 +177,10 @@ export class BotSettings {
       }
     }
     return false;
+  }
+
+  setLanguage() {
+    this.bot.bot_language = this.selectedLanguage;
+    this.api.saveBot(this.bot);
   }
 }
