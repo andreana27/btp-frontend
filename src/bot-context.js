@@ -14,6 +14,7 @@ import {
 import {
   areEqual
 } from './utility';
+import * as toastr from 'toastr';
 
 @inject(WebAPI, EventAggregator)
 export class BotContext {
@@ -56,20 +57,27 @@ export class BotContext {
   //Child contexts of the current context
   contextChlidContexts = [];
 
+  isTemplate = false;
+  isAttachment = false;
   isSA = false;
   istext = false;
   isQR = false;
   isEnd = false;
   isRest = false;
+  isSmartText = false;
+  isSmartReply = false;
 
   selectedValSA = [];
   ContentValue = '';
+  SmartContentValue = '';
+  SmartReplyContentValue = '';
   ContentValueQR = '';
   SenderActionValue = '';
   //Contains the value of the selected option for flow (repeat/return)
   selectedValEnd =[];
   //Contains the value of the selected method(POST/GET) for the JSON api
   selectedValMethod = [];
+  selectedValMethodx = 'link';
   //Contains the value selected fot the context to sent the action-reply property
   selectedValContext  = [];
   //contains the list of variables for the selected bot
@@ -97,61 +105,144 @@ export class BotContext {
     this.ea = ea;
   }
   elementSelected(selectedValType) {
+    console.log(selectedValType);
     //console.log(JSON.stringify(this.contextChlidContexts));
     //console.log((this.contextChlidContexts));
     if (selectedValType == 'sa') {
       if (!this.isSA) {
+        this.isAttachment = false;
+        this.isTemplate = false;
         this.isSA = true;
         this.istext = false;
         this.isQR = false
         this.isEnd = false;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isSA = false;
       }
     } else
+    if (selectedValType == 'template') {
+      if (!this.isTemplate) {
+        this.isAttachment = false;
+        this.isTemplate = true;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+      } else {
+        this.isTemplate = false;
+      }
+    } else
+    if (selectedValType == 'attachment') {
+      if (!this.isTemplate) {
+        this.isAttachment = true;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+      } else {
+        this.isAttachment = false;
+      }
+    } else
     if (selectedValType == 'text') {
       if (!this.istext) {
+        this.isAttachment = false;
+        this.isTemplate = false;
         this.isSA = false;
         this.istext = true;
         this.isQR = false;
         this.isEnd = false;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.istext = false;
       }
     } else
     if (selectedValType == 'qr') {
       if (!this.isQR) {
+        this.isAttachment = false;
+        this.isTemplate = false;
         this.isSA = false;
         this.istext = false;
         this.isQR = true;
         this.isEnd = false;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isQR = false;
       }
     } else
     if (selectedValType == 'end') {
       if (!this.isRptRet) {
+        this.isAttachment = false;
+        this.isTemplate = false;
         this.isSA = false;
         this.istext = false;
         this.isQR = false;
         this.isEnd = true;
         this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isEnd = false;
       }
     }  else
     if (selectedValType == 'rest') {
       if (!this.isRptRet) {
+        this.isAttachment = false;
+        this.isTemplate = false;
         this.isSA = false;
         this.istext = false;
         this.isQR = false;
         this.isEnd = false;
         this.isRest = true;
+        this.isSmartText = false;
+        this.isSmartReply = false;
       } else {
         this.isRest = false;
+      }
+    }
+    else
+    if (selectedValType == 'smartText') {
+      if (!this.isRptRet) {
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = true;
+        this.isSmartReply = false;
+      } else {
+        this.isSmartText = false;
+      }
+    }
+    else
+    if (selectedValType == 'smartReply') {
+      if (!this.isRptRet) {
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = true;
+      } else {
+        this.isSmartReply = false;
       }
     }
   }
@@ -168,15 +259,25 @@ export class BotContext {
       newElement.store = this.StoreOnText;
       this.ContentValue = "";
       this.istext = false;
-      alert('Text element added');
+      toastr.success('Text element added');
 
+    } else
+    if (type == 'attachment') {
+      newElement.type = type;
+      newElement.media_type = this.selectedValMethodx;
+      newElement.url  = this.serviceURL;
+      //clean variables
+      this.selectedValMethodx = 'link';
+      this.serviceURL = '';
+      this.isRest = false;
+      toastr.success('REST Plugin element added');
     } else
     if (type == 'sender_action') {
       newElement.type = type;
       newElement.sender_action = this.selectedValSA;
       this.selectedValSA = [];
       this.isSA = false;
-      alert('Sender action element added');
+      toastr.success('Sender action element added');
 
     } else
     if (type == 'quick_reply') {
@@ -191,14 +292,14 @@ export class BotContext {
         sendTo: null
       }];
       this.isQR = false;
-      alert('Quick reply element added');
+      toastr.success('Quick reply element added');
     } else
     if (type == 'end') {
       newElement.type = type;
       newElement.action = this.selectedValEnd;
       this.selectedValEnd = [];
       this.isEnd = false;
-      alert('End element added');
+      toastr.success('End element added');
     } else
     if (type == 'rest') {
       newElement.type = type;
@@ -213,7 +314,29 @@ export class BotContext {
       }];
       this.serviceURL = '';
       this.isRest = false;
-      alert('REST Plugin element added');
+      toastr.success('REST Plugin element added');
+    } else
+    if(type == 'smartText'){
+      newElement.type = type;
+      newElement.store = this.StoreOnSmartText;
+      newElement.content = this.SmartContentValue;
+      this.isSmartText = false;
+      this.SmartContentValue = '';
+      toastr.success('Smart Text element added');
+    } else
+    if (type == 'smartReply') {
+      newElement.type = type;
+      newElement.content = this.SmartReplyContentValue;
+      newElement.store = this.StoreOnSR;
+      newElement.quick_replies = this.items;
+      this.SmartReplyContentValue = "";
+      this.items = [{
+        title: '',
+        content_type: 'text',
+        sendTo: null
+      }];
+      this.isSmartReply = false;
+      toastr.success('Smart reply element added');
     }
 
     arrayLength = this.json_Context[this.context.name].length;

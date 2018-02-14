@@ -85,6 +85,8 @@
             <i if.bind="element.type=='text'" class="fa fa-file-text-o bg-blue"></i>
             <i if.bind="element.type=='sender_action'" class="fa fa-send-o bg-blue"></i>
             <i if.bind="element.type=='quick_reply'" class="fa fa-reply bg-blue"></i>
+            <i if.bind="element.type=='smartText'" class="fa fa-pencil-square-o bg-blue"></i>
+            <i if.bind="element.type=='smartReply'" class="fa fa-star bg-blue"></i>
             <div if.bind="element.type=='text'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
               <h3 class="timeline-header"><a href="#">${element.type}</a></h3>
@@ -206,6 +208,34 @@
               </div>
             </div>
             <!-- END REST PLUGIN-->
+            <!-- ATTACHMENT-->
+            <div if.bind="element.type=='attachment'"  class="timeline-item">
+              <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
+              <h3 class="timeline-header"><a href="#">Attachment</a></h3>
+              <div class="timeline-body">
+                <div class="panel-heading">Attachment</div>
+                <div class="panel-body">
+                  <div class="row">
+                    <label class="col-sm-2 ">Type</label>
+                    <label class="col-sm-10">URL</label>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-2">
+            					<select value.bind="element.media_type" class="form-control" change.delegate="elementChanged($index, element)">
+            						<option repeat.for="option of ['link', 'upload']" model.bind="option">${option}</option>
+            					</select>
+            				</div>
+                    <div class="col-sm-10">
+                      <input type="text" placeholder="Asset URL" class="form-control" value.bind="element.url" change.delegate="elementChanged($index, element)">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-footer">
+                <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <!-- END ATTACHMENT-->
             <div if.bind="element.type=='quick_reply'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
               <h3 class="timeline-header"><a href="#">Quick Reply</a></h3>
@@ -285,8 +315,129 @@
                 <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
               </div>
             </div>
+            <!-- _________________ SMART OBJECTS _________________ -->
+            <!-- _________________ SMART TEXT _________________ -->
+            <div if.bind="element.type=='smartText'"  class="timeline-item">
+              <h3 class="timeline-header"><a href="#">Smart Text</a></h3>
+              <div class="timeline-body">
+                <div class="row">
+                  <label class="col-sm-2 control-label">Content</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" value.bind="element.content" change.delegate="elementChanged($index, element)"></textarea>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <label class="col-sm-2 control-label">Store on</label>
+                  <div class="col-sm-10">
+          					<!--<input class="form-control" type="text" value.bind="element.store"
+                           change.delegate="elementChanged($index, element)">-->
+                     <autocomplete  value.bind="element.store" service.bind="variableService"
+                             placeholder="Enter variable name" change.delegate="elementChanged($index, element)">
+                     </autocomplete>
+          				</div>
+                </div>
+              </div>
+              <div class="timeline-footer">
+                <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <!-- _________________ SMART REPLY _________________ -->
+            <div if.bind="element.type=='smartReply'"  class="timeline-item">
+              <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
+              <h3 class="timeline-header"><a href="#">Smart Reply</a></h3>
+              <div class="timeline-body">
+                <div class="row">
+                  <label class="col-sm-2 control-label">Content</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" value.bind="element.content"
+                              change.delegate="elementChanged($index, element)"></textarea>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <label class="col-sm-2 control-label">Store on</label>
+                  <div class="col-sm-10">
+                    <autocomplete  value.bind="element.store" service.bind="variableService"
+                            placeholder="Enter variable name" change.delegate="elementChanged($index, element)">
+                    </autocomplete>
+          				</div>
+                </div>
+                <h5>Quick replies</h5>
+                <div class="row">
+                  <div repeat.for="item of element.quick_replies" ref="$replies" index.bind="$index">
+                    <div class="col-md-3">
+                      <label>Content Type</label>
+                      <select class="form-control" value.bind="item.content_type" change.delegate="editing_changedItem($replies.index, $root.index, item)">
+                        <option value="text">text</option>
+                        <option value="location">location</option>
+                      </select>
+                    </div>
+                    <div class="col-md-4">
+                      <label >Title</label>
+                      <input class="form-control" type="text" value.bind="item.title" change.delegate="editing_changedItem($replies.index, $root.index, item)">
+                    </div>
+                    <div class="col-md-3">
+                      <label >Send To</label>
+                      <select value.bind="item.sendTo" class="form-control" change.delegate="editing_changedItem($replies.index, $root.index, item)" >
+            						<option repeat.for="option of contextChlidContexts" model.bind="option.id">${option.name}</option>
+            					</select>
+                    </div>
+                    <div class="col-md-2">
+                      <label >Action</label>
+                      <div>
+                        <button type="button"
+                                class="btn btn-default btn-circle"
+                                click.delegate="editing_removeItem($replies.index,$root.index)"
+                                disabled.bind="!(element.quick_replies.length>1)">
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="timeline-body">
+                <button type="button" class="btn btn-default btn-circle" click.delegate="editing_addBlank($index)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+              </div>
+              <div class="timeline-footer">
+                 <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
           </li>
         </ul>
+        <!-- add template element-->
+        <div class="panel panel-primary" show.bind="isAttachment" >
+          <div class="panel-heading">Adding Attachment element</div>
+          <div class="panel-body">
+            <div class="row">
+              <label class="col-sm-2 ">Type</label>
+              <label class="col-sm-10">Media</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">
+      					<select value.bind="selectedValMethodx" class="form-control" >
+      						<option repeat.for="option of ['link', 'upload']" model.bind="option">${option}</option>
+      					</select>
+      				</div>
+              <div class="col-sm-10" show.bind="selectedValMethodx != 'upload'">
+                <input type="text" placeholder="Enter the item URL" class="form-control" value.bind="serviceURL">
+              </div>
+              <div class="col-sm-10" show.bind="selectedValMethodx == 'upload'">
+                <input type="file" accept="image/*" class="form-control" value.bind="uploadFile">
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <label class="col-sm-2 control-label">Store on</label>
+              <div class="col-sm-10">
+      					<!--<input class="form-control" type="text" value.bind="StoreOnText">-->
+                <autocomplete service.bind="variableService" value.bind="StoreOnText" placeholder="Enter variable name"></autocomplete>
+      				</div>
+            </div>
+            <button class="btn btn-primary" click.delegate="additem('attachment')">Add</button>
+          </div>
+        </div>
         <!-- add text element-->
         <div class="panel panel-primary" show.bind="istext" >
           <div class="panel-heading">Adding text element</div>
@@ -460,24 +611,101 @@
           </div>
         </div>
         <!-- /add end/repeat element -->
+        <!-- add smart text element-->
+        <div class="panel panel-primary" show.bind="isSmartText" >
+          <div class="panel-heading">Adding smart text element</div>
+          <div class="panel-body">
+            <div class="row">
+              <label class="col-sm-2 control-label">Content</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" rows="5" value.bind="SmartContentValue"></textarea>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <label class="col-sm-2 control-label">Store on</label>
+              <div class="col-sm-10">
+                <!--<input class="form-control" type="text" value.bind="StoreOnText">-->
+                <autocomplete service.bind="variableService" value.bind="StoreOnSmartText" placeholder="Enter variable name"></autocomplete>
+              </div>
+            </div>
+            <button class="btn btn-primary" click.delegate="additem('smartText')">Add</button>
+          </div>
+        </div>
+        <!-- ./add smart text element-->
+        <!-- add smart reply element-->
+        <div class="panel panel-primary" show.bind="isSmartReply">
+    			<div class="panel-heading">Adding smart reply element</div>
+    			<div class="panel-body">
+            <div class="row">
+      				<label class="col-sm-2 control-label">Content</label>
+      				<div class="col-sm-10">
+      					<textarea class="form-control" rows="5" value.bind="SmartReplyContentValue"></textarea>
+      				</div>
+            </div>
+            <br>
+            <div class="row">
+              <label class="col-sm-2 control-label">Store on</label>
+              <div class="col-sm-10">
+                  <autocomplete service.bind="variableService" value.bind="StoreOnSR" placeholder="Enter variable name"></autocomplete>
+      				</div>
+            </div>
+    				<label class="col-sm-2 control-label">Quick replies:</label>
+    				<div class="col-sm-12">
+    					<div class="form-inline" repeat.for="item of items">
+    						<div class="form-group">
+    							<label>Content Type</label>
+    							<select class="form-control" value.bind="item.content_type" change.delegate="changedItem($index, item)">
+    								<option value="text">text</option>
+    								<option value="location">location</option>
+    							</select>
+    							<label >Title</label>
+    							<input class="form-control" type="text" value.bind="item.title" change.delegate="changedItem($index, item)">
+    							<label >Send to Context:</label>
+                  <select value.bind="item.sendTo" class="form-control" >
+        						<option repeat.for="option of contextChlidContexts" model.bind="option.id">${option.name}</option>
+        					</select>
+    							<button type="button" class="btn btn-default btn-circle" click.delegate="removeItem($index)" disabled.bind="!canRemove" ><i class="fa fa-trash" aria-hidden="true"></i></button>
+    						</div>
+    					</div>
+    					<button type="button" class="btn btn-default btn-circle" click.delegate="addBlank()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+    				</div>
+    			</div>
+    			<div class="panel-body">
+    				<button class="btn btn-primary" click.delegate="additem('smartReply')">Add</button>
+    			</div>
+    		</div>
+        <!-- ./add smart reply element-->
         <div class="box-footer">
           <div class="row">
             <div class="col-sm-12">
               <h4 class="text-leftS">Add an element</h4>
-              <a class="btn btn-app" click.delegate="elementSelected('text')">
+              <a class="btn btn-app ${istext ? 'active' : ''}" click.delegate="elementSelected('text')">
                 <i class="fa fa-file-text-o"></i> Text
               </a>
-              <a class="btn btn-app" click.delegate="elementSelected('sa')">
+              <a class="btn btn-app ${isSA ? 'active' : ''}" click.delegate="elementSelected('sa')">
                 <i class="fa fa-send-o" ></i> Sender Action
               </a>
-              <a class="btn btn-app" click.delegate="elementSelected('qr')">
+              <a class="btn btn-app ${isQR ? 'active' : ''}" click.delegate="elementSelected('qr')">
                 <i class="fa fa-reply"></i> Quick Reply
               </a>
-              <a class="btn btn-app" click.delegate="elementSelected('rest')">
+              <a class="btn btn-app ${isRest ? 'active' : ''}" click.delegate="elementSelected('rest')">
                 <i class="fa fa-exchange"></i> REST API Plugin
               </a>
-              <a class="btn btn-app" click.delegate="elementSelected('end')">
+              <a class="btn btn-app ${isEnd ? 'active' : ''}" click.delegate="elementSelected('end')">
                 <i class="fa fa-circle-o-notch"></i> Flow End/Repeat
+              </a>
+              <a class="btn btn-app ${isSmartText ? 'active' : ''}" click.delegate="elementSelected('smartText')">
+                <i class="fa fa-pencil-square-o"></i> Smart Text
+              </a>
+              <a class="btn btn-app ${isSmartReply ? 'active' : ''}" click.delegate="elementSelected('smartReply')">
+                <i class="fa fa-star"></i> Smart Reply
+              </a>
+              <a show.bind="isTemplate" class="btn btn-app ${isTemplate ? 'active' : ''}" click.delegate="elementSelected('template')">
+                <i class="fa fa-list"></i> Template
+              </a>
+              <a class="btn btn-app ${isAttachment ? 'active' : ''}" click.delegate="elementSelected('attachment')">
+                <i class="fa fa-paperclip"></i> Attachment
               </a>
             </div>
           </div>

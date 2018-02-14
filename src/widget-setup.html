@@ -1,0 +1,99 @@
+<template>
+  <require from="resources/elements/number-input"></require>
+  <require from="resources/elements/number-value"></require>
+  <section class="content-header">
+    <h1>
+      <small>Chat Widget Setup</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="../../index.html">Chat Center</a></li>
+      <li class="active">Chat Widget Setup</li>
+    </ol>
+  </section>
+  <section class="content">
+
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#settings" data-toggle="tab" aria-expanded="false">Settings</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="settings">
+              <br>
+              <div class="row">
+                <label align="right" class="col-sm-4" align=right>Select a Bot</label>
+                <div class="col-sm-8">
+                  <select value.bind="selectedBotId" class="form-control" change.delegate="SelectBot(selectedBotId)">
+                    <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+                  </select>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <label class="col-sm-4 control-label" align=right>Bot Display Name</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" placeholder="Enter the bot display name" value.bind="botNameValue" change.delegate="generateHTML()"></input>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <label align="right" class="col-sm-4" align=right>Connection token</label>
+                <div class="col-sm-8">
+                  <select value.bind="token" class="form-control" change.delegate="SelectToken(token)">
+                    <option repeat.for="connector of connector_list" model.bind="connector.token">${connector.token}</option>
+                  </select>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <label class="col-sm-4 control-label" align=right>Widget Height</label>
+                <div class="col-sm-8">
+                  <number-input lass="form-control" value.bind="widgetHeight" change.delegate="generateHTML()"></number-input>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <label class="col-sm-4 control-label" align=right>Widget Width</label>
+                <div class="col-sm-8">
+                  <number-input lass="form-control" value.bind="widgetWidth" change.delegate="generateHTML()"></number-input>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <label class="col-sm-4 control-label" align=right> HTML Code</label>
+                <div class="col-sm-8">
+                  <textarea class="form-control"
+                            rows="5"
+                            value.bind="HTMLgenCode" readonly>
+                  </textarea>
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <label class="col-sm-4 control-label" align=right>Javascript Reference</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" value.bind="jsReference" readonly></input>
+                  <br>
+                  <small>This HTML tag must be added to the head section of the page where the widget is placed.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <h4>This is a preview of the Widget</h4>
+        <br>
+        <center>
+          <div innerhtml.bind="widgetHTML">
+          </div>
+        </center>
+        <br>
+      </div>
+    </div>
+  </section>
+</template>

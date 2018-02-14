@@ -3,7 +3,7 @@ import { Aurelia, inject } from 'aurelia-framework';
 
 @inject(Aurelia)
 export class WebAPI {
-  backend = 'https://developer.innovare.es/backend/';
+  backend = 'https://a2.botprotec.com/backend/';
   isRequesting = false;
   sessionUser = null;
 
@@ -119,6 +119,19 @@ export class WebAPI {
     }
   }
 
+  setPasswordRecovery(value){
+    localStorage.isRegister = value;
+    if(!value)
+    {
+      this.app.setRoot('login');
+    }
+    else
+    {
+      this.app.setRoot('password-reset');
+    }
+  }
+
+
 	can(permission) {
     //TODO set roles or permission
 		return true;
@@ -174,6 +187,17 @@ export class WebAPI {
   validateNewUserEmail(email) {
     this.isRequesting = true;
     return this.client_auth.fetch(`user/${email}.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
+        return data;
+      });
+  }
+
+  resetPassword(email) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`password_reset/${email}.json`, {
         method: 'GET'
       })
       .then(response => response.json())
@@ -243,6 +267,9 @@ export class WebAPI {
       .then(response => response.json())
       .then(data => {
         this.isRequesting = false;
+        /*call the method that creates the ai file*/
+        //console.log(JSON.stringify(data.content[0].id));
+        this.createAIFile(data.content[0].id,'');
         return data.content[0];
       });
   }
@@ -537,4 +564,187 @@ export class WebAPI {
           return data;
       });
     }
+
+    //Gets the record count for the variables registered to a bot
+    getIntentCount(botId) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intent_recordcount/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.data;
+      });
+    }
+
+    //Returns a segment of the intent records stored fot the selected bot
+    getBotIntents(botId,startLimit,endLimit) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents/${botId}/${startLimit}/${endLimit}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    updateBotIntent(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents.json`, {
+        method: 'PUT',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    deleteBotIntent(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents.json`, {
+        method: 'DELETE',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    insertBotIntent(parameters) {
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_intents.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    /*------------------------------------*/
+    /*INTENT EXAMPLES*/
+    //Gets the record count for the variables registered to a bot
+    getIntentExampleCount(intent_id) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`intent_example_count/${intent_id}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data.data;
+      });
+    }
+
+    //Returns a segment of the intent records stored fot the selected bot
+    getIntentExamples(intent_id,startLimit,endLimit) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`intent_example/${intent_id}/${startLimit}/${endLimit}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+
+    //Returns a segment of the intent records stored fot the selected bot
+    intentExampleCRUD(operationType,parameters){
+      //operation types:
+      //  1 - insert
+      //  2 - delete
+      //  3 - update
+      let method = '';
+      switch(operationType) {
+        case 1:
+            method = 'POST';
+            break;
+        case 3:
+            method = 'PUT';
+            break;
+        case 2:
+            method = 'DELETE';
+            break;
+      }
+      //Setting up the parameters
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //sending the data
+      this.isRequesting = true;
+      return this.client_auth.fetch(`intent_example.json`, {
+        method: method,
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    /*------------------------------------*/
+    /*------------------------------------*/
+    /*AI ENGINE - FILE HANDLING*/
+    createAIFile(bot_id,file_content){
+      let parameters = {bot_id: bot_id, file_content:file_content}
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //bot_ai
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_ai.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+
+    }
+    /*------------------------------------*/
 }
