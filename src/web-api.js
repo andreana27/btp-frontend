@@ -3,7 +3,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 
 @inject(Aurelia)
 export class WebAPI {
-  backend = 'https://a2.botprotec.com/backend/';
+  backend = 'https://developer.innovare.es/backend/';
+  //backend = 'https://a2.botprotec.com/backend/';
   isRequesting = false;
   sessionUser = null;
 
@@ -270,6 +271,7 @@ export class WebAPI {
         /*call the method that creates the ai file*/
         //console.log(JSON.stringify(data.content[0].id));
         this.createAIFile(data.content[0].id,'');
+        //this.createAIConfigFile(data.content[0].id);
         return data.content[0];
       });
   }
@@ -744,7 +746,30 @@ export class WebAPI {
           this.isRequesting = false;
           return data;
       });
-
+    }
+    //
+    createAIConfigFile(bot_id, bot_language){
+      var file_content = '{"project": "Project_' + bot_id +'","language": "'+ bot_language +'", "pipeline": "spacy_sklearn","path" : "./projects","data" : "./data/examples/rasa/Project_' + bot_id +'.json"}';
+      let parameters = {bot_id: bot_id, file_content:file_content}
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //bot_ai
+      this.isRequesting = true;
+      return this.client_auth.fetch(`bot_ai_config.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
     }
     /*------------------------------------*/
 }

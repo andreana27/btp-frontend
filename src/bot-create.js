@@ -26,7 +26,8 @@ export class CreateBot {
     this.router = router;
     this.bot = {
       name: '',
-      enabled: 'True'
+      enabled: 'True',
+      bot_language: 'en'
     };
   }
 

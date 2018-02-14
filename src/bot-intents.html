@@ -21,6 +21,12 @@
                 <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
               </select>
             </div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-3">
+              <button type="button" class="btn btn-success btn-block btn-flat" disabled.bind="!intentsQualify" click.delegate="generateTrainningFiles()">
+                Generate Bot Trainning
+              </button>
+            </div>
           </div>
           <div class="row">
             <div class="col-sm-12">
