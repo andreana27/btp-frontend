@@ -357,7 +357,9 @@ export class WebAPI {
     this.isRequesting = true;
     let formData = new FormData();
     for (let key in context) {
-      if ((context[key] != null)||(context[key]!=undefined)){
+      if (typeof(context[key]) === 'object'){
+        formData.append(key, JSON.stringify(context[key]));
+      }else{
         formData.append(key, context[key]);
       }
     }
