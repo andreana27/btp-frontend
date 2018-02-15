@@ -38,14 +38,14 @@ export class BotSettings {
   activate(params, routeConfig) {
     this.routeConfig = routeConfig;
     this.botid = params.id;
-    //adding language value
-    this.selectedLanguage = params.bot_language;
     this.contextos = [];
     //getting the full context list
     this.api.getContextList(this.botid).then(contextos => {
       this.fullContextList = contextos;
       this.api.getBotDetails(params.id).then(bot => {
         this.bot = bot;
+        //adding language value
+        this.selectedLanguage = bot.bot_language;
         this.routeConfig.navModel.setTitle(bot.name);
         this.originalBot = JSON.parse(JSON.stringify(bot));
         this.ea.publish(new BotViewed(this.bot));
