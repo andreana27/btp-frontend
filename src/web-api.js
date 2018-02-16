@@ -357,6 +357,9 @@ export class WebAPI {
     this.isRequesting = true;
     let formData = new FormData();
     for (let key in context) {
+      if (context[key] === null){
+        continue; // this avoids sending null to the backend
+      }
       if (typeof(context[key]) === 'object'){
         formData.append(key, JSON.stringify(context[key]));
       }else{
