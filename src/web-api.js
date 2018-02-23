@@ -358,8 +358,7 @@ export class WebAPI {
       .then(response => response.json())
       .then(data => {
         this.isRequesting = false;
-        console.log(data);
-        return data.content[0];
+        return data;
       });
   }
 
