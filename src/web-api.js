@@ -75,6 +75,7 @@ export class WebAPI {
     })
       .then(response => response.json())
       .then((responseData) => {
+        this.isRequesting = false;
         let response = {'type':0,'msg':''};
         try {
           if (responseData.data[0].length > 3)
@@ -192,6 +193,7 @@ export class WebAPI {
       })
       .then(response => response.json())
       .then(data => {
+        this.isRequesting = false;
         return data;
       });
   }
@@ -203,6 +205,7 @@ export class WebAPI {
       })
       .then(response => response.json())
       .then(data => {
+        this.isRequesting = false;
         return data;
       });
   }
