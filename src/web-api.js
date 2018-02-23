@@ -772,7 +772,8 @@ export class WebAPI {
     }
     //
     createAIConfigFile(bot_id, bot_language){
-      var file_content = '{"project": "Project_' + bot_id +'","language": "'+ bot_language +'", "pipeline": "spacy_sklearn","path" : "./projects","data" : "./data/examples/rasa/Project_' + bot_id +'.json"}';
+      let path = '/home/rasa/rasa_nlu';
+      var file_content = '{"project": "Project_' + bot_id +'","language": "'+ bot_language +'", "pipeline": "spacy_sklearn","path" : "'+ path+'/projects","data" : "'+path+'/data/examples/rasa/Project_' + bot_id +'.json"}';
       let parameters = {bot_id: bot_id, file_content:file_content}
       let data = new FormData();
       for (let key in parameters) {
