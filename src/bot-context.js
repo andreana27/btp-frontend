@@ -265,6 +265,13 @@ export class BotContext {
     if (type == 'attachment') {
       newElement.type = type;
       newElement.media_type = this.selectedValMethodx;
+      if (newElement.media_type == 'upload'){
+        newElement.uploadFile = this.uploadFile;
+        this.api.uploadFile(this.context.bot_id, newElement.uploadFile).then(items => {
+          console.log(items);
+        });
+        return;
+      }
       newElement.url  = this.serviceURL;
       //clean variables
       this.selectedValMethodx = 'link';

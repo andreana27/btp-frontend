@@ -3,8 +3,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 
 @inject(Aurelia)
 export class WebAPI {
-  backend = 'https://developer.innovare.es/backend/';
-  //backend = 'https://a2.botprotec.com/backend/';
+  //backend = 'https://developer.innovare.es/backend/';
+  backend = 'https://a2.botprotec.com/backend/';
   isRequesting = false;
   sessionUser = null;
 
@@ -338,6 +338,24 @@ export class WebAPI {
       .then(response => response.json())
       .then(data => {
         this.isRequesting = false;
+        return data.content[0];
+      });
+  }
+
+  uploadFile(bot_id, file) {
+    this.isRequesting = true;
+    let formData = new FormData();
+    console.log(file);
+    formData.append('data', file[0]);
+    formData.append('bot_id', bot_id);
+    return this.client_auth.fetch('upload.json', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        this.isRequesting = false;
+        console.log(data);
         return data.content[0];
       });
   }
