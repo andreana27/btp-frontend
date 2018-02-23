@@ -252,7 +252,7 @@ export class BotContext {
     var newElement = {};
 
     var arrayLength;
-    var prom = new Promise(function(accept, reject){});
+    var prom = new Promise(function(accept, reject){accept();});
 
     if (type == 'text') {
 
@@ -274,7 +274,7 @@ export class BotContext {
           this.selectedMediaType = 'link';
           this.serviceURL = '';
           this.isRest = false;
-          toastr.success('REST Plugin element added');
+          toastr.success('Attachment element added');
         });
       }else{
         newElement.url  = this.serviceURL;
@@ -282,7 +282,7 @@ export class BotContext {
         this.selectedMediaType = 'link';
         this.serviceURL = '';
         this.isRest = false;
-        toastr.success('REST Plugin element added');
+        toastr.success('Attachment element added');
       }
     } else
     if (type == 'sender_action') {
