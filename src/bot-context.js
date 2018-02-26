@@ -78,6 +78,7 @@ export class BotContext {
   //Contains the value of the selected method(POST/GET) for the JSON api
   selectedValMethod = [];
   selectedValMethodx = 'link';
+  selectedMediaType = 'url';
   //Contains the value selected fot the context to sent the action-reply property
   selectedValContext  = [];
   //contains the list of variables for the selected bot
@@ -139,7 +140,7 @@ export class BotContext {
       }
     } else
     if (selectedValType == 'attachment') {
-      if (!this.isTemplate) {
+      if (!this.isAttachment) {
         this.isAttachment = true;
         this.isTemplate = false;
         this.isSA = false;
@@ -184,7 +185,7 @@ export class BotContext {
       }
     } else
     if (selectedValType == 'end') {
-      if (!this.isRptRet) {
+      if (!this.isEnd) {
         this.isAttachment = false;
         this.isTemplate = false;
         this.isSA = false;
@@ -199,7 +200,7 @@ export class BotContext {
       }
     }  else
     if (selectedValType == 'rest') {
-      if (!this.isRptRet) {
+      if (!this.isRest) {
         this.isAttachment = false;
         this.isTemplate = false;
         this.isSA = false;
@@ -215,7 +216,7 @@ export class BotContext {
     }
     else
     if (selectedValType == 'smartText') {
-      if (!this.isRptRet) {
+      if (!this.isSmartText) {
         this.isAttachment = false;
         this.isTemplate = false;
         this.isSA = false;
@@ -231,7 +232,7 @@ export class BotContext {
     }
     else
     if (selectedValType == 'smartReply') {
-      if (!this.isRptRet) {
+      if (!this.isSmartReply) {
         this.isAttachment = false;
         this.isTemplate = false;
         this.isSA = false;
@@ -251,6 +252,7 @@ export class BotContext {
     var newElement = {};
 
     var arrayLength;
+    var prom = new Promise(function(accept, reject){accept();});
 
     if (type == 'text') {
 
@@ -265,12 +267,23 @@ export class BotContext {
     if (type == 'attachment') {
       newElement.type = type;
       newElement.media_type = this.selectedValMethodx;
-      newElement.url  = this.serviceURL;
-      //clean variables
-      this.selectedValMethodx = 'link';
-      this.serviceURL = '';
-      this.isRest = false;
-      toastr.success('REST Plugin element added');
+      if (newElement.selectedMediaType == 'upload'){
+        prom = this.api.uploadFile(this.context.bot_id, this.uploadFile).then(answer => {
+          newElement.url = `${this.api.backend}v1/download/${answer.filename}`;
+          this.selectedValMethodx = 'link';
+          this.selectedMediaType = 'link';
+          this.serviceURL = '';
+          this.isRest = false;
+          toastr.success('Attachment element added');
+        });
+      }else{
+        newElement.url  = this.serviceURL;
+        this.selectedValMethodx = 'link';
+        this.selectedMediaType = 'link';
+        this.serviceURL = '';
+        this.isRest = false;
+        toastr.success('Attachment element added');
+      }
     } else
     if (type == 'sender_action') {
       newElement.type = type;
@@ -341,13 +354,15 @@ export class BotContext {
       toastr.success('Smart reply element added');
     }
 
-    arrayLength = this.json_Context[this.context.name].length;
-    //this.json_Context[this.context.name][arrayLength] = newElement;
-    this.json_Context[this.context.name].push(newElement);
+    prom.then(r=>{
+      arrayLength = this.json_Context[this.context.name].length;
+      //this.json_Context[this.context.name][arrayLength] = newElement;
+      this.json_Context[this.context.name].push(newElement);
 
-    //console.log(JSON.stringify(this.json_Context));
-    this.context.context_json = JSON.stringify(this.json_Context);
-    this.save();
+      //console.log(JSON.stringify(this.json_Context));
+      this.context.context_json = JSON.stringify(this.json_Context);
+      this.save();
+    })
     //this.activate(this.params,this.routeConfig);
   }
   activate(params, routeConfig) {

@@ -1,7 +1,7 @@
 import {WebAPI} from './web-api';
 import {inject} from 'aurelia-framework';
 import {Router} from 'aurelia-router';
-
+import * as toastr from 'toastr';
 @inject(WebAPI, Router)
 export class Login {
   constructor(api, router) {
@@ -44,7 +44,7 @@ export class Login {
       if (loginResponse.type == 200) {
         this.router.navigate('manager');
       } else {
-        alert(loginResponse.msg);
+        toastr.error(`${loginResponse.msg}`);
       }
     });
   }

@@ -1,6 +1,6 @@
 import {WebAPI} from './web-api';
 import {inject} from 'aurelia-framework';
-
+import * as toastr from 'toastr';
 @inject(WebAPI)
 export class Register {
   //Class constructor
@@ -31,7 +31,7 @@ export class Register {
         return true;
       }
       else {
-        alert('Passwords doesn\'t match.')
+        toastr.warning('Passwords doesn\'t match.');
         return false;
       }
     }
@@ -65,7 +65,7 @@ export class Register {
         this.api.validateNewUserEmail(this.register.email).then(response => {
           //if the user already exists
           if (response.count > 0) {
-            alert('User with email '+ this.register.email +' already exists.');
+            toastr.warning(`E-mail ${this.register.email} already registered.`);
           }
           else {
             this.api.registerUser(this.register).then(result => {
@@ -75,7 +75,7 @@ export class Register {
                 this.api.logIn(login);
               }
               else {
-                alert('Unsuccessfull request!');
+                toastr.error('Registration failed.');
               }
             });
           }// end else - user existance
@@ -83,7 +83,7 @@ export class Register {
       }// end if - isValidPassword
     }
     else {
-      alert('You must provide a valid email address.');
+      toastr.warning('Valid e-mail is required.');
     }
   }// end registerNewUser
 

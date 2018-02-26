@@ -87,6 +87,8 @@
             <i if.bind="element.type=='quick_reply'" class="fa fa-reply bg-blue"></i>
             <i if.bind="element.type=='smartText'" class="fa fa-pencil-square-o bg-blue"></i>
             <i if.bind="element.type=='smartReply'" class="fa fa-star bg-blue"></i>
+            <i if.bind="element.type=='attachment'" class="fa fa-paperclip bg-blue"></i>
+            <i if.bind="element.type=='rest'" class="fa fa-plug bg-blue"></i>
             <div if.bind="element.type=='text'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
               <h3 class="timeline-header"><a href="#">${element.type}</a></h3>
@@ -213,10 +215,9 @@
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
               <h3 class="timeline-header"><a href="#">Attachment</a></h3>
               <div class="timeline-body">
-                <div class="panel-heading">Attachment</div>
                 <div class="panel-body">
                   <div class="row">
-                    <label class="col-sm-2 ">Type</label>
+                    <label class="col-sm-2 ">Display Type</label>
                     <label class="col-sm-10">URL</label>
                   </div>
                   <div class="row">
@@ -423,8 +424,7 @@
           <div class="panel-heading">Adding Attachment element</div>
           <div class="panel-body">
             <div class="row">
-              <label class="col-sm-2 ">Type</label>
-              <label class="col-sm-10">Media</label>
+              <label class="col-sm-2 ">Display Type</label>
             </div>
             <div class="row">
               <div class="col-sm-2">
@@ -432,11 +432,22 @@
       						<option repeat.for="option of ['link', 'upload']" model.bind="option">${option}</option>
       					</select>
       				</div>
-              <div class="col-sm-10" show.bind="selectedValMethodx != 'upload'">
+            </div>
+            <div class="row">
+              <label class="col-sm-2 ">Media Type</label>
+              <label class="col-sm-2 ">Media URL/File</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-2">
+      					<select value.bind="selectedMediaType" class="form-control" >
+      						<option repeat.for="option of ['url', 'upload']" model.bind="option">${option}</option>
+      					</select>
+      				</div>
+              <div class="col-sm-10" show.bind="selectedMediaType != 'upload'">
                 <input type="text" placeholder="Enter the item URL" class="form-control" value.bind="serviceURL">
               </div>
-              <div class="col-sm-10" show.bind="selectedValMethodx == 'upload'">
-                <input type="file" accept="image/*" class="form-control" value.bind="uploadFile">
+              <div class="col-sm-10" show.bind="selectedMediaType == 'upload'">
+                <input type="file" accept="image/*" class="form-control" files.bind="uploadFile">
               </div>
             </div>
             <br>

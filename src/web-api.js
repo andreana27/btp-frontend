@@ -75,6 +75,7 @@ export class WebAPI {
     })
       .then(response => response.json())
       .then((responseData) => {
+        this.isRequesting = false;
         let response = {'type':0,'msg':''};
         try {
           if (responseData.data[0].length > 3)
@@ -192,6 +193,7 @@ export class WebAPI {
       })
       .then(response => response.json())
       .then(data => {
+        this.isRequesting = false;
         return data;
       });
   }
@@ -203,6 +205,7 @@ export class WebAPI {
       })
       .then(response => response.json())
       .then(data => {
+        this.isRequesting = false;
         return data;
       });
   }
@@ -339,6 +342,23 @@ export class WebAPI {
       .then(data => {
         this.isRequesting = false;
         return data.content[0];
+      });
+  }
+
+  uploadFile(bot_id, file) {
+    this.isRequesting = true;
+    let formData = new FormData();
+    console.log(file);
+    formData.append('data', file[0]);
+    formData.append('bot_id', bot_id);
+    return this.client_auth.fetch('upload.json', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        this.isRequesting = false;
+        return data;
       });
   }
 
