@@ -320,8 +320,10 @@ export class BotContext {
       newElement.type = type;
       newElement.store = this.StoreOnSmartText;
       newElement.content = this.SmartContentValue;
+      newElement.validation=this.SmartValidationValue;
       this.isSmartText = false;
       this.SmartContentValue = '';
+      this.SmartValidationValue='';
       toastr.success('Smart Text element added');
     } else
     if (type == 'smartReply') {

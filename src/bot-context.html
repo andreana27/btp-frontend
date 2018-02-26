@@ -328,6 +328,18 @@
                 </div>
                 <br>
                 <div class="row">
+                  <label class="col-sm-2 control-label">Tipo</label>
+                  <div class="col-sm-10">
+                    <select change.delegate="elementChanged($index, element)" class="form-control" value.bind="element.validation">
+                      <option model.bind="'0'">Sin Seleccionar</option>
+                      <option model.bind="'1'">Texto</option>
+                      <option model.bind="'2'">Numero</option>
+                      <option model.bind="'3'">Email</option>
+                      <option model.bind="'4'">Fecha</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row">
                   <label class="col-sm-2 control-label">Store on</label>
                   <div class="col-sm-10">
           					<!--<input class="form-control" type="text" value.bind="element.store"
@@ -622,6 +634,20 @@
               </div>
             </div>
             <br>
+            <div class="row">
+              <label class="col-sm-2 control-label">Tipo</label>
+              <div class="col-sm-10">
+                <select class="form-control" value.bind="SmartValidationValue">
+                  <option model.bind="'0'">Sin Seleccionar</option>
+                  <option model.bind="'1'">Texto</option>
+                  <option model.bind="'2'">Numero</option>
+                  <option model.bind="'3'">Email</option>
+                  <option model.bind="'4'">Fecha</option>
+                </select>
+              </div>
+            </div>
+            <br>
+
             <div class="row">
               <label class="col-sm-2 control-label">Store on</label>
               <div class="col-sm-10">
