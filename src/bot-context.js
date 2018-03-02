@@ -15,8 +15,12 @@ import {
   areEqual
 } from './utility';
 import * as toastr from 'toastr';
+import {
+  Router
+} from 'aurelia-router';
 
-@inject(WebAPI, EventAggregator)
+
+@inject(WebAPI, EventAggregator,Router)
 export class BotContext {
 
   SenderActionOptions = [{
@@ -101,9 +105,10 @@ export class BotContext {
     out: ''
   }];
 
-  constructor(api, ea) {
+  constructor(api, ea,router) {
     this.api = api;
     this.ea = ea;
+    this.router=router;
   }
   elementSelected(selectedValType) {
     console.log(selectedValType);
@@ -399,6 +404,7 @@ export class BotContext {
         this.routeConfig.navModel.setTitle(context.name);
         this.originalContext = JSON.parse(JSON.stringify(context));
         this.ea.publish(new ContextViewed(this.context));
+        this.newName=context.name;
 
 
       }).catch(console.log.bind(console));  //in case something goes wrong
@@ -426,6 +432,54 @@ export class BotContext {
   select(context) {
     this.selectedId = context.id;
     return true;
+  }
+  changeContextName()
+  {
+    if(this.context.parent_context==null)
+    {
+      toastr.error('the name of this context cannot be change! This is the default context.');
+    }
+    else
+    {
+      this.json_Context[this.newName]=this.json_Context[this.context.name];
+      this.api.changeContextName(this.context.id,this.newName).then(response=>{
+        toastr.success('Context updated!');
+        delete this.json_Context[this.context.name];
+        this.context.name=this.newName;
+        this.context.context_json = JSON.stringify(this.json_Context);
+        this.save();
+        console.log(response);
+      });
+    }
+
+  }
+
+  deleteContext()
+  {
+    if(confirm('This will erase the context and all the context inside. Are you sure?'))
+    {
+      if(this.context.parent_context==null)
+      {
+        toastr.error('this context cannot be erased! This is the default context.');
+      }
+      else {
+        //toastr.success('Intentando borrar contexto: '+context.id);
+        this.api.deleteContext(this.context.id).then(response=>{
+          if(response.data=='ok')
+            {
+              toastr.success('Context deleted!');
+              this.selectedId=this.context.parent_context;
+              this.router.navigate(`/manager/bot/${this.context.bot_id}/context/${this.selectedId}`);
+            }
+          else
+          {
+            toastr.error(`You must move or delete the intent ${response.datos[0].name}. it's related to the context ${response.cont}. The context cannot be removed!` );
+            console.log(response.datos[0]);
+          }
+
+        });
+      }
+    }
   }
 
   changedItem(idx, item) {

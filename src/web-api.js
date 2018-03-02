@@ -798,4 +798,28 @@ export class WebAPI {
       });
     }
     /*------------------------------------*/
+
+
+    deleteContext(contextId) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`deleteContext/${contextId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    changeContextName(contextId,newName) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`changeContextName/${contextId}/${newName}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
 }
