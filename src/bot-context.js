@@ -473,7 +473,7 @@ export class BotContext {
             }
           else
           {
-            toastr.error(`You must move or delete the intent ${response.datos[0].name}. it's related to the context ${response.cont}. The context cannot be removed!` );
+            toastr.error(`You must move or delete the intent ${response.datos[0].name}. it's related to the context ${response.cont[0].name}. The context cannot be removed!` );
             console.log(response.datos[0]);
           }
 
