@@ -347,9 +347,11 @@ export class BotContext {
     if (type == 'smartReply') {
       newElement.type = type;
       newElement.content = this.SmartReplyContentValue;
+      newElement.validation=this.SmartReplayValidationValue;
       newElement.store = this.StoreOnSR;
       newElement.quick_replies = this.items;
       this.SmartReplyContentValue = "";
+      this.SmartReplayValidationValue='';
       this.items = [{
         title: '',
         content_type: 'text',
@@ -441,16 +443,38 @@ export class BotContext {
     }
     else
     {
-      this.json_Context[this.newName]=this.json_Context[this.context.name];
-      this.api.changeContextName(this.context.id,this.newName).then(response=>{
-        toastr.success('Context updated!');
-        delete this.json_Context[this.context.name];
-        this.context.name=this.newName;
-        this.context.context_json = JSON.stringify(this.json_Context);
-        this.save();
-        console.log(response);
-      });
+      var regex = /[a-zA-Z\-0-9]+([_]|[-]|[a-zA-Z\-0-9])*$/;
+      if(regex.test(this.newName))
+      {
+
+        this.api.existsContextName(this.context.bot_id,this.newName).then(response => {
+          if(response.cont==0)
+          {
+            this.json_Context[this.newName]=this.json_Context[this.context.name];
+            this.api.changeContextName(this.context.id,this.newName).then(response=>{
+              toastr.success('Context updated!');
+              delete this.json_Context[this.context.name];
+              this.context.name=this.newName;
+              this.context.context_json = JSON.stringify(this.json_Context);
+              this.save();
+            });
+          }
+          else
+          {
+            toastr.error('There is a context with that name already. Change the name of the context');
+          }
+
+        });
+
+      }
+      else {
+        toastr.error('Allowed name characters: Letters A-9, Numbrers:0-9, Underscore: _ and Hyphen: ');
+
+      }
+
+
     }
+
 
   }
 

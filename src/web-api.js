@@ -822,4 +822,15 @@ export class WebAPI {
           return data;
       });
     }
+    existsContextName(botId,name) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`existsContextName/${botId}/${name}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
 }

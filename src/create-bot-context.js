@@ -26,7 +26,7 @@ export class CreateBotContext {
     this.api = api;
     this.ea = ea;
     this.router = router;
-
+    this.HTMLError = '';
     this.context = {
       name: '',
       context_json: '',
@@ -55,13 +55,32 @@ export class CreateBotContext {
     return this.context.name && !this.api.isRequesting;
   }
   save() {
-    this.context.parent_context = this.selectedContextId;
+    var regex = /[a-zA-Z\-0-9]+([_]|[-]|[a-zA-Z\-0-9])*$/;
+    if(regex.test(this.context.name))
+    {
 
-    this.api.createContext(this.context).then(context => {
-      this.context = context;
-      this.ea.publish(new ContextCreated(this.context));
-    });
-    this.router.navigate('');
+      this.api.existsContextName(this.botid,this.context.name).then(response => {
+        if(response.cont==0)
+        {
+          this.context.parent_context = this.selectedContextId;
+          this.api.createContext(this.context).then(context => {
+            this.context = context;
+            this.ea.publish(new ContextCreated(this.context));
+          });
+          this.router.navigate('');
+        }
+        else
+        {
+            this.HTMLError = '<br><label>There is a context with that name already. Change the name of the context <label>';
+        }
+
+      });
+
+    }
+    else {
+      this.HTMLError = '<br><label>Allowed name characters: Letters A-9, Numbrers:0-9, Underscore: _ and Hyphen: -<label>';
+    }
+
   }
   selectParentContext(context)
   {
