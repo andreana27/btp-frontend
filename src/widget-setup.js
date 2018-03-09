@@ -1,8 +1,9 @@
 import { WebAPI } from './web-api';
 import { inject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
+import { Router } from 'aurelia-router';
 
-@inject(WebAPI, EventAggregator)
+@inject(WebAPI, EventAggregator, Router)
 export class WidgetSetup {
   //variables
   HTMLgenCode = '';
@@ -21,11 +22,13 @@ export class WidgetSetup {
   //bool indicator enables the bot variable table
   botSelected = false;
   //class constructor
-  constructor(webAPI, eventAgreggator){
+  constructor(webAPI, eventAgreggator, router){
     this.api = webAPI;
     this.ea = eventAgreggator;
+    this.router = router;
     this.generateHTML();
     this.getSampleHTML();
+
   }//end constructor
 
   activate(){
@@ -75,8 +78,13 @@ export class WidgetSetup {
       this.widgetHTML = this.HTMLgenCode;
     }
     else {this.qualifiesForDemo = false; this.getSampleHTML(); }*/
-  }
+    this.hReference=((this.router.history.location+'').replace('chat/widget-setup','bot.html?'))+'urlBotId='+this.selectedBotId+'&urlToken='+this.token;
 
+  }
+  goToChatWidget()
+  {
+    window.open(this.hReference)
+  }
   SelectBot(botId) {
     this.selectedBotId = botId;
     this.getConnectors();
