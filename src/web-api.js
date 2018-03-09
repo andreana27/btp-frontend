@@ -833,4 +833,15 @@ export class WebAPI {
           return data;
       });
     }
+    existsIntentName(botId,name) {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`existsIntentName/${botId}/${name}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
 }

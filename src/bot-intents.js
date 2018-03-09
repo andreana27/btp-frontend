@@ -163,23 +163,35 @@ export class BotDataManagment {
 
   saveIntent() {
     if (this.validateIntentName(this.intentName)) {
-      this.HTMLError = '';
-      let intent = {bot_id: this.selectedBotId, context_id: this.selectedContextId, name: this.intentName, id:this.intentId };
-      if (this.isEditing) {
-        intent.id =
-        this.api.updateBotIntent(intent).then(response => {
-          this.intentName = '';
-          this.getIntents(this.selectedBotId);
-          this.isEditing = false;
-          this.generateJSONFile();
-        });
-      } else {
-        this.api.insertBotIntent(intent).then(response => {
-          this.intentName = '';
-          this.getIntents(this.selectedBotId);
-          this.generateJSONFile();
-        });
-      }
+      this.api.existsIntentName(this.selectedBotId,this.intentName).then(cant => {
+        if(cant.cont==0)
+        {
+          this.HTMLError = '';
+          let intent = {bot_id: this.selectedBotId, context_id: this.selectedContextId, name: this.intentName, id:this.intentId };
+          if (this.isEditing) {
+            intent.id =
+            this.api.updateBotIntent(intent).then(response => {
+              this.intentName = '';
+              this.getIntents(this.selectedBotId);
+              this.isEditing = false;
+              this.generateJSONFile();
+            });
+          } else {
+            this.api.insertBotIntent(intent).then(response => {
+              this.intentName = '';
+              this.getIntents(this.selectedBotId);
+              this.generateJSONFile();
+            });
+          }
+        }
+        else
+        {
+          this.HTMLError = '<br><label>the intent name already exists.<label>';
+        }
+
+      });
+
+
     }
     else {
       this.HTMLError = '<br><label>Allowed name characters: Letters A-9, Numbrers:0-9, Underscore: _ and Hyphen: -<label>';
