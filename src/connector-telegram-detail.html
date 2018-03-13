@@ -1,4 +1,6 @@
 <template>
+  <div if.bind='!existcon'>
+
   <h4>Setup an existing  or new Telegram connector</h4>
   <form role="form" class="form-horizontal" submit.delegate="save()">
     <div class="form-group">
@@ -19,6 +21,7 @@
       Delete
     </button>
   </div>
+</div>
   <!--modal for delete warning-->
   <div class="modal modal-danger fade" id="modal-danger" ref="mdlDeleteConnector">
       <div class="modal-dialog">

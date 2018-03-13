@@ -127,13 +127,15 @@ export class ConnectorMessenger {
       let index = this.bot.connectors.indexOf(exists);
       //deleting the connector from the array
       this.bot.connectors.splice(index,1);
-      this.api.saveBot(this.bot).then(bot => {
-        this.bot = bot;
-        this.api.deactivateConnector(this.bot.id, index).then(r => {
-          this.ea.publish(new BotUpdated(this.bot));
-          this.ea.publish(new ConnectorUpdated(newConnector));
-        });
-      });
+      //this.api.saveBot(this.bot).then(bot => {
+      //  this.bot = bot;
+      //  this.api.deactivateConnector(this.bot.id, index).then(r => {
+      //    this.ea.publish(new BotUpdated(this.bot));
+      //    this.ea.publish(new ConnectorUpdated(newConnector));
+      //  });
+      //});
+      this.ea.publish(new BotUpdated(this.bot));
+      this.ea.publish(new ConnectorUpdated(newConnector));
     }
   }
 

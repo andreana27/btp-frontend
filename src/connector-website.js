@@ -20,6 +20,7 @@ export class ConnectorWebsite {
     this.router = router;
     this.connectortype = 'website';
     ea.subscribe(BotViewed, msg => this.select(msg.bot));
+    this.edit=false;
   }
 
   //function called when the page is created
@@ -86,10 +87,13 @@ export class ConnectorWebsite {
             this.api.activateConnector(this.bot.id, index).then(r => {
               this.ea.publish(new BotUpdated(this.bot));
               this.ea.publish(new ConnectorUpdated(this.connector));
+
             })
             //getting the new list of connectors
             this.getConnectorList();
           });
+
+          this.existcon=true;
       });
     }
     else {
@@ -118,14 +122,18 @@ export class ConnectorWebsite {
            //getting the new list of connectors
            this.getConnectorList();
          });
+         this.existcon=true;
        });
     }//end else
+
   }
 
   //get the selected connector and set's it up to view/edit
   editConnector(token) {
     this.connector = this.bot.connectors.filter(x => x.token == token)[0];
     this.isEditing = true;
+    this.existcon=false;
+    this.edit=true;
   }
 
   deleteConnector() {
@@ -144,6 +152,8 @@ export class ConnectorWebsite {
         let parameters = {bot_id: this.bot.id,website: this.connector.website, token: this.connector.token};
         this.api.deleteWebsiteConnector(parameters);
         this.getConnectorList();
+        this.existcon=false;
+        this.edit=true;
       });//saveBot end
     }
     else {
@@ -221,6 +231,8 @@ export class ConnectorWebsite {
 
   //function called when the view is activated
   activate(params) {
+
+
       return this.api.getBotDetails(params.id).then(bot => {
         //get the bot from the function
         this.bot = bot;
@@ -228,6 +240,13 @@ export class ConnectorWebsite {
         this.originalBot = JSON.parse(JSON.stringify(bot));
         //publishing the viewed bot
         this.ea.publish(new BotViewed(this.bot));
+        this.api.getConnectorList(this.bot.id,'website').then(conn=>{
+            if(conn.length>0&!this.edit){
+              this.existcon= true}
+            else {
+              this.existcon=false;}
+        });
+
       });
     }
 

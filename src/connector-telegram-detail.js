@@ -29,6 +29,7 @@ export class ConnectorTelegramDetail {
     this.ea = ea;
     ea.subscribe(BotViewed, msg => this.select(msg.bot));
     this.suscriptions = [];
+    this.edit=false;
   }
 
   attached()
@@ -41,6 +42,12 @@ export class ConnectorTelegramDetail {
   activate(params, routeConfig) {
     this.routeConfig = routeConfig;
     this.connectorType = 'messenger';
+    this.api.getConnectorList(this.bot.id,'telegram').then(conn=>{
+        if(conn.length>0&!this.edit){
+          this.existcon= true}
+        else {
+          this.existcon=false;}
+    });
     if (params.token != null)
     {
       return this.telegramConnectors.getConnectorDetails(params.token).then(connector => {
@@ -49,6 +56,8 @@ export class ConnectorTelegramDetail {
         this.originalConnector = JSON.parse(JSON.stringify(connector));
         //changes are publised
         this.ea.publish(new ConnectorViewed(this.connector));
+        this.existcon=false;
+        this.edit=true;
       });
     }
   }
@@ -67,14 +76,19 @@ export class ConnectorTelegramDetail {
   save() {
     this.telegramConnectors.save(this.connector.token);
     this.clearform();
+    this.existcon=true;
   }
 
   //function for deleting an existing connector
   delete() {
-    this.telegramConnectors.delete(this.connector.token);
-    //publishing the deletion event
-    this.ea.publish(new ConnectorDeleted(this.connector));
-    this.clearform();
+    this.api.deleteTelegramConnector(this.bot.id,this.connector.token).then(status=>
+      {
+        this.telegramConnectors.delete(this.connector.token);
+        //publishing the deletion event
+        this.ea.publish(new ConnectorDeleted(this.connector));
+        this.clearform();
+      });
+
   }
 
   confirmdelete(){

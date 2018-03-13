@@ -844,4 +844,28 @@ export class WebAPI {
           return data;
       });
     }
+    deleteMessengerConnector(botId,token)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`deleteMessengerConnector/${botId}/${token}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    deleteTelegramConnector(botId,token)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`deleteTelegramConnector/${botId}/${token}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
 }
