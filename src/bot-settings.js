@@ -183,4 +183,6 @@ export class BotSettings {
     this.bot.bot_language = this.selectedLanguage;
     this.api.saveBot(this.bot);
   }
+  
+
 }

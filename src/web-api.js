@@ -868,4 +868,52 @@ export class WebAPI {
           return data;
       });
     }
+    getBotTrainStatus(botId)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getBotTrainStatus/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    setBotTrainStatus(botId)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`setBotTrainStatus/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    setFalseBotTrainStatus(botId)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`setFalseBotTrainStatus/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    getTrainLog(botId)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getTrainLog/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
 }

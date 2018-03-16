@@ -69,6 +69,8 @@ export class BotDataManagment {
       this.bot_list = bots
       this.selectedBotId = this.bot_list[0].id;
       this.getData(this.selectedBotId);
+      this.textlogfilevisible=false;
+
     });
   }
 
@@ -85,6 +87,8 @@ export class BotDataManagment {
       //Adding the default empty context option at the first position of the array
       this.exampleContextList.unshift(defaultEmptyContext);
       */
+      this.textlogfile=''
+      this.textlogfilevisible=false;
     });
   }
 
@@ -183,6 +187,7 @@ export class BotDataManagment {
               this.generateJSONFile();
             });
           }
+          this.api.setFalseBotTrainStatus(this.selectedBotId);
         }
         else
         {
@@ -221,6 +226,8 @@ export class BotDataManagment {
       this.intentId = 0;
       this.getIntents(this.selectedBotId);
       this.isEditing = false;
+      this.api.setFalseBotTrainStatus(this.selectedBotId);
+
     });
   }
 
@@ -265,6 +272,7 @@ export class BotDataManagment {
         this.generateJSONFile();
       });
     }
+    this.api.setFalseBotTrainStatus(this.selectedBotId);
   }
 
 
@@ -437,9 +445,24 @@ export class BotDataManagment {
   }
 
   generateTrainningFiles(){
-    this.api.createAIConfigFile(this.selectedBotId, this.bot_language);
+    this.api.createAIConfigFile(this.selectedBotId, this.bot_language).then(res=>
+      {
+        this.api.setBotTrainStatus(this.selectedBotId).then(response=>
+          {
+            console.log(response.cont)
+          });
+      });
+
     this.intentsQualify = false;
   }
-
+  seelog()
+  {
+    this.api.getTrainLog(this.selectedBotId).then(response=>
+      {
+        console.log(response);
+        this.textlogfile=response.cont
+        this.textlogfilevisible=true;
+      });
+  }
 
 }//END BotIntentManagment

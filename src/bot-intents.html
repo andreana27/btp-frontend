@@ -26,6 +26,8 @@
               <button type="button" class="btn btn-success btn-block btn-flat" disabled.bind="!intentsQualify" click.delegate="generateTrainningFiles()">
                 Generate Bot Trainning
               </button>
+              <i click.delegate='seelog()' class="fa fa-warning" style="color:green"></i>
+              <a click.delegate='seelog()'>Log file</a>
             </div>
           </div>
           <div class="row">
@@ -77,6 +79,31 @@
               <!-- /.col-sm-12 -->
             </div>
             <!-- /.row -->
+          </div>
+        </div>
+        <!-- /.panel primary -->
+      </div>
+      <div if.bind="textlogfilevisible" class="panel panel-primary">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a aria-expanded="true">Content of logfile</a>
+          </h4>
+        </div>
+        <div id="show-log" class="panel-collapse">
+          <div class="panel-body">
+            <div class="row">
+              <div class ="col-sm-1">
+
+              </div>
+              <div class ="col-sm-3">
+
+              </div>
+              <div class ="col-sm-5">
+                <textarea readonly rows="8" cols="60" style='-webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box;' value.bind='textlogfile'>
+                </textarea>
+              </div>
+
+            </div>
           </div>
         </div>
         <!-- /.panel primary -->
@@ -266,4 +293,5 @@
     </div>
     <!-- /.modal-dialog -->
   </div>
+
 </template>

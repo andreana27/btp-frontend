@@ -27,6 +27,10 @@
               <i class="fa fa-circle ${bot.enabled===true? 'text-success' : 'text-error'}"></i>
               ${bot.enabled===true ? 'Online': 'Offline'}
             </h5>
+            <h5 class="widget-user-desc">
+              <i click.delegate='getBotTrainStatus()' class="fa ${bot.ai_configured===true? 'fa-circle text-success' : 'fa-warning' }" style="color: ${bot.ai_configured===true? '' : 'red' }"></i>
+              ${bot.ai_configured===true ? 'Train': 'Not train'}
+            </h5>
           </div>
           <div class="widget-user-image">
             <img class="img-circle" src="${api.backend + 'default/download/' + bot.picture}" alt="Bot Avatar">

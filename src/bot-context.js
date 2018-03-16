@@ -221,6 +221,10 @@ export class BotContext {
     }
     else
     if (selectedValType == 'smartText') {
+      if(!this.botTrainStatus)
+      {
+        toastr.warning('The IA is not train, or it changed and you need to train it again!');
+      }
       if (!this.isSmartText) {
         this.isAttachment = false;
         this.isTemplate = false;
@@ -237,6 +241,10 @@ export class BotContext {
     }
     else
     if (selectedValType == 'smartReply') {
+      if(!this.botTrainStatus)
+      {
+        toastr.warning('The IA is not train, or it changed and you need to train it again!');
+      }
       if (!this.isSmartReply) {
         this.isAttachment = false;
         this.isTemplate = false;
@@ -387,7 +395,15 @@ export class BotContext {
         //Adding the default empty context option at the first position of the array
         this.contextChlidContexts.unshift(defaultEmptyContext);
       });
-
+      this.api.getBotTrainStatus(this.context.bot_id).then(response=>{
+        if(response.cont==false)
+        {
+          this.botTrainStatus=false;
+        }
+        else{
+          this.botTrainStatus=true;
+        }
+      });
       //getting the vairable list for the selected bot
       this.api.getVariableList(this.context.bot_id).then(variable_list => {
         this.variable_list = variable_list;
