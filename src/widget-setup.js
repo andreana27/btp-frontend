@@ -78,7 +78,7 @@ export class WidgetSetup {
       this.widgetHTML = this.HTMLgenCode;
     }
     else {this.qualifiesForDemo = false; this.getSampleHTML(); }*/
-    this.hReference=((this.router.history.location+'').replace('chat/widget-setup','bot.html?'))+'urlBotId='+this.selectedBotId+'&urlToken='+this.token;
+    this.hReference=((this.router.history.location+'').replace('#/manager/chat/widget-setup','bot.html?'))+'urlBotId='+this.selectedBotId+'&urlToken='+this.token;
 
   }
   goToChatWidget()
