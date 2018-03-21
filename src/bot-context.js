@@ -388,7 +388,7 @@ export class BotContext {
 
 
       //getting the child contexts for the current contexts
-      this.api.getContextListByParentContext(this.context.bot_id,this.context.id).then(Childcontexts => {
+      this.api.getContextListForQuick(this.context.bot_id,this.context.id).then(Childcontexts => {
         //Setting up the context child contexts
         this.contextChlidContexts = Childcontexts;
         let defaultEmptyContext = {id:null,name:'No Context'}

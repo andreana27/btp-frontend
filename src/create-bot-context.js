@@ -66,8 +66,11 @@ export class CreateBotContext {
           this.api.createContext(this.context).then(context => {
             this.context = context;
             this.ea.publish(new ContextCreated(this.context));
+            this.router.navigateToRoute('bot-context', { 'contextid': this.context.id }, // route parameters object
+                    { trigger: true, replace: true }); // options
           });
-          this.router.navigate('');
+
+//          this.router.navigate('');
         }
         else
         {

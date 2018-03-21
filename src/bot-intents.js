@@ -461,7 +461,11 @@ export class BotDataManagment {
       {
         console.log(response);
         this.textlogfile=response.cont
-        this.textlogfilevisible=true;
+        //this.textlogfilevisible=true;
+        this.delete_message = {};
+        this.delete_message.title = `Log File`;
+        this.delete_message.content = response.cont;
+        $("#mdllogfile").modal('show');
       });
   }
 
