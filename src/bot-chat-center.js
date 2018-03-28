@@ -41,7 +41,8 @@ export class BotChatCenter {
   selectedContactId = '';
   //
   messagesHTML = 'Select a contact';
-
+  messageToClient='';
+  unread=[];
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
@@ -81,6 +82,9 @@ export class BotChatCenter {
       this.totalRecords = 0;
       this.contactList = [];
       this.messagesHTML = 'Select a contact';
+      this.api.lookForMessages(this.selectedBotId).then(clients=>{
+        this.unread=clients.cont;
+      });
       this.api.getBotMessageRecordCount(this.selectedBotId).then(numberOfRecords => {
         this.numberOfRecords = numberOfRecords;
         this.botSelected = true;
@@ -136,7 +140,7 @@ export class BotChatCenter {
       //adding the Contacts
       let foundRecord = this.contactList.filter(x => x.id == owner)[0];
       if (!foundRecord) {
-        let contact = {id:owner};
+        let contact = {id:owner,unread:this.unread.filter(x=>x.owner==owner)[0].chatcenter};
         this.contactList.push(contact);
       }
       //adding up the record to the table
@@ -147,6 +151,7 @@ export class BotChatCenter {
     getMessagerByContact(contact) {
       this.selectedContactId = contact;
       //setting the name of the contact
+      this.selectedunread=this.unread.filter(x=>x.owner==contact)[0].chatcenter;
       this.selectedContactName = contact;
       //clearing values
       this.messagesHTML = '';
@@ -157,6 +162,7 @@ export class BotChatCenter {
         for (currentRowPosition; currentRowPosition < this.totalRecords; currentRowPosition++) {
           if (this.tableRecords[currentRowPosition].owner == contact) {
             //checking for the message Channel
+            this.client=this.tableRecords[currentRowPosition].channel;
             if (this.channel == '') {
                 this.appendHTMLMessage(
                   this.tableRecords[currentRowPosition].ctype,
@@ -192,7 +198,7 @@ export class BotChatCenter {
       if (content_type == 'attachment')
       {
         message_html = '<img src="' + message + '" alt="recieved attachment" width="300" height="300">';
-        message_html += '<a href="'+ message +'" target="_blank">View original</a> ';
+        message_html += '<a href="'+ message +'" target="_blank">View original</a>  '+message;
       }
       if (message == '<repeat>')
       {
@@ -225,6 +231,112 @@ export class BotChatCenter {
       this.messagesHTML += '</li>';
     }
 
+    refreshmsg()
+    {
+      this.tableRecords = [];
+      this.totalRecords = 0;
+      this.api.getBotMessageRecordCount(this.selectedBotId).then(numberOfRecords => {
+        this.numberOfRecords = numberOfRecords;
+        this.botSelected = true;
+        if(this.numberOfRecords <= 0) {
+          alert("The selected bot has no logged messages");
+        }
+        else {
+          //start getting the records
+          let inf_limit = this.numberOfRecords-20;
+          if(inf_limit<1)
+          {
+            inf_limit=0;
+          }
+          let sup_limit = this.numberOfRecords;
+          this.api.getBotMessages(this.selectedBotId,inf_limit,sup_limit).then(recordList => {
+            //getting all the contacts from the logged Messages
+            for(let n = 0;n<recordList.length;n++) {
+              let record = recordList[n];
+              this.addRecord(
+                record.id,
+                record.storage_owner,
+                record.ctype,
+                record.ccontent,
+                record.origin,
+                record.medium,
+                record.message_date,
+                record.message_time,
+                record.content_type
+              );
+            }
+            this.totalRecords = this.tableRecords.length;
+            this.hasRecords = true;
+            this.getMessagerByContact(this.selectedContactId);
+            this.messageToClient='';
+          });
+
+        }
+      });
+    }
+
+    sendMessage()
+    {
+      if(this.client=='telegram')
+      {
+        this.api.sendMessageToTelegram(this.selectedBotId,this.selectedContactId,this.messageToClient).then(response=>{
+          this.refreshmsg();
+          //this.getMessagerByContact(this.selectedContactId);
+        });
+      }
+      else if (this.client=='messenger') {
+        this.api.sendMessageToMessenger(this.selectedBotId,this.selectedContactId,this.messageToClient).then(response=>{
+          this.tableRecords = [];
+          this.totalRecords = 0;
+          this.api.getBotMessageRecordCount(this.selectedBotId).then(numberOfRecords => {
+            this.numberOfRecords = numberOfRecords;
+            this.botSelected = true;
+            if(this.numberOfRecords <= 0) {
+              alert("The selected bot has no logged messages");
+            }
+            else {
+              //start getting the records
+              let inf_limit = this.numberOfRecords-20;
+              if(inf_limit<1)
+              {
+                inf_limit=0;
+              }
+              let sup_limit = this.numberOfRecords;
+              this.api.getBotMessages(this.selectedBotId,inf_limit,sup_limit).then(recordList => {
+                //getting all the contacts from the logged Messages
+                for(let n = 0;n<recordList.length;n++) {
+                  let record = recordList[n];
+                  this.addRecord(
+                    record.id,
+                    record.storage_owner,
+                    record.ctype,
+                    record.ccontent,
+                    record.origin,
+                    record.medium,
+                    record.message_date,
+                    record.message_time,
+                    record.content_type
+                  );
+                }
+                this.totalRecords = this.tableRecords.length;
+                this.hasRecords = true;
+                this.getMessagerByContact(this.selectedContactId);
+                this.messageToClient='';
+              });
+
+            }
+          });
+        });
+      }
+    }
+    endChat()
+    {
+      this.api.endChatCenter(this.selectedBotId,this.selectedContactId).then(response=>{
+          this.unread.filter(x=>x.owner==this.selectedContactId)[0].chatcenter=false;
+          this.contactList.filter(x=>x.id==this.selectedContactId)[0].unread=false;
+          this.refreshmsg();
+        });
+    }
     getContactsByChannel() {
       //clearing the array
       this.contactList = [];

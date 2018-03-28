@@ -77,7 +77,7 @@
                   	<a click.delegate="getMessagerByContact(contact.id)" class="clearfix">
                   		<img src="assets/images/person_64.png" alt="" class="img-circle">
                   		<div class="friend-name">
-                  			<strong>${contact.id}</strong>
+                  			<strong>${contact.id}<i style="color:${contact.unread===true? 'red' : ''}"class="${contact.unread===true? 'fa fa-circle' : ''}"></i></strong>
                   		</div>
                   	</a>
                   </li>
@@ -107,9 +107,15 @@
               <div class="panel-body">
                 <div class="wrap">
                   <main>
-                    <div class="scrollable">
+                    <div class="pre-scrollable">
                       <ul class="chat" innerhtml.bind="messagesHTML">
                       </ul>
+                    </div>
+                    <div class="scrollable" if.bind=selectedunread>
+                      <input type="text" placeholder="Send message to client" class="form-control" value.bind="messageToClient">
+                      <button class="btn btn-info pull-left bg-red" click.delegate='endChat()'>End Chat</button>
+                      <button class="btn btn-info pull-left" click.delegate='refreshmsg()'>Refresh</button>
+                      <button class="btn btn-info pull-right" click.delegate='sendMessage()'>Send Message</button>
                     </div>
                   </main>
                 </div>

@@ -91,7 +91,34 @@
             <i if.bind="element.type=='smartReply'" class="fa fa-star bg-blue"></i>
             <i if.bind="element.type=='attachment'" class="fa fa-paperclip bg-blue"></i>
             <i if.bind="element.type=='rest'" class="fa fa-plug bg-blue"></i>
+            <i if.bind="element.type=='chatCenter'" class="fa fa-keyboard-o bg-blue"></i>
             <div if.bind="element.type=='text'"  class="timeline-item">
+              <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
+              <h3 class="timeline-header"><a href="#">${element.type}</a></h3>
+              <div class="timeline-body">
+                <div class="row">
+                  <label class="col-sm-2 control-label">Content</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" value.bind="element.content" change.delegate="elementChanged($index, element)"></textarea>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <label class="col-sm-2 control-label">Store on</label>
+                  <div class="col-sm-10">
+          					<!--<input class="form-control" type="text" value.bind="element.store"
+                           change.delegate="elementChanged($index, element)">-->
+                     <autocomplete  value.bind="element.store" service.bind="variableService"
+                             placeholder="Enter variable name" change.delegate="elementChanged($index, element)">
+                     </autocomplete>
+          				</div>
+                </div>
+              </div>
+              <div class="timeline-footer">
+                <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div if.bind="element.type=='chatCenter'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
               <h3 class="timeline-header"><a href="#">${element.type}</a></h3>
               <div class="timeline-body">
@@ -741,6 +768,27 @@
     				<button class="btn btn-primary" click.delegate="additem('smartReply')">Add</button>
     			</div>
     		</div>
+        <div class="panel panel-primary" show.bind="isChatCenter">
+    			<div class="panel-heading">Adding Chat Center element</div>
+    			<div class="panel-body">
+            <div class="row">
+      				<label class="col-sm-2 control-label">Content</label>
+      				<div class="col-sm-10">
+      					<textarea class="form-control" rows="5" value.bind="ChatCenterContentValue"></textarea>
+      				</div>
+            </div>
+            <br>
+            <div class="row">
+              <label class="col-sm-2 control-label">Store on</label>
+              <div class="col-sm-10">
+                  <autocomplete service.bind="variableService" value.bind="StoreOnChatCenter" placeholder="Enter variable name"></autocomplete>
+      				</div>
+            </div>
+    			</div>
+    			<div class="panel-body">
+    				<button class="btn btn-primary" click.delegate="additem('chatCenter')">Add</button>
+    			</div>
+    		</div>
         <!-- ./add smart reply element-->
         <div class="box-footer">
           <div class="row">
@@ -772,6 +820,9 @@
               </a>
               <a class="btn btn-app ${isAttachment ? 'active' : ''}" click.delegate="elementSelected('attachment')">
                 <i class="fa fa-paperclip"></i> Attachment
+              </a>
+              <a class="btn btn-app ${isChatCenter ? 'active' : ''}" click.delegate="elementSelected('chatCenter')">
+                <i class="fa fa-keyboard-o"></i> Chat Center
               </a>
             </div>
           </div>

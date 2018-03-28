@@ -338,7 +338,7 @@ export class WebAPI {
             var obj = arr[i];
 
               filteredeContexts.push(obj);
-            
+
           }
           //The return value only contains an array of matching parent context
           return filteredeContexts;
@@ -937,5 +937,69 @@ export class WebAPI {
           this.isRequesting = false;
           return data;
       });
+    }
+    sendMessageToMessenger(botId,clientId,message)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`sendMessageToMesseger/${botId}/${clientId}/${message}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    sendMessageToTelegram(botId,clientId,message)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`sendMessageToTelegram/${botId}/${clientId}/${message}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    endChatCenter(botId,clientId,message)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`endChatCenter/${botId}/${clientId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    lookForMessages(botId)
+    {//falta implementacion en el backend
+      this.isRequesting = true;
+      return this.client_auth.fetch(`checkNeedChatCenter/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    tryNotify(data)
+    {
+      if (!("Notification" in window)) {
+            alert("This browser does not support desktop notification");
+          }
+      else if (Notification.permission === "granted") {
+        var notification = new Notification(data);
+      }
+      else if (Notification.permission !== 'denied') {
+        Notification.requestPermission(function (permission) {
+          if (permission === "granted") {
+            var notification = new Notification(data);
+          }
+        });
+      }
     }
 }

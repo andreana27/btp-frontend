@@ -70,7 +70,9 @@ export class BotContext {
   isRest = false;
   isSmartText = false;
   isSmartReply = false;
+  isChatCenter=false;
 
+  ChatCenterContentValue='';
   selectedValSA = [];
   ContentValue = '';
   SmartContentValue = '';
@@ -125,6 +127,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.isSA = false;
       }
@@ -140,8 +143,25 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.isTemplate = false;
+      }
+    } else
+    if (selectedValType == 'chatCenter') {
+      if (!this.isChatCenter) {
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=true;
+      } else {
+        this.chatCenter = false;
       }
     } else
     if (selectedValType == 'attachment') {
@@ -155,6 +175,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.isAttachment = false;
       }
@@ -170,6 +191,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.istext = false;
       }
@@ -185,6 +207,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.isQR = false;
       }
@@ -200,6 +223,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.isEnd = false;
       }
@@ -215,6 +239,7 @@ export class BotContext {
         this.isRest = true;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.isRest = false;
       }
@@ -235,6 +260,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = true;
         this.isSmartReply = false;
+        this.isChatCenter=false;
       } else {
         this.isSmartText = false;
       }
@@ -255,6 +281,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = true;
+        this.isChatCenter=false;
       } else {
         this.isSmartReply = false;
       }
@@ -275,6 +302,17 @@ export class BotContext {
       this.ContentValue = "";
       this.istext = false;
       toastr.success('Text element added');
+
+    } else
+    if (type == 'chatCenter') {
+
+      newElement.type = type;
+      newElement.content = this.ChatCenterContentValue;
+      newElement.store = this.StoreOnChatCenter;
+      this.ChatCenterContentValue = "";
+      this.StoreOnChatCenter='';
+      this.isChatCenter = false;
+      toastr.success('Chat Center element added');
 
     } else
     if (type == 'attachment') {
