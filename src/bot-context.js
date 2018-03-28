@@ -701,8 +701,11 @@ export class VariableSuggestionService {
       return Promise.resolve([]);
     }
     value = value.toLowerCase();
-    const suggestions = this.variables.filter(x => x.storage_key.toLowerCase().indexOf(value) === 0)
+    let suggestions = this.variables.filter(x => x.storage_key != null);
+    suggestions = suggestions.filter(x => x.storage_key.toLowerCase().indexOf(value) === 0)
       .map(x => x.storage_key);
+    /*const suggestions = this.variables.filter(x => x.storage_key.toLowerCase().indexOf(value) === 0)
+      .map(x => x.storage_key);*/
     return Promise.resolve(suggestions);
   }
 
