@@ -1,6 +1,7 @@
 import {  WebAPI } from './web-api';
 import { inject } from 'aurelia-framework';
 import { EventAggregator } from 'aurelia-event-aggregator';
+import * as toastr from 'toastr';
 
 @inject(WebAPI, EventAggregator)
 export class BotDataManagment {
@@ -450,6 +451,14 @@ export class BotDataManagment {
         this.api.setBotTrainStatus(this.selectedBotId).then(response=>
           {
             console.log(response.cont)
+            if(response.cont=='ok')
+            {
+              toastr.success('The bot has been trained successfully!');
+            }
+            else
+            {
+              toastr.error('Something wrong has happened! See the log for more information.');
+            }
           });
       });
 

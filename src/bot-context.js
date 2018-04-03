@@ -77,6 +77,8 @@ export class BotContext {
   ContentValue = '';
   SmartContentValue = '';
   SmartReplyContentValue = '';
+  SmartValidationValue='0';
+  SmartReplayValidationValue='0';
   ContentValueQR = '';
   SenderActionValue = '';
   //Contains the value of the selected option for flow (repeat/return)
