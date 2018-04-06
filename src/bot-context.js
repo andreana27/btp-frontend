@@ -386,6 +386,10 @@ export class BotContext {
       newElement.type = type;
       newElement.store = this.StoreOnSmartText;
       newElement.content = this.SmartContentValue;
+      if(this.SmartValidationValue=='')
+      {
+        this.SmartValidationValue='0';
+      }
       newElement.validation=this.SmartValidationValue;
       this.isSmartText = false;
       this.SmartContentValue = '';
@@ -395,6 +399,10 @@ export class BotContext {
     if (type == 'smartReply') {
       newElement.type = type;
       newElement.content = this.SmartReplyContentValue;
+      if(this.SmartReplayValidationValue=='')
+      {
+        this.SmartReplayValidationValue='0';
+      }
       newElement.validation=this.SmartReplayValidationValue;
       newElement.store = this.StoreOnSR;
       newElement.quick_replies = this.items;

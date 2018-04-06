@@ -974,6 +974,18 @@ export class WebAPI {
           return data;
       });
     }
+    getAiRequests(botId)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getAiRequests/${botId}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
     lookForMessages(botId)
     {//falta implementacion en el backend
       this.isRequesting = true;

@@ -28,6 +28,9 @@
               </button>
               <i click.delegate='seelog()' class="fa fa-warning" style="color:green"></i>
               <a click.delegate='seelog()'>Log file</a>
+              <br>
+              <i click.delegate='showRequest()' class="fa fa-comments" style="color:green"></i>
+              <a click.delegate='showRequest()'>Request history</a>
             </div>
           </div>
           <div class="row">
@@ -83,6 +86,60 @@
         </div>
         <!-- /.panel primary -->
       </div>
+      <div class="panel panel-primary" if.bind=show_request>
+        <div class="panel-heading">AI Request</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="nav-tabs-custom">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="requests">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <h4>List of Request<h4>
+                          <table class="table table-striped"
+                                  aurelia-table="data.bind:tableRequests; display-data.bind: $requestsData;
+                                  current-page.bind: currentPage; page-size.bind: pageSize;
+                                  total-items.bind:totalRequests;">
+                            <thead>
+                              <th>User</th>
+                              <th>Request Time</th>
+                              <th>Request Date</th>
+                              <th>Medium</th>
+                              <th>Status</th>
+                              <th>Message</th>
+                              <th>Ai Response</th>
+                            </thead>
+                            <thbody>
+                              <tbody>
+                              <tr repeat.for="request of tableRequest">
+                                <td>${request.user}</td>
+                                <td>${request.time}</td>
+                                <td>${request.date}</td>
+                                <td>${request.medium}</td>
+                                <td>${request.status}</td>
+                                <td>${request.message}</td>
+                                <td>${request.ai_response}</td>
+                              </tr>
+                              </tbody>
+                            </thbody>
+                          </table>
+                      </div>
+                    </div>
+                      <!-- /.box-body -->
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div>
+              <!-- /.col-sm-12 -->
+            </div>
+            <!-- /.row -->
+          </div>
+        </div>
+        <!-- /.panel primary -->
+      </div>
+
       <div if.bind="textlogfilevisible" class="panel panel-primary">
         <div class="panel-heading">
           <h4 class="panel-title">

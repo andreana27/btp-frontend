@@ -17,10 +17,14 @@ export class BotDataManagment {
   intentList = [];
   //records array
   tableRecords = [];
+  tableRequest=[];
+  show_request=false;
   intentExamples = [];
   //pagination size
   pageSize = 10;
   totalRecords = 0;
+  totalRequests = 0;
+
   intentExPageSize = 10;
   intentExampleCount = 0;
   //filters settings
@@ -76,6 +80,7 @@ export class BotDataManagment {
   }
 
   getData(bot_id){
+    this.show_request=false;
     this.getContexts(bot_id);
     this.getIntents(bot_id);
   }
@@ -468,7 +473,6 @@ export class BotDataManagment {
   {
     this.api.getTrainLog(this.selectedBotId).then(response=>
       {
-        console.log(response);
         this.textlogfile=response.cont
         //this.textlogfilevisible=true;
         this.delete_message = {};
@@ -476,6 +480,27 @@ export class BotDataManagment {
         this.delete_message.content = response.cont;
         $("#mdllogfile").modal('show');
       });
+  }
+  showRequest()
+  {
+    this.api.getAiRequests(this.selectedBotId).then(response=>
+      {
+        this.show_request=true;
+        var r=response.cont;
+        for(var i=0; i<r.length;i++)
+        {
+          let request={}
+          request.user=r[i].owner;
+          request.time=r[i].time;
+          request.date=r[i].date;
+          request.medium=r[i].medium;
+          request.status=r[i].status;
+          request.message=r[i].content;
+          request.ai_response=r[i].ai_response;
+          this.tableRequest.push(request);
+        }
+      });
+
   }
 
 }//END BotIntentManagment
