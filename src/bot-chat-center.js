@@ -117,12 +117,16 @@ export class BotChatCenter {
                   record.content_type
                 );
               }
+              this.contactList.sort(function(x, y) {
+              return (x.unread === y.unread)? 0 : x.unread? -1 : 1;
+              });
               this.totalRecords = this.tableRecords.length;
               this.hasRecords = true;
             });
           }
         }
       });
+
     }
 
     addRecord(id,owner,type,content,origin,medium,message_date,message_time,content_type) {
@@ -137,6 +141,7 @@ export class BotChatCenter {
       record.date = message_date;
       record.time = message_time;
       record.content_type = content_type;
+      record.unread=this.unread.filter(x=>x.owner==owner)[0].chatcenter
       //adding the Contacts
       let foundRecord = this.contactList.filter(x => x.id == owner)[0];
       if (!foundRecord) {
