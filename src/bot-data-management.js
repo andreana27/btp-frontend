@@ -160,6 +160,43 @@ export class BotDataManagment {
         this.tableRecords.push(record);
       }
     }
+    downloadVariables()
+    {
+      var CsvString = "owner";
+      for(var i=0; i<this.tableRecords.length;i++)
+      {
+        for(var j=0 ; j<this.tableRecords[i].vars.length;j++)
+        {
+          if(i==0&j==0)
+          {
+            for(var k=0 ; k<this.tableRecords[0].vars.length;k++)
+            {
+              CsvString+=','+this.tableRecords[0].vars[k].key;
+            }
+            CsvString+='\r\n';
+          }
+          if(j==0)
+          {
+            CsvString+=this.tableRecords[i].owner;
+          }
+          CsvString+=','+this.tableRecords[i].vars[j].value;
+        }
+        CsvString+="\r\n";
+      }
+      //this.tableRecords.forEach(function(RowItem, RowIndex) {
+        //RowItem.forEach(function(ColItem, ColIndex) {
+          //CsvString += ColItem + ',';
+        //});
+        //CsvString += "\r\n";
+      //});
+      console.log(CsvString);
+      CsvString = "data:application/csv," + encodeURIComponent(CsvString);
+      var x = document.createElement("A");
+      x.setAttribute("href", CsvString );
+      x.setAttribute("download","Bot_"+this.selectedBotId+"_Variables.csv");
+      document.body.appendChild(x);
+      x.click();
+    }
 
     //Filter the existing records in accordance to the selected row and entered value
     filterRecords(){
