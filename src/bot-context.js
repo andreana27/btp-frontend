@@ -71,6 +71,16 @@ export class BotContext {
   isSmartText = false;
   isSmartReply = false;
   isChatCenter=false;
+  isValidationText=false;
+  isValidationReply=false;
+  validationTextValue='';
+  validationReplyValue='';
+  validationTextValidationValue='0';
+  validationTextRetry=0;
+  validationReplyValidationValue='0';
+  validationReplyRetry=0;
+  validationTextsendTo='';
+  validationReplysendTo='';
 
   ChatCenterContentValue='';
   selectedValSA = [];
@@ -130,6 +140,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.isSA = false;
       }
@@ -146,6 +158,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.isTemplate = false;
       }
@@ -162,6 +176,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=true;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.chatCenter = false;
       }
@@ -178,6 +194,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.isAttachment = false;
       }
@@ -194,6 +212,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.istext = false;
       }
@@ -210,6 +230,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.isQR = false;
       }
@@ -226,6 +248,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.isEnd = false;
       }
@@ -242,6 +266,8 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+        this.isValidationReply = false;
       } else {
         this.isRest = false;
       }
@@ -263,6 +289,8 @@ export class BotContext {
         this.isSmartText = true;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isValidationText = false;
+        this.isValidationReply = false;
       } else {
         this.isSmartText = false;
       }
@@ -284,8 +312,46 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = true;
         this.isChatCenter=false;
+        this.isValidationText = false;
+          this.isValidationReply = false;
       } else {
         this.isSmartReply = false;
+      }
+    }else
+    if (selectedValType == 'validationText') {
+      if (!this.isValidationText) {
+        this.isValidationText=true;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+          this.isValidationReply = false;
+      } else {
+        this.isValidationText = false;
+      }
+    }else
+    if (selectedValType == 'validationReply') {
+      if (!this.isValidationReply) {
+        this.isValidationReply=true;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+        this.isValidationText = false;
+      } else {
+        this.isValidationReply = false;
       }
     }
   }
@@ -346,6 +412,37 @@ export class BotContext {
       toastr.success('Sender action element added');
 
     } else
+    if (type == 'validationReply') {
+      newElement.type = type;
+      newElement.content = this.validationReplyValue;
+      newElement.validation=this.validationReplyValidationValue;
+      newElement.store = this.StoreOnSR;
+      newElement.quick_replies = this.items;
+      this.validationReplyValue = "";
+      this.validationReplyValidationValue='0';
+      this.items = [{
+        title: '',
+        content_type: 'text',
+        sendTo: null
+      }];
+      newElement.retry=this.validationReplyRetry;
+      newElement.sendTo=this.validationReplysendTo;
+      this.validationReplyValue = "";
+      this.isValidationReply = false;
+      toastr.success('Validation Reply element added');
+    }else
+    if (type == 'validationText') {
+      newElement.type = type;
+      newElement.content = this.validationTextValue;
+      newElement.store = this.StoreOnQR;
+      newElement.retry=this.validationTextRetry;
+      newElement.sendTo=this.validationTextsendTo;
+      newElement.validation=this.validationTextValidationValue;
+      this.validationTextValue = "";
+      this.isValidationText = false;
+      toastr.success('Validation Text element added');
+    }
+    else
     if (type == 'quick_reply') {
       newElement.type = type;
       newElement.content = this.ContentValueQR;
