@@ -122,6 +122,13 @@ export class BotChatCenter {
               });
               this.totalRecords = this.tableRecords.length;
               this.hasRecords = true;
+              let contact = {id:'Broadcast',unread:true};
+              this.unread.push({owner:'Broadcast',chatcenter:true})
+              if(!this.contactList.filter(x=>x.id=='Broadcast')[0])
+              {
+                this.contactList.unshift(contact);
+                this.unread.push({owner:'Broadcast',chatcenter:true});
+              }
             });
           }
         }
@@ -157,6 +164,7 @@ export class BotChatCenter {
       this.selectedContactId = contact;
       //setting the name of the contact
       this.selectedunread=this.unread.filter(x=>x.owner==contact)[0].chatcenter;
+      console.log(this.unread.filter(x=>x.owner==contact)[0]);
       this.selectedContactName = contact;
       //clearing values
       this.messagesHTML = '';
@@ -282,6 +290,12 @@ export class BotChatCenter {
 
     sendMessage()
     {
+      console.log(this.client);
+      console.log(this.selectedContactId);
+      if(this.selectedContactId=='Broadcast')
+      {
+        this.client=this.selectedContactId;
+      }
       if(this.client=='telegram')
       {
         this.api.sendMessageToTelegram(this.selectedBotId,this.selectedContactId,this.messageToClient).then(response=>{
@@ -332,6 +346,14 @@ export class BotChatCenter {
             }
           });
         });
+      }
+      else
+      {
+        console.log('intentando Broadcast');
+        this.api.sendMessageToBroadcast(this.selectedBotId,this.messageToClient).then(response=>
+          {
+            console.log(response);
+          });
       }
     }
     endChat()

@@ -92,6 +92,7 @@
             <i if.bind="element.type=='attachment'" class="fa fa-paperclip bg-blue"></i>
             <i if.bind="element.type=='rest'" class="fa fa-plug bg-blue"></i>
             <i if.bind="element.type=='chatCenter'" class="fa fa-keyboard-o bg-blue"></i>
+            <i if.bind="element.type=='checkPoint'" class="fa fa-check-circle"></i>
             <div if.bind="element.type=='text'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
               <h3 class="timeline-header"><a href="#">${element.type}</a></h3>
@@ -113,6 +114,22 @@
                      </autocomplete>
           				</div>
                 </div>
+              </div>
+              <div class="timeline-footer">
+                <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div if.bind="element.type=='checkPoint'"  class="timeline-item">
+              <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
+              <h3 class="timeline-header"><a href="#">${element.type}</a></h3>
+              <div class="timeline-body">
+                <div class="row">
+                  <label class="col-sm-2 control-label">Name</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="1" value.bind="element.content" change.delegate="elementChanged($index, element)"></textarea>
+                  </div>
+                </div>
+                <br>
               </div>
               <div class="timeline-footer">
                 <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
@@ -645,6 +662,19 @@
           </div>
         </div>
         <!-- add text element-->
+        <div class="panel panel-primary" show.bind="isCheckPoint" >
+          <div class="panel-heading">Adding checkpoint </div>
+          <div class="panel-body">
+            <div class="row">
+              <label class="col-sm-2 control-label">Name</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" rows="1" value.bind="checkPointId"></textarea>
+              </div>
+            </div>
+            <br>
+            <button class="btn btn-primary" click.delegate="additem('checkPoint')">Add</button>
+          </div>
+        </div>
         <div class="panel panel-primary" show.bind="istext" >
           <div class="panel-heading">Adding text element</div>
           <div class="panel-body">
@@ -1092,6 +1122,9 @@
               </a>
               <a class="btn btn-app ${isValidationReply ? 'active' : ''}" click.delegate="elementSelected('validationReply')">
                 <i class="fa fa-external-link"></i> Validation Reply
+              </a>
+              <a class="btn btn-app ${isCheckPoint ? 'active' : ''}" click.delegate="elementSelected('checkPoint')">
+                <i class="fa fa-check-circle"></i> CheckPoint
               </a>
             </div>
           </div>

@@ -998,6 +998,18 @@ export class WebAPI {
           return data;
       });
     }
+    sendMessageToBroadcast(botId,message)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`sendMessageToBroadcast/${botId}/${message}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
     tryNotify(data)
     {
       if (!("Notification" in window)) {

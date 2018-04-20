@@ -73,6 +73,7 @@ export class BotContext {
   isChatCenter=false;
   isValidationText=false;
   isValidationReply=false;
+  isCheckPoint=false;
   validationTextValue='';
   validationReplyValue='';
   validationTextValidationValue='0';
@@ -81,7 +82,7 @@ export class BotContext {
   validationReplyRetry=0;
   validationTextsendTo='';
   validationReplysendTo='';
-
+  checkPointId='';
   ChatCenterContentValue='';
   selectedValSA = [];
   ContentValue = '';
@@ -141,6 +142,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isValidationText = false;
+        this.isCheckPoint=false;
           this.isValidationReply = false;
       } else {
         this.isSA = false;
@@ -158,6 +160,7 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -171,6 +174,7 @@ export class BotContext {
         this.isSA = false;
         this.istext = false;
         this.isQR = false
+        this.isCheckPoint=false;
         this.isEnd = false;
         this.isRest = false;
         this.isSmartText = false;
@@ -192,6 +196,7 @@ export class BotContext {
         this.isEnd = false;
         this.isRest = false;
         this.isSmartText = false;
+        this.isCheckPoint=false;
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isValidationText = false;
@@ -212,6 +217,7 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -229,6 +235,7 @@ export class BotContext {
         this.isRest = false;
         this.isSmartText = false;
         this.isSmartReply = false;
+        this.isCheckPoint=false;
         this.isChatCenter=false;
         this.isValidationText = false;
           this.isValidationReply = false;
@@ -248,6 +255,7 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -266,6 +274,7 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
         this.isValidationText = false;
         this.isValidationReply = false;
       } else {
@@ -289,6 +298,7 @@ export class BotContext {
         this.isSmartText = true;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
         this.isValidationText = false;
         this.isValidationReply = false;
       } else {
@@ -312,6 +322,7 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = true;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -331,6 +342,7 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
           this.isValidationReply = false;
       } else {
         this.isValidationText = false;
@@ -349,9 +361,29 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isCheckPoint=false;
         this.isValidationText = false;
       } else {
         this.isValidationReply = false;
+      }
+    }else
+    if (selectedValType == 'checkPoint') {
+      if (!this.isCheckPoint) {
+        this.isValidationReply=false;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+        this.isCheckPoint=true;
+        this.isValidationText = false;
+      } else {
+        this.isCheckPoint = false;
       }
     }
   }
@@ -370,6 +402,15 @@ export class BotContext {
       this.ContentValue = "";
       this.istext = false;
       toastr.success('Text element added');
+
+    }else
+    if (type == 'checkPoint') {
+
+      newElement.type = type;
+      newElement.content = this.checkPointId;
+      this.checkPointId = "";
+      this.isCheckPoint = false;
+      toastr.success('CheckPoint added');
 
     } else
     if (type == 'chatCenter') {
