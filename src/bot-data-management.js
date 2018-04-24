@@ -179,7 +179,7 @@ export class BotDataManagment {
           {
             CsvString+=this.tableRecords[i].owner;
           }
-          CsvString+=','+this.tableRecords[i].vars[j].value;
+          CsvString+=',"'+this.tableRecords[i].vars[j].value+'"';
         }
         CsvString+="\r\n";
       }
