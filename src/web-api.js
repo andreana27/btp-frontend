@@ -1010,6 +1010,30 @@ export class WebAPI {
           return data;
       });
     }
+    getStatistics(botId,start,end)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getStatistics/${botId}/${start}/${end}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
+    botClone(botId,name,full)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`botClone/${botId}/${name}/${full}.json`, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+    }
     tryNotify(data)
     {
       if (!("Notification" in window)) {

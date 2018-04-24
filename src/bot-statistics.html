@@ -1,0 +1,115 @@
+<template>
+
+  <section class="content-header">
+    <h1>
+      Data
+      <small>Bot Statistics</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Bot Statistics</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Bot</div>
+      <div class="panel-body">
+        <div class="row">
+          <label align="right" class="col-sm-2">Select a Bot</label>
+          <div class="col-sm-6">
+            <select value.bind="selectedBotId" class="form-control">
+              <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+            </select>
+          </div>
+          <div class="cols-sm-4">
+            <button class="btn btn-primary" type="submit" click.delegate="getStatistics()">Get Statistics</button>
+          </div>
+        </div>
+        <div class="row">
+          <label align="right" class="col-sm-2">when</label>
+          <div class="col-sm-6">
+            <select value.bind="selectedtime" change.delegate="changeCombo()" class="form-control">
+              <option  model.bind='1'>All</option>
+              <option  model.bind='2'>Today</option>
+              <option  model.bind='3'>Dates</option>
+            </select>
+          </div>
+        </div>
+        <div show.bind='dates'>
+          <div class="row">
+            <label align="right" class="col-sm-2">From:</label>
+            <div class="col-sm-6">
+              <input value.bind='start_date' type="date">
+            </div>
+          </div>
+          <div class="row">
+            <label align="right" class="col-sm-2">To:</label>
+            <div class="col-sm-6">
+              <input value.bind='end_date' type="date">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-primary" show.bind='isStatistics'>
+      <div class="panel-heading">Statistics</div>
+      <div class="anel-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <table class="table table-striped"
+                    aurelia-table="data.bind:tableRecords; display-data.bind: $displayData;
+                    current-page.bind: currentPage; page-size.bind: pageSize;
+                    total-items.bind:totalRecords;">
+              <thead>
+                <th>Total</th>
+                <th>Telegram</th>
+                <th>Messenger</th>
+                <th>WebSite</th>
+              </thead>
+              <thbody>
+                <tr>
+                  <td>${telegram+messenger+website}</td>
+                  <td>${telegram}</td>
+                  <td>${messenger}</td>
+                  <td>${website}</td>
+                </tr>
+                <tr>
+                  <td>${telegram_p+messenger_p+website_p} %</td>
+                  <td>${telegram_p} %</td>
+                  <td>${messenger_p} %</td>
+                  <td>${website_p} %</td>
+                </tr>
+              </thbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-primary" show.bind='isStatistics'>
+        <div class="panel-heading">CheckPoints Statistics</div>
+        <div class="anel-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-striped"
+                      aurelia-table="data.bind:tableRecords; display-data.bind: $displayData;
+                      current-page.bind: currentPage; page-size.bind: pageSize;
+                      total-items.bind:totalRecords;">
+                <thead>
+                  <th>CheckPoint Name</th>
+                  <th>Times passed</th>
+                </thead>
+                <thbody>
+                  <tr repeat.for="variable of checkpoints">
+                    <td >${variable.name}</td>
+                    <td >${variable.val}</td>
+                  </tr>
+                </thbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+</template>

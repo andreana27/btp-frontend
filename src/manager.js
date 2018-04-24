@@ -21,6 +21,11 @@ export class Manager {
         name: 'bot-create'
       },
       {
+        route: 'bot/data-statistics/',
+        moduleId: 'bot-statistics',
+        name: 'bot-statistics'
+      },
+      {
         route: 'bot/data-management/',
         moduleId: 'bot-data-management',
         name: 'bot-data-management'
