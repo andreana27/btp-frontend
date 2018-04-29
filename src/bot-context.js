@@ -74,6 +74,7 @@ export class BotContext {
   isValidationText=false;
   isValidationReply=false;
   isCheckPoint=false;
+  isDecisionRest=false;
   validationTextValue='';
   validationReplyValue='';
   validationTextValidationValue='0';
@@ -143,6 +144,7 @@ export class BotContext {
         this.isChatCenter=false;
         this.isValidationText = false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
           this.isValidationReply = false;
       } else {
         this.isSA = false;
@@ -161,6 +163,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -180,6 +183,7 @@ export class BotContext {
         this.isSmartText = false;
         this.isSmartReply = false;
         this.isChatCenter=true;
+        this.isDecisionRest=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -199,6 +203,7 @@ export class BotContext {
         this.isCheckPoint=false;
         this.isSmartReply = false;
         this.isChatCenter=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -218,6 +223,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -237,6 +243,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isCheckPoint=false;
         this.isChatCenter=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -256,6 +263,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -275,6 +283,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
         this.isValidationReply = false;
       } else {
@@ -299,6 +308,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
         this.isValidationReply = false;
       } else {
@@ -323,6 +333,7 @@ export class BotContext {
         this.isSmartReply = true;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
           this.isValidationReply = false;
       } else {
@@ -343,6 +354,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
           this.isValidationReply = false;
       } else {
         this.isValidationText = false;
@@ -362,6 +374,7 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=false;
+        this.isDecisionRest=false;
         this.isValidationText = false;
       } else {
         this.isValidationReply = false;
@@ -381,9 +394,30 @@ export class BotContext {
         this.isSmartReply = false;
         this.isChatCenter=false;
         this.isCheckPoint=true;
+        this.isDecisionRest=false;
         this.isValidationText = false;
       } else {
         this.isCheckPoint = false;
+      }
+    }else
+    if (selectedValType == 'decisionRest') {
+      if (!this.isDecisionRest) {
+        this.isValidationReply=false;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+        this.isCheckPoint=false;
+        this.isDecisionRest=true;
+        this.isValidationText = false;
+      } else {
+        this.isDecisionRest = false;
       }
     }
   }
@@ -519,6 +553,27 @@ export class BotContext {
       this.serviceURL = '';
       this.isRest = false;
       toastr.success('REST Plugin element added');
+    }else
+    if (type == 'decisionRest') {
+      newElement.type = type;
+      newElement.url  = this.serviceURL;
+      newElement.keys = this.keys;
+      newElement.method = this.selectedValMethod;
+      newElement.quick_replies = this.items;
+      this.ContentValueQR = "";
+      this.items = [{
+        title: '',
+        content_type: 'text',
+        sendTo: null
+      }];
+      this.selectedValMethod = [];
+      this.keys = [{
+        in: '',
+        out: null
+      }];
+      this.serviceURL = '';
+      this.isDecisionRest = false;
+      toastr.success('Decision REST Plugin element added');
     } else
     if(type == 'smartText'){
       newElement.type = type;
