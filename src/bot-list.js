@@ -61,7 +61,9 @@ export class BotList {
     Continue?`;
     this.delete_message.bot = bot;
   }
-
+  confirmClone(bot){
+    this.selectedId = bot.id;
+  }
   toggleEnabled(bot){
     bot.enabled = !bot.enabled;
     //bot.connectors = JSON.stringify(bot.connectors);
@@ -82,5 +84,15 @@ export class BotList {
   select(bot) {
     this.selectedId = bot.id;
     return true;
+  }
+  botClone(botId,type)
+  {
+    console.log(this.cloneName)
+    this.api.botClone(botId,this.cloneName,type).then(response=>
+      {
+        this.created();
+        this.cloneName='';
+        toastr.success(`The bot has been successfully clone`);
+      });
   }
 }

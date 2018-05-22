@@ -483,6 +483,7 @@ export class BotDataManagment {
   }
   showRequest()
   {
+    this.tableRequest=[];
     this.api.getAiRequests(this.selectedBotId).then(response=>
       {
         this.show_request=true;
@@ -499,6 +500,9 @@ export class BotDataManagment {
           request.ai_response=r[i].ai_response;
           this.tableRequest.push(request);
         }
+        this.tableRequest.sort(function(a, b) {
+          return (a.date +a.time) - (b.date + b.time);
+        });
       });
 
   }
