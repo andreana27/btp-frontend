@@ -5,6 +5,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
   backend = 'https://demo-backend.botprotec.com/backend/';
+  //backend = 'https://a2.botprotec.com/backend/';
+
   isRequesting = false;
   sessionUser = null;
 
