@@ -53,7 +53,7 @@
     </div>
 
     <div class="panel panel-primary" show.bind='isStatistics'>
-      <div class="panel-heading">Statistics</div>
+      <div class="panel-heading">Received Messages</div>
       <div class="anel-body">
         <div class="row">
           <div class="col-sm-12">
@@ -87,6 +87,40 @@
         </div>
       </div>
       <div class="panel panel-primary" show.bind='isStatistics'>
+        <div class="panel-heading">Users</div>
+        <div class="anel-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <table class="table table-striped"
+                      aurelia-table="data.bind:tableRecords; display-data.bind: $displayData;
+                      current-page.bind: currentPage; page-size.bind: pageSize;
+                      total-items.bind:totalRecords;">
+                <thead>
+                  <th>Total</th>
+                  <th>Telegram</th>
+                  <th>Messenger</th>
+                  <th>WebSite</th>
+                </thead>
+                <thbody>
+                  <tr>
+                    <td>${telegram_c+messenger_c+website_c}</td>
+                    <td>${telegram_c}</td>
+                    <td>${messenger_c}</td>
+                    <td>${website_c}</td>
+                  </tr>
+                  <tr>
+                    <td>${telegram_p_c+messenger_p_c+website_p_c} %</td>
+                    <td>${telegram_p_c} %</td>
+                    <td>${messenger_p_c} %</td>
+                    <td>${website_p_c} %</td>
+                  </tr>
+                </thbody>
+              </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="panel panel-primary" show.bind='isStatistics'>
         <div class="panel-heading">CheckPoints Statistics</div>
         <div class="anel-body">
           <div class="row">
@@ -97,11 +131,13 @@
                       total-items.bind:totalRecords;">
                 <thead>
                   <th>CheckPoint Name</th>
+                  <th>Users</th>
                   <th>Times passed</th>
                 </thead>
                 <thbody>
                   <tr repeat.for="variable of checkpoints">
                     <td >${variable.name}</td>
+                    <td >${variable.clients}</td>
                     <td >${variable.val}</td>
                   </tr>
                 </thbody>

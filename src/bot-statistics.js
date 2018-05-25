@@ -110,10 +110,17 @@ export class BotDataManagment {
             this.telegram=response.telegram_t;
             this.messenger=response.messenger_t;
             this.website=response.website_t;
+            this.telegram_c=response.telegram_clients;
+            this.messenger_c=response.messenger_clients;
+            this.website_c=response.website_clients;
             this.total=(this.telegram+this.messenger+this.website)/100;
+            this.total_c=(this.telegram_c+this.messenger_c+this.website_c)/100;
             this.telegram_p=response.telegram_t/this.total;
             this.messenger_p=response.messenger_t/this.total;
             this.website_p=response.website_t/this.total;
+            this.telegram_p_c=response.telegram_clients/this.total_c;
+            this.messenger_p_c=response.messenger_clients/this.total_c;
+            this.website_p_c=response.website_clients/this.total_c;
             this.checkpoints=response.check;
             this.isStatistics=true;
           });

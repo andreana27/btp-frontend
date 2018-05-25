@@ -109,6 +109,7 @@ export class BotSettings {
   sendToDefaultContext()
   {
     //getting the default context id
+    this.fullContextList.sort(function(x, y) {return (x.isdefault === y.isdefault)? 0 : x.isdefault? -1 : 1;});
     let defaultContextId =  JSON.stringify(this.fullContextList[0].id);
     //getting the botit
     let botId = this.botid;
@@ -183,6 +184,6 @@ export class BotSettings {
     this.bot.bot_language = this.selectedLanguage;
     this.api.saveBot(this.bot);
   }
-  
+
 
 }
