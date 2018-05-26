@@ -942,6 +942,26 @@ export class WebAPI {
     }
     sendMessageToMessenger(botId,clientId,message)
     {
+      let parameters = {bot_id: botId, message:message,clientid:clientId}
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //bot_ai
+      this.isRequesting = true;
+      return this.client_auth.fetch(`sendMessageToMesseger.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });/*
       this.isRequesting = true;
       return this.client_auth.fetch(`sendMessageToMesseger/${botId}/${clientId}/${message}.json`, {
         method: 'GET'
@@ -950,10 +970,31 @@ export class WebAPI {
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     sendMessageToTelegram(botId,clientId,message)
     {
+      let parameters = {bot_id: botId, message:message,clientid:clientId}
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //bot_ai
+      this.isRequesting = true;
+      return this.client_auth.fetch(`sendMessageToTelegram.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+      /*/
       this.isRequesting = true;
       return this.client_auth.fetch(`sendMessageToTelegram/${botId}/${clientId}/${message}.json`, {
         method: 'GET'
@@ -962,7 +1003,7 @@ export class WebAPI {
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     endChatCenter(botId,clientId,message)
     {
@@ -1002,7 +1043,27 @@ export class WebAPI {
     }
     sendMessageToBroadcast(botId,message)
     {
+      let parameters = {bot_id: botId, message:message}
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //bot_ai
       this.isRequesting = true;
+      return this.client_auth.fetch(`sendMessageToBroadcast.json`, {
+        method: 'POST',
+        body: data
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false;
+          return data;
+      });
+      /*
       return this.client_auth.fetch(`sendMessageToBroadcast/${botId}/${message}.json`, {
         method: 'GET'
       })
@@ -1010,7 +1071,7 @@ export class WebAPI {
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     getStatistics(botId,start,end)
     {

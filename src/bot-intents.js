@@ -341,6 +341,7 @@ export class BotDataManagment {
           this.countLabel = "The selected intent has no examples";
         }
         else {
+          this.intentsQualify=true;
           this.countLabel = "";
           //setting the number of petitions to make to the backend depending of the number of records of variables
           this.numberOfPetitions = (this.numberOfRecords / this.recordsPerPetition)+1;
