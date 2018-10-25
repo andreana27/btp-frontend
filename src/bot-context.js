@@ -490,6 +490,7 @@ export class BotContext {
     if (type == 'validationReply') {
       newElement.type = type;
       newElement.content = this.validationReplyValue;
+      newElement.onError = this.validationReplyError;
       newElement.validation=this.validationReplyValidationValue;
       newElement.store = this.StoreOnSR;
       newElement.quick_replies = this.items;
@@ -509,6 +510,7 @@ export class BotContext {
     if (type == 'validationText') {
       newElement.type = type;
       newElement.content = this.validationTextValue;
+      newElement.onError = this.validationTextError;
       newElement.store = this.StoreOnQR;
       newElement.retry=this.validationTextRetry;
       newElement.sendTo=this.validationTextsendTo;
@@ -767,9 +769,10 @@ export class BotContext {
     this.items[idx].content_type = item.content_type;
     this.items[idx].title = item.title;
     this.items[idx].sendTo = item.sendTo;
-
+    console.log(item.sendTo);
 
   }
+  
   addBlank() {
 
     if (this.items[this.items.length - 1]) {
