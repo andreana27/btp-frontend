@@ -9,6 +9,7 @@ export class WebAPI {
 
   isRequesting = false;
   sessionUser = null;
+  datos=null;
 
   constructor(Aurelia) {
     this.app = Aurelia;
@@ -161,6 +162,185 @@ export class WebAPI {
       let data = {firstName: sessionStorage.userFirstName, lastName: sessionStorage.userLastName}
       return data;
   }
+  //**********************************************************************************
+
+  setInfoUser(id,nombre,apellido,email){//inactive
+    datos.id=id;
+    datos.nombre=nombre;
+    datos.apellido=apellido;
+    datos.email=email;
+    return datos;
+  }
+  setPathFinal(value){
+      localStorage.isRegister = value;
+    if(!value)
+    {
+      this.app.setRoot('user-manager');
+    }
+    else
+    {
+       this.app.setRoot('user.manager');
+    }
+  }
+  getCountUser() {   
+    this.isRequesting = true;
+    return this.client_auth.fetch(`count_users.json`, {
+      method: 'GET'//,
+      //body: loginData
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData.count;
+      });
+  }
+  getUpdateUser(userData) {
+      this.isRequesting = true;
+    let formData = new FormData();
+    for (let key in userData) {
+      if (typeof(userData[key]) === 'object'){
+        formData.append(key, JSON.stringify(userData[key]));
+      }else{
+        formData.append(key, userData[key]);
+      }
+    }
+    return this.client_auth.fetch(`update_user.json`, {
+        method: 'PUT',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        //this.app.setRoot('app')
+        return data;
+      });
+  }
+  getSelectUser() {
+     //let loginData = new FormData();     
+    this.isRequesting = true;
+    return this.client_auth.fetch(`auth_users.json`, {
+      method: 'POST'
+    })
+
+      .then(response => response.json())
+      .then((responseData) => {
+        
+        this.isRequesting = false;
+        return responseData;
+      });
+      /*.then((algo)=>{
+        console.log("enumeracionUsuarios: "+algo);
+        return algo;
+      });*/
+  }
+  //----------------------------Roles----------------------------------------------------------
+  getSelectRoles(id) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`group_membership/${id}.json`, {
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData;
+      });
+  }
+  getGroupRoles() {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_roles.json`, {
+      method: 'POST'
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData;
+      });
+  }
+
+  getCountRoles() {   
+    this.isRequesting = true;
+    return this.client_auth.fetch(`count_roles.json`, {
+      method: 'POST'//,
+      //body: loginData
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData.count;
+      });
+  }
+  
+  getCountUsersRoles(infoRole) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`count_membership/${infoRole}.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
+        //this.app.setRoot('app')
+        return data.count;
+      });
+  }
+  deleteUsersRoles(id,role) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`delete_Userinroles/${id}/${role}.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
+        return data;
+      });
+  }
+  addUserMembership(id,role) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`add_user_role/${id}/${role}.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
+        return data;
+      });
+  }
+  getUpdateRole(roleData) {
+      this.isRequesting = true;
+    let formData = new FormData();
+    for (let key in roleData) {
+      if (typeof(roleData[key]) === 'object'){
+        formData.append(key, JSON.stringify(roleData[key]));
+      }else{
+        formData.append(key, roleData[key]);
+      }
+    }
+    return this.client_auth.fetch(`update_role.json`, {
+        method: 'PUT',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        //this.app.setRoot('app')
+        return data;
+      });
+  }
+  registerRole(roleData) {
+    this.isRequesting = true;
+    let formData = new FormData();
+    for (let key in roleData) {
+      if (typeof(roleData[key]) === 'object'){
+        formData.append(key, JSON.stringify(roleData[key]));
+      }else{
+        formData.append(key, roleData[key]);
+      }
+    }
+    return this.client_auth.fetch(`role.json`, {
+        method: 'PUT',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        //this.app.setRoot('app')
+        return data;
+      });
+  }
+  //**************************************************************************************************
 
   recoverPassword(email,new_password) {
     //TODO Validation of email and renewal of password

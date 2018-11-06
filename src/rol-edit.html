@@ -1,0 +1,112 @@
+<template>
+  <div>
+    <div style="width:800px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      <div class="login-logo">
+        <a href="/#/">
+          <img src="assets/images/logo-wide.png" height="40px">
+        </a>
+      </div>
+
+      <div class="login-box-body">
+        <div clas="container-fluid" style="width:600px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+        
+        <div class="form-inline">
+            <i class="fa fa-drivers-license" style="font-size:32px"> </i><br clear="left"><h2>  Roles management </h2>
+        </div>
+
+         
+            <label class="text-primary"><strong><h3>Role ID: ${roleInfo.id}</h3></strong></label>
+            
+            <div style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+              <div class="form-inline has-feedback">
+                <button type="button" class="btn ${clicked ? 'btn-warning' : 'btn-primary'}" click.trigger="handleClick()" value.bind="roleInfo.access_role">
+                    <span class="fa fa-star-o" style="font-size:16px"></span> Status: ${clicked ? 'disable' : 'enable'}
+                </button>
+              </div>
+              <br>
+              <div class="form-horizontal has-feedback">            
+                <label><strong>Role Name </strong></label>
+                <input type="text" class="form-control col-xs-5" placeholder="Role Name" value.bind="roleInfo.role">
+                <span class="form-control-feedback"></span>
+              </div>
+              <div class="form-group has-feedback">
+                <label><strong>Description</strong></label>
+                <input type="text" class="form-control" placeholder="Description" value.bind="roleInfo.description">
+                <span class="form-control-feedback"></span>
+              </div>
+            </div><!-- fin div-->
+
+            <div class="form-group has-feedback" style="width:600px;padding-top:3%; padding-bottom:3%; margin-right:auto; margin-left:auto;">        
+              <label><strong>Users</strong></label>
+              <div>
+                    <button type="button" class="btn btn-info btn-md" click.trigger="ocultar()">
+                    <span class="fa fa-plus-circle" style="font-size:16px"></span> Add User
+                    </button>
+              </div>
+              <div if.bind="oculto">
+                <div class="form-inline">            
+                  <label><strong>ID User: </strong></label>
+                  <input type="text" class="form-control col-xs-5" placeholder="ID user" value.bind="idUser.id">
+                  <button type="button" class="btn btn-success btn-md"  click.delegate="Adduser(roleInfo.id)">
+                    <span class="fa fa-user-plus" style="font-size:16px"></span> Add 
+                  </button>
+                </div>
+              </div>
+              <br>
+                <table class="table table-striped">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr repeat.for="i of cuenta"><!-- query-->
+                      <form>
+                      <td>${memberData.data[i].id}</td>
+                      <td>${memberData.data[i].first_name+" "+memberData.data[i].last_name}</td>
+                      <td>
+
+                        
+                        <div class="btn-toolbar" role="toolbar">
+                          <div class="btn-group">
+                              <!--<button type="submit" class="btn btn-warning btn-sm" click.delegate="DeleteUserRole(memberData.data[i].id,roleInfo.id)">
+                                <span class="fa fa-minus-circle" style="font-size:16px"></span>
+                              </button>-->
+                            <a  class="btn btn-warning btn-sm" click.delegate="DeleteUserRole(memberData.data[i].id,roleInfo.id)">
+                                <i class="fa fa-minus-circle" style="font-size:16px" ></i>
+                              </a>
+                            </div>
+                          </div>
+                      </td>
+                    </form>
+                    </tr>
+                  </tbody>
+                </table>
+            </div><!-- fin div-->
+            
+            <br>
+             
+            <div class="row">
+              <div class="col-xs-6">
+                   <button type="submit" class="btn btn-success " click.delegate="UpdateRole()">
+                      <span class="fa fa-check-square-o" style="font-size:16px"></span> Save Changes
+                    </button>
+                    <!--<a class="btn btn-success btn-md" click.delegate="UpdateRoleMembership()">
+                       <i class="fa fa-check-square" style="font-size:16px" ></i>Save Changes
+                    </a>-->
+                    <a class="btn btn-danger btn-md" route-href="route: user-roles;">
+                       <i class="fa fa-close" style="font-size:16px" ></i>Cancel Changes
+                    </a>
+              </div>
+
+            </div><!-- fin div-->
+          
+        </div>
+        <!--<router-view class="col-md-8"></router-view>-->
+     </div> 
+   </div>
+ </div>
+  </div>
+</template>

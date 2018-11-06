@@ -40,11 +40,46 @@ export class Manager {
         moduleId: 'widget-setup',
         name: 'widget-setup'
       },
+      //-------------------------------------
       {
-        route: 'user/profle',
+        route: 'user/profile',
         moduleId: 'user-profile',
         name: 'user-profile'
       },
+      {
+        route: 'rol/roles',
+        moduleId: 'user-roles',
+        name: 'user-roles'
+      },
+      {
+        route: 'user/manager',
+        moduleId: 'user-manager',
+        name: 'user-manager'
+      },
+       {
+        route: 'user/edit',
+        moduleId: 'user-edit',
+        name: 'user-edit'
+      },
+      {
+        route: 'user/create',
+        moduleId: 'user-create',
+        name: 'user-create'
+      },
+      //*********************************
+       {
+        route: 'rol/edit',
+        moduleId: 'rol-edit',
+        name: 'rol-edit',
+        title:'edit'
+      },
+      {
+        route: 'rol/create',
+        moduleId: 'role-create',
+        name: 'role-create',
+        title:'create'
+      },
+      //---------------------------------
       {
         route: 'bot/intents',
         moduleId: 'bot-intents',

@@ -1,0 +1,53 @@
+<template>
+  <require from="bootstrap/css/bootstrap.css"></require>
+  <require from="font-awesome/css/font-awesome.css"></require>
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-black.css"></require>
+  <require from="toastr/build/toastr.css"></require>
+  <div>
+    <div style="width:700px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      <div class="login-logo">
+        <a href="/#/">
+          <img src="assets/images/logo-wide.png" height="40px">
+        </a>
+      </div>
+
+      <div class="login-box-body">
+        <div clas="container-fluid" style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+        <div class="form-inline">
+            <i class="fa fa-address-book" style="font-size:32px"> </i><br clear="left"><h2>  Create Role  </h2>
+        </div>
+          <div class="form-group has-feedback">
+          <label>Name</label>
+          <input type="text" class="form-control" placeholder="Role" value.bind="register.role">
+          <span class="fa fa-address-book form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <label>Description</label>
+          <input type="text" class="form-control" placeholder="Description" value.bind="register.description">
+          <span class="fa fa-drivers-license form-control-feedback"></span>
+        </div>
+          <div class="row">
+            <div class="col-xs-6"></div>
+            <div class="col-xs-6">
+                  <button type="submit" class="btn btn-success" disabled.bind="!canRegister" click.delegate="registerNewRole()">
+                    <span class="fa fa-check-square-o" style="font-size:16px"></span> Save Changes
+                  </button>
+                  <!--<button type="submit" class="btn btn-danger" click.delegate="cancelRegistry()">
+                    <span class="fa fa-close" style="font-size:16px"></span> Cancel 
+                  </button>
+                  click.delegate="cancelarpage()"
+                  -->
+                  
+                  <a class="btn btn-danger btn-md" route-href="route: user-roles;">
+                     <i class="fa fa-close" style="font-size:16px" ></i>Cancel Changes
+                  </a>
+            <!-- /.col -->
+          </div>
+      </div>
+        <!--<router-view class="col-md-8"></router-view>-->
+      </div>
+    </div>
+  </div>
+</template>

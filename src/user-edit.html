@@ -1,0 +1,60 @@
+<template>
+  <div>
+    <div style="width:700px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      <div class="login-logo">
+        <a href="/#/">
+          <img src="assets/images/logo-wide.png" height="40px">
+        </a>
+      </div>
+
+      <div class="login-box-body">
+        <div clas="container-fluid" style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+        <div class="form-inline">
+            <i class="fa fa-address-card-o" style="font-size:32px"> </i><br clear="left"><h2>  User management </h2>
+        </div>
+
+        <form submit.delegate="UpdateUserData()">
+          <label class="text-primary"><strong><h3>User ID: ${userInfo.id}</h3></strong></label>
+
+          <div class="form-inline has-feedback">
+            <button type="button" class="btn ${clicked ? 'btn-warning' : 'btn-primary'}" click.trigger="handleClick()" value.bind="userInfo.enabled_access">
+                <span class="fa fa-star-o" style="font-size:16px"></span> Status: ${clicked ? 'disable' : 'enable'}
+            </button>
+          </div>
+          <br>
+          <div class="form-group has-feedback">            
+            <label><strong>First Name</strong></label>
+            <input type="text" class="form-control" placeholder="First Name" value.bind="userInfo.first_name">
+            <span class="form-control-feedback"></span>
+          </div>
+          <div class="form-group has-feedback">
+            <label><strong>Last Name</strong></label>
+            <input type="text" class="form-control" placeholder="Last Name" value.bind="userInfo.last_name">
+            <span class="form-control-feedback"></span>
+          </div>
+          <div class="form-group has-feedback">
+            <label><strong>Email</strong></label>
+            <input type="text" class="form-control" placeholder="Email" value.bind="userInfo.email">
+            <span class="form-control-feedback"></span>
+          </div>
+          
+          <br>
+          <div class="row">
+            <div class="col-xs-6"></div>
+            <div class="col-xs-6">
+                  <button type="submit" class="btn btn-success ">
+                    <span class="fa fa-check-square-o" style="font-size:16px"></span> Save Changes
+                  </button>
+                  <a class="btn btn-danger btn-md" route-href="route: user-manager;">
+                     <i class="fa fa-close" style="font-size:16px" ></i>Cancel Changes
+                  </a>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+      </div>
+        <!--<router-view class="col-md-8"></router-view>-->
+      </div>
+    </div>
+  </div>
+</template>

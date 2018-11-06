@@ -1,0 +1,79 @@
+<template>
+  <require from="bootstrap/css/bootstrap.css"></require>	 
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-black.css"></require>
+  <require from="toastr/build/toastr.css"></require>
+  <loading-indicator loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
+  <div>
+    <div style="width:1200px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      <div class="login-logo">
+        <a href="/#/">
+          <img src="assets/images/logo-wide.png" height="40px">
+        </a>
+      </div>
+      <div class="login-box-body">
+      	<div clas="container-fluid" style="width:1000px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      	<div class="form-inline">
+	      	<i class="fa fa-user-circle-o" style="font-size:36px"></i><br clear="left"><h3> User Manager </h3>
+	      	
+    	</div>
+    	<br>
+        <div>
+        	<!--route-href="route: user-create;"
+        		click.delegate="gotoRegister()"
+        	-->
+	      		<a class="btn btn-info btn-md" route-href="route: user-create;">
+	      			<i class="fa fa-user-plus" style="font-size:16px" ></i> Add user
+  				</a>
+	      	</div>
+	      	<br>
+        	<div class="table-responsive">
+	  	        <table class="table table-striped">
+	  	        	<thead class="thead-dark">
+	  	        		 <!-- Aplicadas en las filas -->
+					  <tr class="active">
+					  	<th>User Id</th>
+					  	<th>Fisrt Name</th>
+					    <th>Last Name</th>
+					    <th>Email</th>
+					    <th>Actions</th>
+					  </tr>
+	  	        	</thead>
+	  				<tbody>
+					 
+
+					  <tr repeat.for="i of userCuenta"> 
+					  	<td >${userData.data[i].id}</td>
+					    <td >${userData.data[i].first_name}</td>
+					    <td >${userData.data[i].last_name}</td>
+					    <td >${userData.data[i].email}</td>
+					    <td>
+					    	<div class="btn-toolbar" role="toolbar">
+							  <div class="btn-group">
+							  		<!--<button type="submit" class="btn btn-warning btn-sm">
+							      		<span class="fa fa-pencil-square-o" style="font-size:16px"></span>
+							    	</button>
+							    	route-href="route: user-edit; params.bind:{id:userData.data[i].id}"
+							    	click.delegate="getInformationUser(userData.data[i])"-->
+							   	<a class="btn btn-warning btn-sm" route-href="route: user-edit; params.bind:{info:userData.data[i]}">
+						      		<i class="fa fa-pencil-square" style="font-size:16px" ></i>
+					  			</a>				  		
+							 	<!--
+							    <button type="button" class="btn btn-danger btn-sm">
+							      <span class="fa fa-times-circle" style="font-size:16px"></span>
+							    </button>-->
+							  </div>
+							</div>
+					    </td>	
+					  </tr>
+
+					  <!-- **********************************-->
+					</tbody>
+				</table>
+			</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

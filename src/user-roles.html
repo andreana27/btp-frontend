@@ -1,0 +1,87 @@
+<template>
+  <require from="bootstrap/css/bootstrap.css"></require>	 
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-black.css"></require>
+  <require from="toastr/build/toastr.css"></require>
+  <div>
+    <div style="width:1100px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      <div class="login-logo">
+        <a href="/#/">
+          <img src="assets/images/logo-wide.png" height="40px">
+        </a>
+      </div>
+      <div class="login-box-body">
+      	<div class="form-inline">
+	      	<i class="fa fa-user-secret" style="font-size:36px"></i>
+	      	<h3> Roles Manager </h3>	      	
+    	</div>
+    	<div>
+	      		
+    		<a class="btn btn-success btn-md" route-href="route: role-create;">
+	      			<i class="fa fa-plus-circle" style="font-size:16px" ></i> Add Role
+  			</a>
+	      		<!--<button type="button" class="btn btn-success btn-md" route-href="route:role-create;">
+	      		<span class="fa fa-plus-circle" style="font-size:16px"></span> Add Role
+	      		</button>-->
+	    </div>
+    	<br>
+        <form submit.delegate="UpdateUserData()">
+        	<div class="table-responsive">
+	  	        <table class="table table-striped">
+	  	        	<thead class="thead-dark">
+	  	        		<tr class="active">
+	  	        		<th>ID</th>
+					  	<th>Role Name</th>
+					    <th>Detail</th>
+					    <!--<th>Users Quantity</th>-->
+					    <th>Actions</th>
+					  </tr>
+	  	        	</thead>
+	  				<tbody>
+					  <!-- Aplicadas en las filas -->
+					  
+					  <tr repeat.for="i of numRoles">
+					  	<td>${roleData.data[i].id} </td>
+					    <td>${roleData.data[i].role} </td>
+					    <td>${roleData.data[i].description} </td>
+					    <!--<td>${quantityUser(roleData.data[i].id)} </td>-->
+					    <!--<td >
+					    	
+					    	<!--
+					    	<div class="container" >
+							  <div class="panel-group" >
+							    <div class="panel panel-default" >
+							      <div class="panel-heading">
+							          <a data-toggle="collapse" href="#collapse1">Users Detail</a>
+							      </div>
+							      <div  id="collapse1" class="panel-collapse collapse" >
+							        <ul class="list-group" repeat.for="x of numero">
+							          <li class="list-group-item">${roleData.data[x].auth_user.first_name+" "+roleData.data[x].auth_user.last_name +" " +x+ " "+numero}</li>
+							        </ul>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+					    </td>-->
+					    <td>
+					    	<div class="btn-toolbar" role="toolbar">
+							  <div class="btn-group">
+							    <!--<button type="button" class="btn btn-warning btn-sm">
+							      <span class="fa fa-pencil-square-o" style="font-size:16px"></span>
+							    </button>-->
+							    <a class="btn btn-warning btn-sm" route-href="route: rol-edit;  params.bind:{info:roleData.data[i]}">
+						      		<i class="fa fa-pencil-square-o" style="font-size:16px" ></i>
+					  			</a>
+							  </div>
+							</div>
+					    </td>	
+					  </tr>
+					</tbody>
+				</table>
+			</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,69 @@
+<template>
+  <require from="bootstrap/css/bootstrap.css"></require>
+  <require from="font-awesome/css/font-awesome.css"></require>
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-black.css"></require>
+  <require from="toastr/build/toastr.css"></require>
+  <div>
+    <div style="width:700px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      <div class="login-logo">
+        <a href="/#/">
+          <img src="assets/images/logo-wide.png" height="40px">
+        </a>
+      </div>
+
+      <div class="login-box-body">
+        <div clas="container-fluid" style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+        <div class="form-inline">
+            <i class="fa fa-id-badge" style="font-size:32px"> </i><br clear="left"><h2>  Create User  </h2>
+        </div>
+          <div class="form-group has-feedback">
+          <label>First Name</label>
+          <input type="text" class="form-control" placeholder="First Name" value.bind="register.firstName">
+          <span class="fa fa-user-circle form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <label>Last Name</label>
+          <input type="text" class="form-control" placeholder="Last Name" value.bind="register.lastName">
+          <span class="fa fa-user-circle form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <label>Email</label>
+          <input type="email" class="form-control" placeholder="Email" value.bind="register.email">
+          <span class="fa fa-envelope form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <label>Password</label>
+          <input type="password" class="form-control" placeholder="Password" value.bind="register.password">
+          <span class="fa fa-lock form-control-feedback"></span>
+        </div>
+        <div class="form-group has-feedback">
+          <label>Confirm Password</label>
+          <input type="password" class="form-control" placeholder="Confirm Password" value.bind="register.confirmPassword">
+          <span class="fa fa-lock form-control-feedback"></span>
+        </div>
+          <div class="row">
+            <div class="col-xs-6"></div>
+            <div class="col-xs-6">
+                  <button type="submit" class="btn btn-success" disabled.bind="!canRegister" click.delegate="registerNewUser()">
+                    <span class="fa fa-check-square-o" style="font-size:16px"></span> Save Changes
+                  </button>
+                  <!--<button type="submit" class="btn btn-danger" click.delegate="cancelRegistry()">
+                    <span class="fa fa-close" style="font-size:16px"></span> Cancel 
+                  </button>
+                    
+                  -->
+                  
+                  <a class="btn btn-danger btn-md" route-href="route: user-manager;">
+                     <i class="fa fa-close" style="font-size:16px" ></i>Cancel Changes
+                  </a>
+            <!-- /.col -->
+          </div>
+        </form>
+      </div>
+        <!--<router-view class="col-md-8"></router-view>-->
+      </div>
+    </div>
+  </div>
+</template>
