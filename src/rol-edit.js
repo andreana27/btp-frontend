@@ -10,6 +10,7 @@ import {
 import {
   Router
 } from 'aurelia-router';
+import * as toastr from 'toastr';
 
 
 @inject(WebAPI, Router)
@@ -21,6 +22,11 @@ export class UserEdit {
     this.idUser = {
       id:''
     };
+    this.permiso={
+      id:'',
+      name:'',
+      table:''
+    };
     this.router = router;
     //this.router.reset();
   }
@@ -30,24 +36,36 @@ export class UserEdit {
   }
   created(){
     
-      this.api.getCountUsersRoles(this.roleInfo.id).then((cuenta)=>{
+      /*this.api.getCountUsersRoles(this.roleInfo.id).then((cuenta)=>{
             //console.log("long: "+Object.keys(datos.data).length);
               this.cuenta=cuenta;
               console.log("cuenta: "+this.cuenta);
              
-          });
-    
+          });*/
       this.api.getSelectRoles(this.roleInfo.id).then((datos)=>{
                 //console.log("long: "+Object.keys(datos.data).length);
+                this.numUser=Object.keys(datos.data).length;
                   this.memberData=datos;
-                  console.log("usuarios agregados");
              
           });
+      this.api.getSelectPermission(this.roleInfo.id).then((datosP)=>{
+                  console.log("longPermission: "+Object.keys(datosP.data).length);
+                  this.numPermission=Object.keys(datosP.data).length;
+                  this.permissionRole=datosP;
+                  console.log("permissons agregados");
+             
+          });
+      this.api.selectTables().then(result => {
+            this.numero=Object.keys(result.grid).length;
+            this.table=result;
+            //console.log("creado: "+this.table.grid[0]);
+        });
     
   }
   get canUser() {
     return this.iduser.id;
   }
+//------------------------------------------------------------------  
   DeleteUserRole(id,group){
     console.log("a eliminar: "+id+" "+group);
     this.api.deleteUsersRoles(id,group).then((dato)=>{
@@ -55,7 +73,20 @@ export class UserEdit {
             this.member=dato;
             //this.router.navigate('rol-edit');
             console.log("valor a eliminar: "+this.member.data);
-             
+            toastr.success("Delete User in Role");
+             window.location.reload();
+          });
+  }
+  DeletePermission(id,name,table){
+    console.log("a eliminar: "+id+" "+table+" "+name);
+    //quitar db. in table
+    var table_name=table.substring(3);
+    console.log("table name: "+table_name);
+    this.api.deletePermission(id,name,table_name).then((datos)=>{
+            //this.router.navigate('rol-edit');
+            console.log("valor a eliminar: "+datos.data);
+            toastr.success("Delete Permission");
+             window.location.reload();
           });
   }
 //********************************************************
@@ -67,7 +98,7 @@ export class UserEdit {
          });
   }
   
-  handleClick(){
+  manejoclick(){
     //console.log("entra: "+this.clicked);
     this.clicked = !this.clicked; // toggle clicked true/false
     //console.log("sale: "+this.clicked);
@@ -79,26 +110,64 @@ export class UserEdit {
     //console.log('var: '+this.userInfo.enabled_access);
     return true; 
   }
+  //*****************************************************************
   ocultar(){
-    //console.log("entra: "+this.clicked);
     this.clicked = !this.clicked; // toggle clicked true/false
-    //console.log("sale: "+this.clicked);
     if (this.clicked==true){
         this.oculto=true;
     }else{
        this.oculto=false;
     }
-    //console.log('var: '+this.userInfo.enabled_access);
     return true; 
   }
+  ocultarPermiso(){
+    this.clicked = !this.clicked; // toggle clicked true/false
+    if (this.clicked==true){
+        this.oculto1=true;
+    }else{
+       this.oculto1=false;
+    }
+    return true; 
+  }
+  ocultarUsuario(){
+    this.clicked = !this.clicked; // toggle clicked true/false
+    if (this.clicked==true){
+        this.oculto2=true;
+    }else{
+       this.oculto2=false;
+    }
+    return true; 
+  }
+  //*******************************************************************
 
   Adduser(idrole){
     console.log("datos user: "+this.idUser.id+" role: "+idrole);
     this.api.addUserMembership(this.idUser.id,idrole).then((resultado)=>{
           console.log(resultado);
           //ruta
-          this.router.navigate('rol/roles');
+          console.log(resultado.data);
+          if(resultado.data==='ok add'){
+            toastr.success("Added User ID: "+this.idUser.id);
+            window.location.reload();
+          }else{
+            toastr.error(resultado.data);
+          }
+          
          });
+  }
+  addPermission(){
+   this.permiso.id=this.roleInfo.id;
+    console.log("creadoPermission: "+this.permiso.id+" "+this.permiso.name+" "+this.permiso.table);
+              this.api.registerPermission(this.permiso).then(resultp => {
+                        console.log("creadoPermission: "+resultp.data);
+                        //this.router.navigate('rol/roles');
+                        if(resultado.data==='ok'){
+                            toastr.success("Created Permission in "+this.permiso.table);
+                            window.location.reload();
+                        }else{
+                          toastr.error("Permission not created");
+                        }
+                });
   }
 
 }//fin de cla clase

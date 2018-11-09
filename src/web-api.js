@@ -232,6 +232,17 @@ export class WebAPI {
         return algo;
       });*/
   }
+  //-------------------------------------------------------------------------
+  selectTables() {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`table_name.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
+        return data;
+      });
+  }
   //----------------------------Roles----------------------------------------------------------
   getSelectRoles(id) {    
     this.isRequesting = true;
@@ -293,7 +304,7 @@ export class WebAPI {
   addUserMembership(id,role) {
     this.isRequesting = true;
     return this.client_auth.fetch(`add_user_role/${id}/${role}.json`, {
-        method: 'GET'
+        method: 'GET'//GET
       })
       .then(response => response.json())
       .then(data => {
@@ -337,6 +348,40 @@ export class WebAPI {
       .then(response => response.json())
       .then(data => {
         //this.app.setRoot('app')
+        return data;
+      });
+  }
+  //-------------------------------------------------------------------
+  registerPermission(permisoData) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`permission_role/${permisoData.id}/${permisoData.name}/${permisoData.table}.json`, {
+        method: 'GET'//,
+        //body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        //this.app.setRoot('app')
+        return data;
+      });
+  }
+  getSelectPermission(id) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_permission/${id}.json`, {
+      method: 'GET'
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData;
+      });
+  }
+  deletePermission(id,name,table) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`delete_permission/${id}/${name}/${table}.json`, {
+        method: 'GET'
+      })
+      .then(response => response.json())
+      .then(data => {
         return data;
       });
   }

@@ -19,8 +19,8 @@
             
             <div style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
               <div class="form-inline has-feedback">
-                <button type="button" class="btn ${clicked ? 'btn-warning' : 'btn-primary'}" click.trigger="handleClick()" value.bind="roleInfo.access_role">
-                    <span class="fa fa-star-o" style="font-size:16px"></span> Status: ${clicked ? 'disable' : 'enable'}
+                <button type="button" class="btn btn btn-dark btn-md" click.trigger="manejoclick()" value.bind="roleInfo.access_role">
+                    <span class="fa fa-star-o" style="font-size:16px"></span> Status: ${roleInfo.access_role}
                 </button>
               </div>
               <br>
@@ -36,22 +36,99 @@
               </div>
             </div><!-- fin div-->
 
-            <div class="form-group has-feedback" style="width:600px;padding-top:3%; padding-bottom:3%; margin-right:auto; margin-left:auto;">        
-              <label><strong>Users</strong></label>
+            <!-- ************************************************************************************** -->
+            <label><strong>Add Permission and Users</strong></label>
+            <div class="form-group has-feedback" style="width:600px;padding-top:3%; padding-bottom:3%; margin-right:auto; margin-left:auto;">           
               <div>
-                    <button type="button" class="btn btn-info btn-md" click.trigger="ocultar()">
-                    <span class="fa fa-plus-circle" style="font-size:16px"></span> Add User
+                    <button type="button" class="btn btn-primary btn-md" click.trigger="ocultarPermiso()">
+                    <span class="fa fa-key" style="font-size:16px"></span> Check permissions
                     </button>
               </div>
+              <br>
+              <div if.bind="oculto1">
+
+                <!--******************************************************************************************** -->
+
+                <div>
+                   <label><strong>Add Permission</strong></label>
+              <div class="form-inline">
+                  <label class="col-sm-2 control-label">Permission</label>
+                  <div class="col-sm-5">
+                    <select class="form-control" value.bind="permiso.name">
+                      <option value.bind="''">Option---</option>
+                      <option value.bind="'create'">create</option>
+                      <option value.bind="'read'">read</option>
+                      <option value.bind="'update'">update</option>
+                      <option value.bind="'delete'">delete</option>
+                      <option value.bind="'select'">select</option>
+                    </select>
+                  </div>
+                </div>
+                <br> 
+                <div class="form-inline"> 
+                <label class="col-sm-2 control-label">Tables</label>             
+                  <div class="col-sm-5">
+                    <select  class="form-control" value.bind="permiso.table">
+                      <option repeat.for="x of numero" value.bind="table.grid[x]">${table.grid[x]}</option>
+                    </select>
+                  </div>
+                  <a class="btn btn-info btn-md" click.delegate="addPermission()">
+                     <i class="fa fa-key" style="font-size:16px" ></i>Add permission
+                  </a>
+                </div>
+                <br>
+          </div>
+                <!--******************************************************************************************** -->
+                <table class="table table-striped">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Permission</th>
+                      <th scope="col">Table Name</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr repeat.for="i of numPermission"><!-- query-->
+                      <form>
+                      <td>${permissionRole.data[i].name}</td>
+                      <td>${permissionRole.data[i].table_name}</td>
+                      <td>
+
+                        
+                        <div class="btn-toolbar" role="toolbar">
+                          <div class="btn-group">
+                              <!--<button type="submit" class="btn btn-warning btn-sm" click.delegate="DeleteUserRole(memberData.data[i].id,roleInfo.id)">
+                                <span class="fa fa-minus-circle" style="font-size:16px"></span>
+                              </button>-->
+                            <a  class="btn btn-warning btn-sm" click.delegate="DeletePermission(roleInfo.id,permissionRole.data[i].name,permissionRole.data[i].table_name)">
+                                <i class="fa fa-minus-circle" style="font-size:16px" ></i>
+                              </a>
+                            </div>
+                          </div>
+                      </td>
+                    </form>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+            <!--********************************************************************************************** -->
+  
+              <div>
+                    <button type="button" class="btn btn-secondary btn-md" click.trigger="ocultar()">
+                    <span class="fa fa-user-plus" style="font-size:16px"></span> Add User to Role
+                    </button>
+
+              </div>
               <div if.bind="oculto">
+                <br>
                 <div class="form-inline">            
                   <label><strong>ID User: </strong></label>
                   <input type="text" class="form-control col-xs-5" placeholder="ID user" value.bind="idUser.id">
                   <button type="button" class="btn btn-success btn-md"  click.delegate="Adduser(roleInfo.id)">
-                    <span class="fa fa-user-plus" style="font-size:16px"></span> Add 
+                    <span class="fa fa-plus-circle" style="font-size:16px"></span> Add 
                   </button>
                 </div>
-              </div>
+              
               <br>
                 <table class="table table-striped">
                   <thead class="thead-dark">
@@ -62,7 +139,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr repeat.for="i of cuenta"><!-- query-->
+                    <tr repeat.for="i of numUser"><!-- query-->
                       <form>
                       <td>${memberData.data[i].id}</td>
                       <td>${memberData.data[i].first_name+" "+memberData.data[i].last_name}</td>
@@ -84,6 +161,7 @@
                     </tr>
                   </tbody>
                 </table>
+              </div>
             </div><!-- fin div-->
             
             <br>
