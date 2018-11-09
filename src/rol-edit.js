@@ -164,6 +164,7 @@ export class UserEdit {
                         if(resultado.data==='ok'){
                             toastr.success("Created Permission in "+this.permiso.table);
                             window.location.reload();
+                            
                         }else{
                           toastr.error("Permission not created");
                         }

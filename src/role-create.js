@@ -61,6 +61,7 @@ export class Register {
               this.api.registerPermission(this.permiso).then(resultp => {
                         console.log("creadoPermission: "+resultp.data);
                         if(resultado.data==='ok'){
+                          
                             toastr.success("Created Permission in "+this.permiso.table);
                             window.location.reload();
                         }else{
