@@ -1331,6 +1331,46 @@
             </div>
           </div>
         </div>
+        <div class="panel panel-primary" show.bind="isCaptcha">
+            <div class="panel-heading">Captcha</div>
+            <div class="panel-body">
+              <div>
+                <h4>Use this field for generate a captcha into the bot chat</h4>
+              </div>
+            
+              <div class="row">
+                  <label class="col-sm-3 control-label">Retry(0 for infinity)</label>
+                  <div class='col-sm-9'>
+                    <input class="form-control" type="number" value.bind="element.retry" change.delegate="changedItem($index, item)">
+                  </div>
+              </div>
+              <br>
+
+              <div class="row">
+                <label class="col-sm-3 control-label">Message in captcha if isn't resolved</label>
+                <div class="col-sm-9">
+                  <textarea class="form-control" rows="5" value.bind="element.message" change.delegate="changedItem($index, item)"></textarea>
+                </div>
+              </div>
+              <br>
+
+              <div class="row">
+                  <label for="" class="col-sm-3 control-label">Context if captcha isn't resolved</label>
+                  <div class="col-sm-9">
+                    <select value.bind="element.sendTo" class="form-control" >
+                      <option repeat.for="option of contextChlidContexts" model.bind="option.id">${option.name}</option>
+                    </select>
+                  </div>
+              </div>
+              <br><br>
+
+              <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-primary" click.delegate="additem('captcha')">Add</button>
+                </div>
+              </div>
+            </div>
+        </div>
 
         <!-- ./add smart reply element-->
         <div class="box-footer">
@@ -1378,6 +1418,9 @@
               </a>
               <a class="btn btn-app ${isDecisionRest ? 'active' : ''}" click.delegate="elementSelected('decisionRest')">
                 <i class="fa fa-external-link-square"></i> Decision Rest
+              </a>
+              <a class="btn btn-app ${isCaptcha ? 'active' : ''}"  click.delegate="elementSelected('captcha')">
+                <i class="fa fa-lock"></i> Captcha
               </a>
             </div>
           </div>
