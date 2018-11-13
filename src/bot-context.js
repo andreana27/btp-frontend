@@ -108,6 +108,17 @@ export class BotContext {
   suggestionService = null;
   variableService = null;
   selVar = null;
+  //captcha elements
+
+  captchaItem = {
+    message: "",
+    validation: 0,
+    sendTo: null
+  }
+  captchaMessage = ""
+  captchaTries = 0
+  captchaSendTo = null
+
 
   json_Context;
 
@@ -646,6 +657,10 @@ export class BotContext {
       }];
       this.isSmartReply = false;
       toastr.success('Smart reply element added');
+    }else 
+    if(type == 'captcha') {
+      console.log(this.captchaItem)
+      console.log(this.captchaItem.message)
     }
 
     prom.then(r=>{

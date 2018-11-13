@@ -1341,7 +1341,7 @@
               <div class="row">
                   <label class="col-sm-3 control-label">Retry(0 for infinity)</label>
                   <div class='col-sm-9'>
-                    <input class="form-control" type="number" value.bind="element.retry" change.delegate="changedItem($index, item)">
+                    <input class="form-control" type="number" value.bind="captchaItem.validation" change.delegate="changedItem($index, item)">
                   </div>
               </div>
               <br>
@@ -1349,7 +1349,7 @@
               <div class="row">
                 <label class="col-sm-3 control-label">Message in captcha if isn't resolved</label>
                 <div class="col-sm-9">
-                  <textarea class="form-control" rows="5" value.bind="element.message" change.delegate="changedItem($index, item)"></textarea>
+                  <textarea class="form-control" rows="5" value.bind="captchaItem.message" change.delegate="changedItem($index, item)"></textarea>
                 </div>
               </div>
               <br>
@@ -1357,7 +1357,7 @@
               <div class="row">
                   <label for="" class="col-sm-3 control-label">Context if captcha isn't resolved</label>
                   <div class="col-sm-9">
-                    <select value.bind="element.sendTo" class="form-control" >
+                    <select value.bind="captchaItem.sendTo" class="form-control" >
                       <option repeat.for="option of contextChlidContexts" model.bind="option.id">${option.name}</option>
                     </select>
                   </div>
