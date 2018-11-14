@@ -94,6 +94,7 @@
             <i if.bind="element.type=='chatCenter'" class="fa fa-keyboard-o bg-blue"></i>
             <i if.bind="element.type=='checkPoint'" class="fa fa-check-circle"></i>
             <i if.bind="element.type=='decisionRest'" class="fa fa-external-link-square"></i>
+            <i if.bind="element.type=='captcha'" class="fa fa-lock"></i>
             <div if.bind="element.type=='text'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
 
@@ -747,6 +748,34 @@
               </div>
               <div class="timeline-footer">
                  <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div if.bind="element.type=='captcha'"  class="timeline-item">
+              <h3 class="timeline-header"><a href="#">Captcha</a></h3>
+              <div class="timeline-body">
+                <div class="row">
+                  <label class="col-sm-2 control-label">Retry(0 for infinity)</label>
+                  <div class='col-sm-10'>
+                    <input class="form-control" type="number" value.bind="element.validation" change.delegate="elementChanged($index, element)">
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <label class="col-sm-2 control-label">Message</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" value.bind="element.message"
+                              change.delegate="elementChanged($index, element)"></textarea>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <label class="col-sm-2 control-label">Send to Context if captcha not resolved</label>
+                  <div class='col-sm-10'>
+                    <select value.bind="element.sendTo" class="form-control" change.delegate="elementChanged($index, element)">
+                      <option repeat.for="option of contextChlidContexts" model.bind="option.id">${option.name}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
           </li>

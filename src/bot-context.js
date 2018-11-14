@@ -115,10 +115,6 @@ export class BotContext {
     validation: 0,
     sendTo: null
   }
-  captchaMessage = ""
-  captchaTries = 0
-  captchaSendTo = null
-
 
   json_Context;
 
@@ -659,8 +655,14 @@ export class BotContext {
       toastr.success('Smart reply element added');
     }else 
     if(type == 'captcha') {
-      console.log(this.captchaItem)
-      console.log(this.captchaItem.message)
+      newElement = {...this.captchaItem, type}
+      this.captchaItem = {
+        message: "",
+        validation: 0,
+        sendTo: null
+      }
+      this.isCaptcha = false
+      toastr.success('Captcha element added');
     }
 
     prom.then(r=>{
