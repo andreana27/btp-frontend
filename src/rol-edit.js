@@ -80,9 +80,9 @@ export class UserEdit {
   DeletePermission(id,name,table){
     console.log("a eliminar: "+id+" "+table+" "+name);
     //quitar db. in table
-    var table_name=table.substring(3);
-    console.log("table name: "+table_name);
-    this.api.deletePermission(id,name,table_name).then((datos)=>{
+    //var table_name=table.substring(3);
+    //console.log("table name: "+table_name);
+    this.api.deletePermission(id,name,table).then((datos)=>{
             //this.router.navigate('rol-edit');
             console.log("valor a eliminar: "+datos.data);
             toastr.success("Delete Permission");

@@ -5,6 +5,7 @@
   <require from="admin-lte/css/AdminLTE.css"></require>
   <require from="admin-lte/css/skins/skin-black.css"></require>
   <require from="toastr/build/toastr.css"></require>
+  <require from="style-panel.css"></require>
   <div>
     <div style="width:700px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
       <div class="login-logo">
@@ -35,9 +36,27 @@
         </div>
         <div class="form-group has-feedback">
           <label>Password</label>
-          <input type="password" class="form-control" placeholder="Password" value.bind="register.password">
+          <input type="password" class="form-control" placeholder="Password" name="pass" id="pass" value.bind="register.password">
           <span class="fa fa-lock form-control-feedback"></span>
+          <span id="passstrength"></span>
         </div>
+        <div id="pswd_info" style="display: none">
+          <h4> Password must meet the following requirements:</h4>
+          <ul>
+            <li id="letter" class="invalid">At least <strong>one letter</strong>
+            </li>
+            <li id="capital" class="invalid">At least <strong>one capital letter</strong>
+            </li>
+            <li id="number" class="invalid">At least <strong>one number</strong>
+            </li>
+            <li id="symbol" class="invalid">At least <strong>one special character</strong>
+            </li>
+            <li id="length" class="invalid">Be at least <strong>6 characters</strong>
+            </li>
+          </ul>
+        </div>
+        <!-- *********************************************************************************************************** 
+        keyup.bind="keypressInput(register.password)"-->
         <div class="form-group has-feedback">
           <label>Confirm Password</label>
           <input type="password" class="form-control" placeholder="Confirm Password" value.bind="register.confirmPassword">
