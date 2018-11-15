@@ -113,7 +113,8 @@ export class BotContext {
   captchaItem = {
     message: "",
     validation: 0,
-    sendTo: null
+    sendTo: null,
+    length: 0
   }
 
   json_Context;
@@ -659,7 +660,8 @@ export class BotContext {
       this.captchaItem = {
         message: "",
         validation: 0,
-        sendTo: null
+        sendTo: null,
+        length: 0
       }
       this.isCaptcha = false
       toastr.success('Captcha element added');
