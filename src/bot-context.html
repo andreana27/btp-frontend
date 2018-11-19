@@ -835,7 +835,7 @@
 
                   <div class="timeline-footer">
                     <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                    <button class="btn btn-primary" click.delegate="editExcludeUsers(element)">Edit exclude users</button>
+                    <button class="btn btn-primary" click.delegate="editExcludeUsers(element, $index)">Edit exclude users</button>
                   </div>
                 </div>
             </div>
@@ -1605,13 +1605,13 @@
         <div class="modal-body">
           <p>Edit exclude users for continue the flow without limits</p>
           <ul class="list-group">
-            <li class="list-group-item" repeat.for="userExcluded of temporalCountValidationItem.users"><span>${userExcluded}</span> <button class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button></li>
+            <li class="list-group-item" repeat.for="userExcluded of temporalCountValidationItem.users"><span>${userExcluded}</span> <button class="btn btn-danger" click.delegate="modalDeleteExcludeUser(userExcluded)"><i class="fa fa-trash" aria-hidden="true"></i></button></li>
           </ul>
         </div>
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save changes</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" click.delegate="modalSaveExcludeUser()">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" click.delegate="changeExcludeModal(false)">Close</button>
         </div>
         
       </div>

@@ -133,7 +133,7 @@ export class BotContext {
     ]
   }
 
-  temporalCountValidationItem = {...this.countValidationItem}
+  temporalCountValidationItem = {...this.countValidationItem, index: 0}
 
   json_Context;
 
@@ -152,13 +152,6 @@ export class BotContext {
     this.api = api;
     this.ea = ea;
     this.router=router;
-  }
-  changeExcludeModal(value) {
-    this.showExcludeUserModal = value
-  }
-  editExcludeUsers(contextElement) {
-    this.temporalCountValidationItem = {...contextElement}
-    this.showExcludeUserModal = true
   }
   elementSelected(selectedValType) {
     console.log(selectedValType);
@@ -923,12 +916,33 @@ export class BotContext {
     this.context.context_json = JSON.stringify(this.json_Context);
     this.save();
   }
+  changeExcludeModal(value) {
+    this.showExcludeUserModal = value
+  }
+  editExcludeUsers(contextElement, index) {
+    this.temporalCountValidationItem = {...contextElement, index, contextElement}
+    this.showExcludeUserModal = true
+  }
   deleteExcludeUser(idx, element, userToDelete) {
     element.users = element.users.filter(item => item !== userToDelete)
     this.json_Context[this.context.name][idx] = element
     this.context.context_json = JSON.stringify(this.json_Context);
     this.save();
   }
+  modalDeleteExcludeUser(element) {
+    this.temporalCountValidationItem.users = this.temporalCountValidationItem.users.filter(item => item !== element)
+  }
+  modalSaveExcludeUser() {
+    //get function temporal item elements
+    let {index, contextElement} = this.temporalCountValidationItem
+    //edit context element
+    contextElement.users = this.temporalCountValidationItem.users
+    //save context
+    this.json_Context[this.context.name][index] = contextElement
+    this.context.context_json = JSON.stringify(this.json_Context)
+    this.save()
+  }
+  
   elementChanged(idx, element) {
     this.json_Context[this.context.name][idx] = element;
     this.context.context_json = JSON.stringify(this.json_Context);
