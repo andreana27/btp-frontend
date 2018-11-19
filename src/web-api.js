@@ -367,6 +367,51 @@ export class WebAPI {
         return data;
       });
   }
+  //---------------------------Features--------------------------------------------
+  getSelectFeatures() {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_features.json`, {
+      method: 'POST'
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData;
+      });
+  }
+  registerFeature(role,feature) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`add_functionality/${role}/${feature}.json`, {
+        method: 'POST'//,
+        //body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        //this.app.setRoot('app')
+        return data;
+      });
+  }
+  getSelectFunction(role) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_functionality/${role}.json`, {
+      method: 'POST'
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData;
+      });
+  }
+  deleteFeature(role,feature) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`delete_functionality/${role}/${feature}.json`, {
+        method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+        return data;
+      });
+  }
   //-----------------------------------------------------------------
   getSearchPermission(token,name,table) {    
     this.isRequesting = true;

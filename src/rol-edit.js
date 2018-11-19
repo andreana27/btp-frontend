@@ -36,19 +36,24 @@ export class UserEdit {
   }
   created(){
     
-      /*this.api.getCountUsersRoles(this.roleInfo.id).then((cuenta)=>{
+      this.api.getSelectFunction(this.roleInfo.id).then((datosF)=>{
             //console.log("long: "+Object.keys(datos.data).length);
-              this.cuenta=cuenta;
-              console.log("cuenta: "+this.cuenta);
+            this.function=datosF;
+              this.cuenta=Object.keys(datosF.data).length;
              
-          });*/
+          });
       this.api.getSelectRoles(this.roleInfo.id).then((datos)=>{
                 //console.log("long: "+Object.keys(datos.data).length);
                 this.numUser=Object.keys(datos.data).length;
                   this.memberData=datos;
              
           });
-      this.api.getSelectPermission(this.roleInfo.id).then((datosP)=>{
+      this.api.getSelectFeatures().then(result => {
+            this.numerofeature=Object.keys(result.grid).length;
+            this.feature=result;
+            //console.log("creado: "+this.table.grid[0]);
+        });
+      /*this.api.getSelectPermission(this.roleInfo.id).then((datosP)=>{
                   console.log("longPermission: "+Object.keys(datosP.data).length);
                   this.numPermission=Object.keys(datosP.data).length;
                   this.permissionRole=datosP;
@@ -59,7 +64,7 @@ export class UserEdit {
             this.numero=Object.keys(result.grid).length;
             this.table=result;
             //console.log("creado: "+this.table.grid[0]);
-        });
+        });*/
     
   }
   get canUser() {
@@ -75,6 +80,18 @@ export class UserEdit {
             console.log("valor a eliminar: "+this.member.data);
             toastr.success("Delete User in Role");
              window.location.reload();
+          });
+  }
+   DeleteFeature(feature){
+    this.api. deleteFeature(this.roleInfo.id,feature).then((datos)=>{
+            //this.router.navigate('rol-edit');
+            if(datos.data==1){
+              toastr.success("Delete Functionality");
+             window.location.reload();
+            }else{
+              toastr.error("Action not done");
+            }
+            
           });
   }
   DeletePermission(id,name,table){
@@ -154,6 +171,18 @@ export class UserEdit {
           }
           
          });
+  }
+  addFeature(id){
+              this.api.registerFeature(this.roleInfo.id,id).then(resultp => {
+                        //this.router.navigate('rol/roles');
+                        if(resultp.data==='ok add'){
+                            toastr.success("Add Functionality");
+                            window.location.reload();
+                            
+                        }else{
+                          toastr.error("Module not added");
+                        }
+                });
   }
   addPermission(){
    this.permiso.id=this.roleInfo.id;
