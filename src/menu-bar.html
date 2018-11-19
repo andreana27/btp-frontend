@@ -70,7 +70,11 @@
           </span>
         </a>
         <ul class="treeview-menu">
-          <li><a route-href="route:user-manager"><i class="fa fa-circle-o"></i> User Manager</a></li>
+          <!--  route-href="route:user-manager"-->
+          <li>  
+              <a class="btn  btn-sm" click.delegate="metodo('User Manager')"><i class="fa fa-circle-o"></i> User Manager</a>
+          </li>
+          <!--<li id="prueba"><a click.delegate="metodo()" ><i class="fa fa-circle-o"></i> User Manager</a></li>-->
           <li><a route-href="route:user-roles"><i class="fa fa-circle-o"></i>Role Manager</a></li>
         </ul>
       </li>

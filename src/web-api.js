@@ -163,7 +163,51 @@ export class WebAPI {
       return data;
   }
   //**********************************************************************************
+  //-----------------------------------------------------------------
+  getSearchPermission(token,modules) {    
+    this.isRequesting = true;
+    //sessionStorage.sessionToken
+    return this.client_auth.fetch(`prueba_decorador/${token}/${modules}.json`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseJson) => {
+      // Do something with the response
+      //console.log("entro")
+      return "ok";
+    })
+    .catch((error) => {
+      return "401 (UNAUTHORIZED)";
+      this.app.setRoot('login');
+    });
+    
+      /*.then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        console.log(response);
+        return response.json();
+      });*/
 
+  }
+  setLocations(value){
+    localStorage.isRegister = value;
+    if(!value)
+    {
+      this.app.setRoot('login');
+    }
+    else
+    {
+      this.app.setRoot('user-manager');
+    }
+  }
+    
+//------------------------------------------------------------------------------------
   getCountUser() {   
     this.isRequesting = true;
     return this.client_auth.fetch(`count_users.json`, {
@@ -412,34 +456,7 @@ export class WebAPI {
         return data;
       });
   }
-  //-----------------------------------------------------------------
-  getSearchPermission(token,name,table) {    
-    this.isRequesting = true;
-    //sessionStorage.sessionToken
-
-    /*let formData = new FormData();
-    formData.append('token', token);
-    formData.append('name', name);
-    formData.append('table', table);
-    return this.client_auth.fetch('prueba_decorador.json', {
-        method: 'POST',
-        body: formData
-      })*/
-    return this.client_auth.fetch(`prueba_decorador/${sessionStorage.sessionToken}/${name}/${table}.json`, {
-      method: 'GET'
-    })
-      .then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
-        return responseData;
-      });
-     /* .then((algo)=>{
-        console.log("error: "+algo);
-        return algo;
-      });*/
-  }
-
-  //**************************************************************************************************
+    //**************************************************************************************************
 
   recoverPassword(email,new_password) {
     //TODO Validation of email and renewal of password
