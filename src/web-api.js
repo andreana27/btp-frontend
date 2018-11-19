@@ -167,7 +167,7 @@ export class WebAPI {
   getSearchPermission(token,modules) {    
     this.isRequesting = true;
     //sessionStorage.sessionToken
-    return this.client_auth.fetch(`prueba_decorador/${token}/${modules}.json`, {
+    return this.client_auth.fetch(`feature_decorador/${token}/${modules}.json`, {
       method: 'GET'
     })
     .then((response) => {

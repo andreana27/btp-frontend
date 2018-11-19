@@ -35,8 +35,29 @@ export class MenuBar {
                         console.log("*********************"+resultp);
                         //this.router.navigate('user/manager');
                         if(resultp=="ok"){
-                          this.router.navigate('user/manager');
-                          //this.respuesta='user-manager';
+                          if(nombre=="User Manager"){
+                              this.router.navigate('user/manager');
+                          }else if(nombre=="Role Manager"){
+                              this.router.navigate('rol/roles');
+            //************************************************************
+                          }else if(nombre=="Bot Management"){
+                              this.router.navigate('');
+                          }else if(nombre=="Bot Intents Manager"){
+                              this.router.navigate('bot/intents');
+                          }
+            //**************************************************************
+                           else if(nombre=="Bot Chat Center"){
+                              this.router.navigate('bot/chat-center/');
+                          }else if(nombre=="Chat Widget Setup"){
+                              this.router.navigate('chat/widget-setup');
+                          }
+            //******************************************************************   
+                         else if(nombre=="Bot Data Manager"){
+                              this.router.navigate('bot/data-management/');
+                          }else if(nombre=="Bot Statistics"){
+                              this.router.navigate('bot/data-statistics/');
+                          }
+            //------------------------------------------------------------------        
                         }else{
                           this.api.setLocations(false);
                         }
