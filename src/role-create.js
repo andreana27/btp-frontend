@@ -16,16 +16,23 @@ export class Register {
       name:'',
       table:''
     };
+    this.inrole={
+      id:''
+    };
     this.router=router;
   }
   //***************
   //*******************
   //Function gets called whenever the class is created
   created() {
+    this.api.getSelectFeatures().then(result => {
+            this.numerofeature=Object.keys(result.grid).length;
+            this.feature=result;
+        });
   }
 
   //Function that gets called whenever the view is activated
-  activated() {
+  activate() {
   }
 
   get canRegister() {
@@ -37,10 +44,11 @@ export class Register {
     this.api.registerRole(this.register).then(result => {
               console.log("creadoRole: "+result.data[0].id);
               this.rolecreated=result;
-              this.permiso.id=result.data[0].id;
+              this.inrole.id=result.data[0].id;
+              //this.permiso.id=result.data[0].id;
               //this.router.navigate('rol/roles');
-              console.log("role No.:"+this.permiso.id);
-              if(this.permiso.id>0){
+              //console.log("role No.:"+this.permiso.id);
+              if(this.inrole.id>0){
                 this.clicked = !this.clicked; // toggle clicked true/false
               if (this.clicked==true){
                   this.oculto1=true;
@@ -51,10 +59,22 @@ export class Register {
               }
               return true; 
               }
-            });
-
-            
+            });            
   }// end 
+
+  //*********************************************************************************************
+  addFeature(id){
+              this.api.registerFeature(this.inrole.id,id).then(resultp => {
+                        //this.router.navigate('rol/roles');
+                        if(resultp.data==='ok add'){
+                            toastr.success("Add Functionality");
+                            window.location.reload();
+                            
+                        }else{
+                          toastr.error("Module not added");
+                        }
+                });
+  }
   addPermission(){
     //this.permiso.id=5;
     console.log("creadoPermission: "+this.permiso.id+" "+this.permiso.name+" "+this.permiso.table);

@@ -6,7 +6,7 @@ import $ from 'jquery';
 
 @customElement('tag-it')
 @inject(WebAPI,Router,Element)
-export class Register {
+export class UserCreate {
   @bindable tags;
   @bindable id = '';
   @bindable name;

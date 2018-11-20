@@ -37,11 +37,11 @@
             </div><!-- fin div-->
 
             <!-- ************************************************************************************** -->
-            <label><strong>Add Permission and Users</strong></label>
+            <label><strong>Add Features and Users</strong></label>
             <div class="form-group has-feedback" style="width:600px;padding-top:3%; padding-bottom:3%; margin-right:auto; margin-left:auto;">           
               <div>
                     <button type="button" class="btn btn-primary btn-md" click.trigger="ocultarPermiso()">
-                    <span class="fa fa-key" style="font-size:16px"></span> Check permissions
+                    <span class="fa fa-key" style="font-size:16px"></span> Check Features
                     </button>
               </div>
               <br>
@@ -50,8 +50,8 @@
                 <!--******************************************************************************************** -->
 
                 <div>
-                   <label><strong>Add Permission</strong></label>
-              <div class="form-inline">
+                   <label><strong>Add Feature</strong></label>
+             <!-- <div class="form-inline">
                   <label class="col-sm-2 control-label">Permission</label>
                   <div class="col-sm-5">
                     <select class="form-control" value.bind="permiso.name">
@@ -63,18 +63,20 @@
                       <option value.bind="'select'">select</option>
                     </select>
                   </div>
-                </div>
+                </div>-->
                 <br> 
                 <div class="form-inline"> 
-                <label class="col-sm-2 control-label">Tables</label>             
+                <label class="col-sm-2 control-label">Modules</label>             
                   <div class="col-sm-5">
-                    <select  class="form-control" value.bind="permiso.table">
-                      <option repeat.for="x of numero" value.bind="table.grid[x]">${table.grid[x]}</option>
+                    <select  class="form-control" value.bind="feature.grid[x].id">
+                      <option repeat.for="x of numerofeature" value.bind="feature.grid[x].id">${feature.grid[x].feature_name}</option>
                     </select>
-                  </div>
-                  <a class="btn btn-info btn-md" click.delegate="addPermission()">
-                     <i class="fa fa-key" style="font-size:16px" ></i>Add permission
+
+                    <a class="btn btn-info btn-md" click.delegate="addFeature(feature.grid[x].id)">
+                     <i class="fa fa-key" style="font-size:16px" ></i>Add feature
                   </a>
+                  </div>
+                  
                 </div>
                 <br>
           </div>
@@ -82,16 +84,16 @@
                 <table class="table table-striped">
                   <thead class="thead-dark">
                     <tr>
-                      <th scope="col">Permission</th>
-                      <th scope="col">Table Name</th>
+                      <th scope="col">ID</th>
+                      <th scope="col">Modules</th>
                       <th scope="col">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr repeat.for="i of numPermission"><!-- query-->
+                    <tr repeat.for="i of cuenta"><!-- query-->
                       <form>
-                      <td>${permissionRole.data[i].name}</td>
-                      <td>${permissionRole.data[i].table_name}</td>
+                      <td>${function.data[i].auth_functionality.feature_id}</td>
+                      <td>${function.data[i].auth_feature.feature_name}</td>
                       <td>
 
                         
@@ -100,7 +102,7 @@
                               <!--<button type="submit" class="btn btn-warning btn-sm" click.delegate="DeleteUserRole(memberData.data[i].id,roleInfo.id)">
                                 <span class="fa fa-minus-circle" style="font-size:16px"></span>
                               </button>-->
-                            <a  class="btn btn-warning btn-sm" click.delegate="DeletePermission(roleInfo.id,permissionRole.data[i].name,permissionRole.data[i].table_name)" >
+                            <a  class="btn btn-warning btn-sm" click.delegate="DeleteFeature(function.data[i].auth_functionality.feature_id)" >
                                 <i class="fa fa-minus-circle" style="font-size:16px" ></i>
                               </a>
                             </div>

@@ -1,8 +1,16 @@
 import {WebAPI} from './web-api';
-import {inject} from 'aurelia-framework';
+import {inject, customElement, bindable} from 'aurelia-framework';
 import * as toastr from 'toastr';
-@inject(WebAPI)
+import $ from 'jquery';
+
+@customElement('tag-it')
+@inject(WebAPI,Element)
 export class Register {
+
+  @bindable tags;
+  @bindable id = '';
+  @bindable name;
+  @bindable options = {};
   //Class constructor
   constructor(api) {
     this.api = api;
@@ -87,5 +95,64 @@ export class Register {
     }
   }// end registerNewUser
 
+//***********************************************************
+//JQuery
+attached(){
+  var longitud = false,
+    minuscula = false,
+    numero = false,
+    symbolo=false,
+    mayuscula = false;
+  $("#pass").keyup(function() {
+    var pswd = $(this).val();
+    if (pswd.length < 6) {
+      $('#length').removeClass('valid').addClass('invalid');
+      longitud = false;
+    } else {
+      $('#length').removeClass('invalid').addClass('valid');
+      longitud = true;
+    }
 
+    //validate letter
+    if (pswd.match(/[A-z]/)) {
+      $('#letter').removeClass('invalid').addClass('valid');
+      minuscula = true;
+    } else {
+      $('#letter').removeClass('valid').addClass('invalid');
+      minuscula = false;
+    }
+
+    //validate capital letter
+    if (pswd.match(/[A-Z]/)) {
+      $('#capital').removeClass('invalid').addClass('valid');
+      mayuscula = true;
+    } else {
+      $('#capital').removeClass('valid').addClass('invalid');
+      mayuscula = false;
+    }
+
+    //validate number
+    if (pswd.match(/\d/)) {
+      $('#number').removeClass('invalid').addClass('valid');
+      numero = true;
+    } else {
+      $('#number').removeClass('valid').addClass('invalid');
+      numero = false;
+    }
+    //validate special character
+    if (pswd.match(/\W/)) {
+      $('#symbol').removeClass('invalid').addClass('valid');
+      symbolo = true;
+    } else {
+      $('#symbol').removeClass('valid').addClass('invalid');
+      symbolo = false;
+    }
+
+    return true;
+  }).focus(function() {
+    $('#pswd_info').show();
+  }).blur(function() {
+    $('#pswd_info').hide();
+  });
+} 
 }
