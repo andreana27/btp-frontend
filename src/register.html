@@ -5,17 +5,21 @@
   <require from="admin-lte/css/AdminLTE.css"></require>
   <require from="admin-lte/css/skins/skin-black.css"></require>
   <require from="toastr/build/toastr.css"></require>
+  <require from="style-panel.css"></require>
   <div>
-    <div style="width:360px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+    <div style="width:700px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
       <div class="login-logo">
         <a href="/#/">
-          <img src="assets/images/logo-wide.png" height="80px">
+          <img src="assets/images/logo-wide.png" height="40px">
         </a>
       </div>
-      <!-- /.login-logo -->
+
       <div class="login-box-body">
-        <h3>Register</h3>
-        <div class="form-group has-feedback">
+        <div clas="container-fluid" style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+        <div class="form-inline">
+            <i class="fa fa-id-badge" style="font-size:32px"> </i><br clear="left"><h2>  Create User  </h2>
+        </div>
+          <div class="form-group has-feedback">
           <label>First Name</label>
           <input type="text" class="form-control" placeholder="First Name" value.bind="register.firstName">
           <span class="fa fa-user-circle form-control-feedback"></span>
@@ -32,31 +36,54 @@
         </div>
         <div class="form-group has-feedback">
           <label>Password</label>
-          <input type="password" class="form-control" placeholder="Password" value.bind="register.password">
+          <input type="password" class="form-control" placeholder="Password" name="pass" id="pass" value.bind="register.password">
           <span class="fa fa-lock form-control-feedback"></span>
+          <span id="passstrength"></span>
         </div>
+        <div id="pswd_info" style="display: none">
+          <h4> Password must meet the following requirements:</h4>
+          <ul>
+            <li id="letter" class="invalid">At least <strong>one letter</strong>
+            </li>
+            <li id="capital" class="invalid">At least <strong>one capital letter</strong>
+            </li>
+            <li id="number" class="invalid">At least <strong>one number</strong>
+            </li>
+            <li id="symbol" class="invalid">At least <strong>one special character</strong>
+            </li>
+            <li id="length" class="invalid">Be at least <strong>6 characters</strong>
+            </li>
+          </ul>
+        </div>
+        <!-- *********************************************************************************************************** 
+        keyup.bind="keypressInput(register.password)"-->
         <div class="form-group has-feedback">
           <label>Confirm Password</label>
           <input type="password" class="form-control" placeholder="Confirm Password" value.bind="register.confirmPassword">
           <span class="fa fa-lock form-control-feedback"></span>
         </div>
-        <div class="row">
-          <div class="col-xs-4">
-            <button type="button" class="btn btn-primary btn-block btn-flat" click.delegate="cancelRegistry()">Cancel</button>
-          </div>
-          <!-- /.col -->
-          <div class="col-xs-4"></div>
-          <!-- /.col -->
-          <div class="col-xs-4">
-            <button type="button" class="btn btn-primary btn-block btn-flat" disabled.bind="!canRegister" click.delegate="registerNewUser()">
-              Register
+          <div class="btn-toolbar" role="toolbar">
+           <div class="btn-group">
+            <button type="button" class="btn btn-success btn-block btn-flat" disabled.bind="!canRegister" click.delegate="registerNewUser()">
+             <span class="fa fa-check-square-o" style="font-size:16px"></span> Register
             </button>
+                 
+            <button type="button" class="btn btn-danger btn-block btn-flat" click.delegate="cancelRegistry()">
+            <span class="fa fa-close" style="font-size:16px"></span>Cancel
+          </button>
+                  
+
+                  <!-- <button type="submit" class="btn btn-success" disabled.bind="!canRegister" click.delegate="registerNewUser()">
+                    <span class="fa fa-check-square-o" style="font-size:16px"></span> Save Changes
+                  </button>
+                  <a class="btn btn-danger btn-md" route-href="route: user-manager;">
+                     <i class="fa fa-close" style="font-size:16px" ></i>Cancel Changes
+                  </a>
+            /.col -->
           </div>
-          <!-- /.col -->
-        </div>
       </div>
-      <!-- /.login-box-body -->
+        <!--<router-view class="col-md-8"></router-view>-->
+      </div>
     </div>
-    <!-- /.login-box -->
   </div>
 </template>

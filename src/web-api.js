@@ -163,7 +163,51 @@ export class WebAPI {
       return data;
   }
   //**********************************************************************************
+  //-----------------------------------------------------------------
+  getSearchPermission(token,modules) {    
+    this.isRequesting = true;
+    //sessionStorage.sessionToken
+    return this.client_auth.fetch(`feature_decorador/${token}/${modules}.json`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseJson) => {
+      // Do something with the response
+      //console.log("entro")
+      return "ok";
+    })
+    .catch((error) => {
+      return "401 (UNAUTHORIZED)";
+      this.app.setRoot('login');
+    });
+    
+      /*.then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        console.log(response);
+        return response.json();
+      });*/
 
+  }
+  setLocations(value){
+    localStorage.isRegister = value;
+    if(!value)
+    {
+      this.app.setRoot('login');
+    }
+    else
+    {
+      this.app.setRoot('user-manager');
+    }
+  }
+    
+//------------------------------------------------------------------------------------
   getCountUser() {   
     this.isRequesting = true;
     return this.client_auth.fetch(`count_users.json`, {
@@ -367,34 +411,52 @@ export class WebAPI {
         return data;
       });
   }
-  //-----------------------------------------------------------------
-  getSearchPermission(token,name,table) {    
+  //---------------------------Features--------------------------------------------
+  getSelectFeatures() {    
     this.isRequesting = true;
-    //sessionStorage.sessionToken
-
-    /*let formData = new FormData();
-    formData.append('token', token);
-    formData.append('name', name);
-    formData.append('table', table);
-    return this.client_auth.fetch('prueba_decorador.json', {
-        method: 'POST',
-        body: formData
-      })*/
-    return this.client_auth.fetch(`prueba_decorador/${sessionStorage.sessionToken}/${name}/${table}.json`, {
-      method: 'GET'
+    return this.client_auth.fetch(`select_features.json`, {
+      method: 'POST'
     })
       .then(response => response.json())
       .then((responseData) => {
         this.isRequesting = false;
         return responseData;
       });
-     /* .then((algo)=>{
-        console.log("error: "+algo);
-        return algo;
-      });*/
   }
-
-  //**************************************************************************************************
+  registerFeature(role,feature) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`add_functionality/${role}/${feature}.json`, {
+        method: 'POST'//,
+        //body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        //this.app.setRoot('app')
+        return data;
+      });
+  }
+  getSelectFunction(role) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_functionality/${role}.json`, {
+      method: 'POST'
+    })
+      .then(response => response.json())
+      .then((responseData) => {
+        this.isRequesting = false;
+        return responseData;
+      });
+  }
+  deleteFeature(role,feature) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`delete_functionality/${role}/${feature}.json`, {
+        method: 'POST'
+      })
+      .then(response => response.json())
+      .then(data => {
+        return data;
+      });
+  }
+    //**************************************************************************************************
 
   recoverPassword(email,new_password) {
     //TODO Validation of email and renewal of password
