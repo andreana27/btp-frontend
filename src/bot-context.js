@@ -126,11 +126,7 @@ export class BotContext {
     message: "",
     limit: 3,
     sendTo: null,
-    users: [
-      234234234235,
-      232523453523,
-      243653645344
-    ]
+    users: []
   }
 
   temporalCountValidationItem = {...this.countValidationItem, index: 0}
@@ -920,14 +916,26 @@ export class BotContext {
     this.showExcludeUserModal = value
   }
   editExcludeUsers(contextElement, index) {
-    this.temporalCountValidationItem = {...contextElement, index, contextElement}
+    this.temporalCountValidationItem = {...contextElement, index, contextElement, botUsers: false}
     this.showExcludeUserModal = true
+    this.api.getConversationUsers(this.context.bot_id)
+      .then(botUsers => {
+        this.temporalCountValidationItem.botUsers = botUsers
+      })
   }
   deleteExcludeUser(idx, element, userToDelete) {
     element.users = element.users.filter(item => item !== userToDelete)
     this.json_Context[this.context.name][idx] = element
     this.context.context_json = JSON.stringify(this.json_Context);
     this.save();
+  }
+  filterBotUsers(array, array2) {
+    return array ? 
+      array.filter(item => !array2.includes(item))
+    : []
+  }
+  modalAddExcludeUser(user) {
+    this.temporalCountValidationItem.users = [...this.temporalCountValidationItem.users, user]
   }
   modalDeleteExcludeUser(element) {
     this.temporalCountValidationItem.users = this.temporalCountValidationItem.users.filter(item => item !== element)

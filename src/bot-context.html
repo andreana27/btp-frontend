@@ -1604,9 +1604,23 @@
 
         <div class="modal-body">
           <p>Edit exclude users for continue the flow without limits</p>
-          <ul class="list-group">
-            <li class="list-group-item" repeat.for="userExcluded of temporalCountValidationItem.users"><span>${userExcluded}</span> <button class="btn btn-danger" click.delegate="modalDeleteExcludeUser(userExcluded)"><i class="fa fa-trash" aria-hidden="true"></i></button></li>
-          </ul>
+
+          <h4>Excluded users: </h4>
+          <div class="text-center" if.bind="!temporalCountValidationItem.users.length">Nothing to show</div>
+          <div class="modal-user-list-container">
+            <ul class="list-group">
+              <li class="list-group-item" repeat.for="userExcluded of temporalCountValidationItem.users"><span>${userExcluded}</span> <button class="btn btn-danger" click.delegate="modalDeleteExcludeUser(userExcluded)"><i class="fa fa-trash" aria-hidden="true"></i></button></li>
+            </ul>
+          </div>
+
+          <h4>Facebook users for this bot: </h4>
+          <div class="text-center" if.bind="temporalCountValidationItem.botUsers === false">Loading...</div>
+          <div class="text-center" if.bind="temporalCountValidationItem.botUsers !== false && filterBotUsers(temporalCountValidationItem.botUsers, temporalCountValidationItem.users).length == 0">Nothing to show</div>
+          <div class="modal-user-list-container">
+            <ul class="list-group">
+              <li class="list-group-item" repeat.for="botUser of filterBotUsers(temporalCountValidationItem.botUsers, temporalCountValidationItem.users)"><span>${botUser}</span> <button class="btn btn-success" click.delegate="modalAddExcludeUser(botUser)"><i class="fa fa-plus" aria-hidden="true"></i></button></li>
+            </ul>
+          </div>
         </div>
         
         <div class="modal-footer">

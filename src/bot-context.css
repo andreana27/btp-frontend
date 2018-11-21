@@ -28,3 +28,15 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.modal-user-list-container {
+  width: 100%;
+  height: auto;
+  max-height: 166px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+a {
+  cursor: pointer;
+}

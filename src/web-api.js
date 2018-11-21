@@ -846,6 +846,19 @@ export class WebAPI {
       });
     }
 
+    getConversationUsers(botId) {
+      this.isRequesting = true
+      return this.client_auth.fetch(`bot_conversation_users/${botId}`,{
+        method: 'GET',
+        mode: 'cors'
+      })
+      .then(response => response.json())
+      .then(data => {
+        this.isRequesting = false
+        return data
+      })
+    }
+
     //Generates and stores a website connector for the specified bot
     saveWebsiteConnector(parameters) {
       let data = new FormData();
