@@ -21,6 +21,11 @@ export class Register {
       password:'',
       confirmPassword:''
     };
+    this.longitud = false,
+    this.minuscula = false,
+    this.numero = false,
+    this.symbolo=false,
+    this.mayuscula = false;
   }
 
 
@@ -31,7 +36,17 @@ export class Register {
   //Function that gets called whenever the view is activated
   activated() {
   }
-
+  isPassword()
+  {
+      if(this.longitud && this.minuscula && this.mayuscula && this.numero && this.symbolo) {
+        return true;
+      }
+      else {
+        toastr.warning('Password doesn\'t meet requirements');
+        return false;
+      }
+    return false;
+  }
   isValidPassword()
   {
     if (this.register.password.length > 0){
@@ -69,6 +84,7 @@ export class Register {
     if (this.validateEmail(this.register.email)) {
       //password matching validation
       if (this.isValidPassword()) {
+        //if (this.isPassword()) {
         //email existance validation
         this.api.validateNewUserEmail(this.register.email).then(response => {
           //if the user already exists
@@ -89,6 +105,7 @@ export class Register {
           }// end else - user existance
         });// end validateNewUserEmail
       }// end if - isValidPassword
+    //}
     }
     else {
       toastr.warning('Valid e-mail is required.');
@@ -98,54 +115,49 @@ export class Register {
 //***********************************************************
 //JQuery
 attached(){
-  var longitud = false,
-    minuscula = false,
-    numero = false,
-    symbolo=false,
-    mayuscula = false;
   $("#pass").keyup(function() {
     var pswd = $(this).val();
     if (pswd.length < 6) {
       $('#length').removeClass('valid').addClass('invalid');
-      longitud = false;
+      this.longitud = false;
     } else {
       $('#length').removeClass('invalid').addClass('valid');
-      longitud = true;
+      this.longitud = true;
     }
 
     //validate letter
     if (pswd.match(/[A-z]/)) {
       $('#letter').removeClass('invalid').addClass('valid');
-      minuscula = true;
+      this.minuscula = true;
     } else {
       $('#letter').removeClass('valid').addClass('invalid');
-      minuscula = false;
+      this.minuscula = false;
     }
 
     //validate capital letter
     if (pswd.match(/[A-Z]/)) {
       $('#capital').removeClass('invalid').addClass('valid');
-      mayuscula = true;
+      this.mayuscula = true;
     } else {
       $('#capital').removeClass('valid').addClass('invalid');
-      mayuscula = false;
+      this.mayuscula = false;
     }
 
     //validate number
     if (pswd.match(/\d/)) {
       $('#number').removeClass('invalid').addClass('valid');
-      numero = true;
+      this.numero = true;
     } else {
       $('#number').removeClass('valid').addClass('invalid');
-      numero = false;
+      this.numero = false;
     }
     //validate special character
     if (pswd.match(/\W/)) {
       $('#symbol').removeClass('invalid').addClass('valid');
-      symbolo = true;
+      this.symbolo = true;
     } else {
       $('#symbol').removeClass('valid').addClass('invalid');
-      symbolo = false;
+      this.symbolo = false;
     }
 
     return true;

@@ -7,11 +7,11 @@
         </a>
       </div>
 
-      <div class="login-box-body">
+      <div class="login-box-body" style="background-color:#96e9e9; border-radius: 15px;">
         <div clas="container-fluid" style="width:600px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
         
         <div class="form-inline">
-            <i class="fa fa-drivers-license" style="font-size:32px"> </i><br clear="left"><h2>  Roles management </h2>
+            <i class="fa fa-drivers-license" style="font-size:32px;text-align:center;"><h2>  Roles management </h2> </i>
         </div>
 
          
@@ -24,9 +24,9 @@
                 </button>
               </div>
               <br>
-              <div class="form-horizontal has-feedback">            
-                <label><strong>Role Name </strong></label>
-                <input type="text" class="form-control col-xs-5" placeholder="Role Name" value.bind="roleInfo.role">
+              <div class="form-group has-feedback">
+                <label><strong>Name</strong></label>
+                <input type="text" class="form-control" placeholder="Role Name" value.bind="roleInfo.role">
                 <span class="form-control-feedback"></span>
               </div>
               <div class="form-group has-feedback">
@@ -123,13 +123,29 @@
               </div>
               <div if.bind="oculto">
                 <br>
-                <div class="form-inline">            
-                  <label><strong>ID User: </strong></label>
+
+                <div class="form-inline"> 
+                <label class="col-sm-2 control-label">ID User:</label>             
+                  <div class="col-sm-5">
+                    <select  class="form-control" value.bind="userData.data[x].id">
+                      <option repeat.for="x of userCuenta" value.bind="userData.data[x].id">${userData.data[x].first_name+" "+userData.data[x].last_name}</option>
+                    </select>
+                    <button type="button" class="btn btn-info btn-md"  click.delegate="Adduser(userData.data[x].id,roleInfo.id)">
+                    <span class="fa fa-plus-circle" style="font-size:16px"></span> Add 
+                  </button>
+                  </div>
+                  
+                </div>
+
+
+
+                <!--<label><strong>ID User: </strong></label>
+                <div class="form-inline">                              
                   <input type="text" class="form-control col-xs-5" placeholder="ID user" value.bind="idUser.id">
                   <button type="button" class="btn btn-success btn-md"  click.delegate="Adduser(roleInfo.id)">
                     <span class="fa fa-plus-circle" style="font-size:16px"></span> Add 
                   </button>
-                </div>
+                </div>-->
               
               <br>
                 <table class="table table-striped">

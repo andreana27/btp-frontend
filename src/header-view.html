@@ -126,20 +126,20 @@
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
-              <li class="user-header">
-                <img src="assets/images/user.jpg" class="img-circle" alt="User Image">
+              <li class="user-header" >
+                <img src="assets/images/user.jpg" class="img-circle" alt="User Image" style="border: 3px solid lightslategrey;">
                 <p innerhtml.bind="userName"></p>
               </li>
               <!-- Menu Body -->
               <!--<li class="user-body">
               </li>-->
               <!-- Menu Footer-->
-              <li class="user-footer">
+              <li class="user-footer" style="background-color: lightblue;">
                 <div class="pull-left">
-                  <a route-href="route:user-profile" class="btn btn-default btn-flat">Profile</a>
+                  <a route-href="route:user-profile" class="btn btn-primary btn-flat" style="border-radius: 10px;">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a  click.delegate="logout()"class="btn btn-default btn-flat">Sign out</a>
+                  <a  click.delegate="logout()"class="btn btn-primary btn-flat" style="border-radius: 10px;">Sign out</a>
                 </div>
               </li>
             </ul>

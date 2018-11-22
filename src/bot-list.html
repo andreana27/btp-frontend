@@ -10,7 +10,11 @@
       <li class="active">Bot Management</li>
     </ol>
   </section>
+
   <section class="content">
+    <a class="btn btn-app" style="background-color: lightgreen; border-radius: 7px;" route-href="route: bot-create;">
+     <i class="fa fa-plus fa-5" aria-hidden="true" ></i> New Bot
+  </a>
     <div class="row">
       <div repeat.for="bot of bots" class="col-md-4">
         <!-- Widget: user widget style 1 -->
@@ -24,7 +28,7 @@
                       data-target="#modal-clone"
                       click.delegate='confirmClone(bot)'>
                 <i class="fa fa-clone"></i>
-              </button>
+              </button><!--clone-->
               <a class="btn btn-xs btn-default" route-href="route: bot-flow; params.bind: {id:bot.id}">
                 <i class="fa fa-cog"></i>
               </a>
@@ -34,7 +38,7 @@
                       data-target="#modal-danger"
                       click.delegate="confirmdelete(bot)">
                 <i class="fa fa-remove"></i>
-              </button>
+              </button><!--delete-->
             </div>
             <h3 class="widget-user-username">${bot.name}</h3>
             <h5 class="widget-user-desc">
@@ -92,9 +96,9 @@
     </div>
   </div>
 </div>
-  <a class="btn btn-app" route-href="route: bot-create;">
+  <!--<a class="btn btn-app" route-href="route: bot-create;">
      <i class="fa fa-plus fa-5" aria-hidden="true" ></i> New
-  </a>
+  </a>-->
 </section>
   <div class="modal modal-danger fade" id="modal-danger">
       <div class="modal-dialog">

@@ -1,7 +1,7 @@
 <template>
   <section class="content-header">
     <h1>
-      <small>Bot Intents Management</small>
+      <small><strong>Bot Intents Management</strong></small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -23,6 +23,7 @@
             </div>
             <div class="col-sm-1"></div>
             <div class="col-sm-3">
+              <!-- -->
               <button type="button" class="btn btn-success btn-block btn-flat" disabled.bind="!intentsQualify" click.delegate="generateTrainningFiles()">
                 Generate Bot Trainning
               </button>
@@ -86,6 +87,7 @@
         </div>
         <!-- /.panel primary -->
       </div>
+      <!-- ************************************************************************** -->
       <div class="panel panel-primary" if.bind=show_request>
         <div class="panel-heading">AI Request</div>
         <div class="panel-body">
@@ -139,7 +141,7 @@
         </div>
         <!-- /.panel primary -->
       </div>
-
+      <!--****************************************************************************-->
       <div if.bind="textlogfilevisible" class="panel panel-primary">
         <div class="panel-heading">
           <h4 class="panel-title">
@@ -165,6 +167,7 @@
         </div>
         <!-- /.panel primary -->
       </div>
+      <!--********************************************************************************-->
       <!--CRUD PANEL FOR INTENTS-->
       <div class="panel panel-primary">
         <div class="panel-heading">

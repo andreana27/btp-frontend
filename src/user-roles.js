@@ -20,16 +20,15 @@ export class RoleManager {
   created() {
 
       //-------------------------------------------------------
-   /*   this.api.getCountRoles().then((datoscuenta)=>{
-          console.log("numroles: "+datoscuenta);
-          this.numRoles=datoscuenta;
-         });//count role
-*/
         this.api.getGroupRoles().then((rol)=>{
+          try{
                   this.roleData=rol;
                    this.numRoles=Object.keys(rol.data).length;
-                  //this.countUserRole=this.roleData;
                   console.log("cuentaUser: "+rol.data);
+                  
+                }catch(e){
+
+                }
              });
           //------------------------------------------------------------
            
