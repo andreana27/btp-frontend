@@ -85,7 +85,7 @@ export class BotDataManagment {
     this.getIntents(bot_id);
   }
 
-  getContexts(bot_id) {
+  getContexts(bot_id) {//p
     this.api.getContextList(bot_id).then(context_list => {
       this.context_list = context_list;
       this.exampleContextList = context_list;
@@ -174,6 +174,7 @@ export class BotDataManagment {
   saveIntent() {
     if (this.validateIntentName(this.intentName)) {
       this.api.existsIntentName(this.selectedBotId,this.intentName).then(cant => {
+        console.log(cant.cont);
         if(cant.cont==0)
         {
           this.HTMLError = '';
@@ -454,6 +455,7 @@ export class BotDataManagment {
   generateTrainningFiles(){
     this.api.createAIConfigFile(this.selectedBotId, this.bot_language).then(res=>
       {
+        console.log(res.result);
         this.api.setBotTrainStatus(this.selectedBotId).then(response=>
           {
             console.log(response.cont)

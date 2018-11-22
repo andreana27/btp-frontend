@@ -11,7 +11,8 @@ export class UserCreate {
   @bindable id = '';
   @bindable name;
   @bindable options = {};
-
+  
+  longitud = false;
   //Class constructor
   constructor(api,router) {
     this.api = api;
@@ -22,6 +23,21 @@ export class UserCreate {
       password:'',
       confirmPassword:''
     };
+    this.longitud=false;
+    this.minuscula = false;
+    this.numero = false;
+    this.symbolo=false;
+    this.mayuscula = false;
+    this.lon='';
+    this.clases={
+      longitud:'',
+      min:'',
+      may:'',
+      sym:'',
+      num:''
+    };
+    
+
     this.router=router;
     //this.myKeypressCallback = this.keypressInput.bind(this);
   }
@@ -41,7 +57,19 @@ export class UserCreate {
   //Function that gets called whenever the view is activated
   activated() {
   }
-
+  isPassword()
+  {
+      if(this.longitud && this.minuscula && this.mayuscula && this.numero && this.symbolo) {
+        //console.log(true);
+        return true;
+      }
+      else {
+        toastr.warning('Password doesn\'t meet requirements');
+        //console.log(false);
+        return false;
+      }
+    return false;
+  }
   isValidPassword()
   {
     if (this.register.password.length > 0){
@@ -75,10 +103,14 @@ export class UserCreate {
   }
 
   registerNewUser() {
+    console.log("fin: "+this.longitud+" ************ "+longitud);
+    //console.log("variables: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
     //email validation
+    try{
     if (this.validateEmail(this.register.email)) {
       //password matching validation
       if (this.isValidPassword()) {
+        //if (this.isPassword()) {
         //email existance validation
         this.api.validateNewUserEmail(this.register.email).then(response => {
           //if the user already exists
@@ -91,6 +123,7 @@ export class UserCreate {
               if (result.data.length > 3) {
                 let login = { email:this.register.email,password:this.register.password};
                 this.router.navigate('user/manager');
+                //console.log(result.data);
               }
               else {
                 toastr.error('Registration failed.');
@@ -99,16 +132,19 @@ export class UserCreate {
           }// end else - user existance
         });// end validateNewUserEmail
       }// end if - isValidPassword
+    //}
     }
     else {
       toastr.warning('Valid e-mail is required.');
     }
+    }catch(e){
+        toastr.error('Fields are empty');
+      }
   }// end registerNewUser
+
   cancelarpage(){
     this.router.navigate('user/manager');
   }
-  //**********************************************************************************
-  
   //***********************************************************************************
   /*keypressInput(e) {
     
@@ -121,38 +157,23 @@ export class UserCreate {
         //console.log(e);        
     }*/
 
-//********************************************************
-  
-//--------------------------------------------------
-tiene_numeros(texto){
-  var re = /^([a-zA-Z0-9]+)$/;// ([a-zA-Z\-0-9]+
-    return re.test(texto);
-   /* var numeros="0123456789";
-   for(var i=0; i<texto.length; i++){
-      if (numeros.indexOf(texto.charAt(i),0)!=-1){
-         //return 1;
-         console.log("tiene numeros");
-      }
-   }
-   //return 0;
-   console.log("no tiene numeros");*/
-}
 //***********************************************************
 //JQuery
 attached(){
-  var longitud = false,
-    minuscula = false,
+  //var longitud = false,
+  var  minuscula = false,
     numero = false,
     symbolo=false,
     mayuscula = false;
+
   $("#pass").keyup(function() {
     var pswd = $(this).val();
     if (pswd.length < 6) {
       $('#length').removeClass('valid').addClass('invalid');
       longitud = false;
     } else {
-      $('#length').removeClass('invalid').addClass('valid');
-      longitud = true;
+      $('#length').removeClass('invalid').addClass('valid');      
+      longitud = true;this.longitud=true;
     }
 
     //validate letter
@@ -189,12 +210,15 @@ attached(){
       $('#symbol').removeClass('valid').addClass('invalid');
       symbolo = false;
     }
-
+    console.log("variables2: "+this.longitud);
     return true;
   }).focus(function() {
     $('#pswd_info').show();
+    console.log("variables3: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
   }).blur(function() {
     $('#pswd_info').hide();
+    console.log("variables4: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
+    //this.isPassword(longitud,minuscula,mayuscula,numero,symbolo);
   });
 } 
 

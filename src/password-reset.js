@@ -10,7 +10,8 @@ export class PasswordReset {
     this.userEmail = '';
     this.validUser = false;
     this.txtResponse = '';
-    this.btnText='Cancel';
+    this.color1='';
+    this.btnText='Back to Login';
   }
 
 
@@ -47,7 +48,7 @@ export class PasswordReset {
           this.api.resetPassword(this.userEmail).then(response => {
             if (response.data === 'ok'){
               this.txtResponse ='Your password has been successfully reseted, please check your email. For further instructions.';
-              this.btnText='Go to Login';
+              //this.btnText='Go to Login';
               this.userEmail = '';
             }
           });

@@ -10,6 +10,7 @@ import {
 import {
   Router
 } from 'aurelia-router';
+import * as toastr from 'toastr';
 
 
 @inject(WebAPI,Router)
@@ -19,19 +20,31 @@ export class UserEdit {
     //this.ea = ea;
     this.api = api;
     this.router = router;
+
     //this.router.reset();
   }
 
-  activate(params) {
+  activate(params) {    
     this.userInfo = params.info;
+    //this.userInfo.token=sessionStorage.sessionToken;
   }
   
 //********************************************************
-  UpdateUserData(){
-    console.log("usuario a actualizar: "+this.userInfo.id+" "+this.userInfo.first_name+" "+this.userInfo.last_name+" "+this.userInfo.email+" "+this.userInfo.enabled_access);
-     this.api.getUpdateUser(this.userInfo).then((resultado)=>{
-          console.log(resultado);
-          this.router.navigate('user/manager');
+  UpdateUserData(){    
+    //console.log(this.userInfo);
+    this.api.getUpdateUser(this.userInfo).then((resultado)=>{
+      try{
+        console.log(resultado.data);
+        if(resultado.data==1){
+            this.router.navigate('user/manager');
+        }else{
+          toastr.warning('Action not done');
+        }               
+          
+        }catch(e){
+          //exception
+        }
+
          });
   }
   

@@ -27,16 +27,14 @@ export class UserManager {
     //Function gets called whenever the class is created
 
   created() {
-      this.api.getCountUser().then((datoscuenta)=>{
-          //console.log(datoscuenta);
-          this.userCuenta=datoscuenta;
-         });
         this.api.getSelectUser().then((datos)=>{
-          //console.log(datos);
+           try{
             this.userData=datos;
-            console.log("mostrar datos usuarios "+datos);
+            this.userCuenta=Object.keys(datos.data).length;
+            }catch(e){
+              //console.log(e);
+            }
           });
-          //this.api.getSelectUser().then(datos => this.contacts = datos);
   }
   gotoRegister(){
     this.api.UserRegister(true);

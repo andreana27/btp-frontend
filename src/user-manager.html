@@ -6,16 +6,16 @@
   <require from="toastr/build/toastr.css"></require>
   <loading-indicator loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
   <div>
-    <div style="width:1200px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+    <div style="width:1000px;padding-top:5%; padding-bottom:5%; margin-right:auto; margin-left:auto;">
       <div class="login-logo">
         <a href="/#/">
           <img src="assets/images/logo-wide.png" height="40px">
         </a>
       </div>
-      <div class="login-box-body">
-      	<div clas="container-fluid" style="width:1000px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      <div class="login-box-body" style="background-color: #8bdac0;border-radius: 15px;">
+      	<div clas="container-fluid" style="width:900px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
       	<div class="form-inline">
-	      	<i class="fa fa-user-circle-o" style="font-size:36px"></i><br clear="left"><h3> User Manager </h3>
+	      	<i class="fa fa-user-circle-o" style="font-size:36px;text-align:center;" ><h3 > User Manager </h3></i>
 	      	
     	</div>
     	<br>
@@ -23,13 +23,13 @@
         	<!--route-href="route: user-create;"
         		click.delegate="gotoRegister()"
         	-->
-	      		<a class="btn btn-info btn-md" route-href="route: user-create;">
+	      		<a class="btn btn-primary btn-md" route-href="route: user-create;">
 	      			<i class="fa fa-user-plus" style="font-size:16px" ></i> Add user
   				</a>
 	      	</div>
 	      	<br>
         	<div class="table-responsive">
-	  	        <table class="table table-striped">
+	  	        <table class="table table-striped table-responsive">
 	  	        	<thead class="thead-dark">
 	  	        		 <!-- Aplicadas en las filas -->
 					  <tr class="active">

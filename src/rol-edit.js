@@ -27,6 +27,14 @@ export class UserEdit {
       name:'',
       table:''
     };
+    this.inrole={
+      id:'',
+      idfeature:''
+    };
+    this.userol={
+      idrol:'',
+      iduser:''
+    };
     this.router = router;
     //this.router.reset();
   }
@@ -35,23 +43,40 @@ export class UserEdit {
     this.roleInfo = params.info;
   }
   created(){
-    
+    //------------------modulos y rol-------------------------------
       this.api.getSelectFunction(this.roleInfo.id).then((datosF)=>{
-            //console.log("long: "+Object.keys(datos.data).length);
-            this.function=datosF;
+             try{
+             this.function=datosF;
               this.cuenta=Object.keys(datosF.data).length;
-             
+            }catch(e){
+             }
           });
+      //----------------usuarios------------------------------------
+      this.api.getSelectUser().then((datos)=>{
+           try{
+            this.userData=datos;
+            this.userCuenta=Object.keys(datos.data).length;
+            }catch(e){
+              //console.log(e);
+            }
+          });
+      //-------------------Usuarios en el rol------------------------
       this.api.getSelectRoles(this.roleInfo.id).then((datos)=>{
                 //console.log("long: "+Object.keys(datos.data).length);
+                try{
                 this.numUser=Object.keys(datos.data).length;
                   this.memberData=datos;
-             
+             }catch(e){
+
+             }
           });
+      //-----------------features-----------------------
       this.api.getSelectFeatures().then(result => {
+        try{
             this.numerofeature=Object.keys(result.grid).length;
             this.feature=result;
-            //console.log("creado: "+this.table.grid[0]);
+          }catch(e){
+          }
         });
       /*this.api.getSelectPermission(this.roleInfo.id).then((datosP)=>{
                   console.log("longPermission: "+Object.keys(datosP.data).length);
@@ -72,20 +97,33 @@ export class UserEdit {
   }
 //------------------------------------------------------------------  
   DeleteUserRole(id,group){
-    console.log("a eliminar: "+id+" "+group);
-    this.api.deleteUsersRoles(id,group).then((dato)=>{
-          
+    this.userol.idrol=group;
+    this.userol.iduser=id;
+    this.api.deleteUsersRoles(this.userol).then((dato)=>{
+          try{
             this.member=dato;
+            console.log("valor a eliminar: "+dato);
+            if(dato.data==1){
+              this.userol.idrol='';
+              this.userol.iduser='';
+              toastr.success("Delete User in Role");
+              window.location.reload();
+            }else{
+              toastr.error("Action not done");
+            }
             //this.router.navigate('rol-edit');
-            console.log("valor a eliminar: "+this.member.data);
-            toastr.success("Delete User in Role");
-             window.location.reload();
+                        
+           }catch(e){}
           });
   }
    DeleteFeature(feature){
-    this.api. deleteFeature(this.roleInfo.id,feature).then((datos)=>{
+    this.inrole.id=this.roleInfo.id;
+    this.inrole.idfeature=feature;
+    this.api. deleteFeature(this.inrole).then((datos)=>{
             //this.router.navigate('rol-edit');
             if(datos.data==1){
+              this.inrole.id='';
+              this.inrole.idfeature='';
               toastr.success("Delete Functionality");
              window.location.reload();
             }else{
@@ -95,7 +133,7 @@ export class UserEdit {
           });
   }
   DeletePermission(id,name,table){
-    console.log("a eliminar: "+id+" "+table+" "+name);
+    /*console.log("a eliminar: "+id+" "+table+" "+name);
     //quitar db. in table
     //var table_name=table.substring(3);
     //console.log("table name: "+table_name);
@@ -104,15 +142,24 @@ export class UserEdit {
             console.log("valor a eliminar: "+datos.data);
             toastr.success("Delete Permission");
              window.location.reload();
-          });
+          });*/
   }
 //********************************************************
   UpdateRole(){
-    console.log("role a actualizar: "+this.roleInfo.id+" "+this.roleInfo.access_role);
+    //console.log("role a actualizar: "+this.roleInfo.id+" "+this.roleInfo.access_role);
      this.api.getUpdateRole(this.roleInfo).then((resultado)=>{
-          console.log(resultado);
-          this.router.navigate('rol/roles');
+      try{
+          if(resultado.data==1){
+            toastr.success("Update done");
+             //window.location.reload();
+             this.router.navigate('rol/roles');
+          }else{
+            toastr.error("Update not done");
+          }
+         
+        }catch(e){}
          });
+        
   }
   
   manejoclick(){
@@ -157,35 +204,49 @@ export class UserEdit {
   }
   //*******************************************************************
 
-  Adduser(idrole){
-    console.log("datos user: "+this.idUser.id+" role: "+idrole);
-    this.api.addUserMembership(this.idUser.id,idrole).then((resultado)=>{
-          console.log(resultado);
+  Adduser(iduser,idrole){
+    console.log("datos user: "+iduser+" role: "+idrole);
+    this.userol.idrol=idrole;
+    this.userol.iduser=iduser;
+    this.api.addUserMembership(this.userol).then((resultado)=>{
+          //console.log(resultado);
           //ruta
+          try{
           console.log(resultado.data);
           if(resultado.data==='ok add'){
-            toastr.success("Added User ID: "+this.idUser.id);
+            this.userol.idrol='';
+            this.userol.iduser='';
+            toastr.success("Added User ID: "+iduser);
             window.location.reload();
           }else{
             toastr.error(resultado.data);
           }
-          
+        }catch(e){}
          });
+        
   }
   addFeature(id){
-              this.api.registerFeature(this.roleInfo.id,id).then(resultp => {
+    this.inrole.id=this.roleInfo.id;
+    this.inrole.idfeature=id;
+              this.api.registerFeature(this.inrole).then(resultp => {
                         //this.router.navigate('rol/roles');
+                        try{
                         if(resultp.data==='ok add'){
+                          this.inrole.id='';
+                          this.inrole.idfeature='';
                             toastr.success("Add Functionality");
                             window.location.reload();
                             
                         }else{
                           toastr.error("Module not added");
                         }
+                      }catch(e){
+
+                      }
                 });
   }
   addPermission(){
-   this.permiso.id=this.roleInfo.id;
+   /*this.permiso.id=this.roleInfo.id;
     console.log("creadoPermission: "+this.permiso.id+" "+this.permiso.name+" "+this.permiso.table);
               this.api.registerPermission(this.permiso).then(resultp => {
                         console.log("creadoPermission: "+resultp.data);
@@ -197,7 +258,7 @@ export class UserEdit {
                         }else{
                           toastr.error("Permission not created");
                         }
-                });
+                });*/
   }
 
 }//fin de cla clase
