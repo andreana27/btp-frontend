@@ -11,8 +11,9 @@
       <li class="active">Chat Widget Setup</li>
     </ol>
   </section>
-  <section class="content">
 
+
+  <section class="content">
     <div class="row">
       <div class="col-sm-12">
         <div class="nav-tabs-custom">
@@ -20,26 +21,30 @@
             <li class="active"><a href="#settings" data-toggle="tab" aria-expanded="false">Settings</a></li>
           </ul>
           <div class="tab-content">
-            <div class="tab-pane active" id="settings">
+            
+            <div class="tab-pane active" id="settings" style=" background-color:#f2f2f2; border-radius: 5px; width:1060px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
               <br>
+
               <div class="row">
-                <label align="right" class="col-sm-4" align=right>Select a Bot</label>
-                <div class="col-sm-8">
+                <label align="right" class="col-sm-3" align=right>Select a Bot</label>
+                <div class="col-sm-6">
                   <select value.bind="selectedBotId" class="form-control" change.delegate="SelectBot(selectedBotId)">
                     <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
                   </select>
                 </div>
               </div>
               <br>
+              <br>
               <div class="row">
-                <label class="col-sm-4 control-label" align=right>Bot Display Name</label>
+                <label class="col-sm-3 control-label" align=right>Bot Display Name</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" placeholder="Enter the bot display name" value.bind="botNameValue" change.delegate="generateHTML()"></input>
+                  <input type="text" class="form-control" placeholder="Enter the bot display name" value.bind="botNameValue" change.delegate="generateHTML()">
                 </div>
               </div>
               <br>
+
               <div class="row">
-                <label align="right" class="col-sm-4" align=right>Connection token</label>
+                <label align="right" class="col-sm-3" align=right>Connection token</label>
                 <div class="col-sm-8">
                   <select value.bind="token" class="form-control" change.delegate="SelectToken(token)">
                     <option repeat.for="connector of connector_list" model.bind="connector.token">${connector.token}</option>
@@ -47,22 +52,25 @@
                 </div>
               </div>
               <br>
+
               <div class="row">
-                <label class="col-sm-4 control-label" align=right>Widget Height</label>
+                <label class="col-sm-3 control-label" align=right>Widget Height</label>
                 <div class="col-sm-8">
                   <number-input lass="form-control" value.bind="widgetHeight" change.delegate="generateHTML()"></number-input>
                 </div>
               </div>
               <br>
+
               <div class="row">
-                <label class="col-sm-4 control-label" align=right>Widget Width</label>
+                <label class="col-sm-3 control-label" align=right>Widget Width</label>
                 <div class="col-sm-8">
                   <number-input lass="form-control" value.bind="widgetWidth" change.delegate="generateHTML()"></number-input>
                 </div>
               </div>
               <br>
+
               <div class="row">
-                <label class="col-sm-4 control-label" align=right> HTML Code</label>
+                <label class="col-sm-3 control-label" align=right> HTML Code</label>
                 <div class="col-sm-8">
                   <textarea class="form-control"
                             rows="5"
@@ -70,27 +78,32 @@
                   </textarea>
                 </div>
               </div>
+
               <br>
               <div class="row">
-                <label class="col-sm-4 control-label" align=right>Javascript Reference</label>
+                <label class="col-sm-3 control-label" align=right>Javascript Reference</label>
                 <div class="col-sm-8">
-                  <input type="text" class="form-control" value.bind="jsReference" readonly></input>
+                  <input type="text" class="form-control" value.bind="jsReference" readonly>
                   <br>
                   <small>This HTML tag must be added to the head section of the page where the widget is placed.</small>
                 </div>
               </div>
               <br>
+
               <div class="row">
-                <label class="col-sm-4 control-label" align=right>Web Reference</label>
+                <label class="col-sm-3 control-label" align=right>Web Reference</label>
                 <div class="col-sm-8">
-                  <input type="button" class="form-control" value.bind="hReference" click.delegate="goToChatWidget()" readonly></input>
+                  <input type="button" class="form-control" value.bind="hReference" click.delegate="goToChatWidget()" readonly>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
+            </div><!-- settings-->
+          
+          </div><!--content-->
+        </div><!-- main panel-->
+
       </div>
-    </div>
+    </div><!--setting main panel-->
+
     <div class="row">
       <div class="col-sm-12">
         <h4>This is a preview of the Widget</h4>

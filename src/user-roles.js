@@ -24,7 +24,7 @@ export class RoleManager {
           try{
                   this.roleData=rol;
                    this.numRoles=Object.keys(rol.data).length;
-                  console.log("cuentaUser: "+rol.data);
+                  //console.log("cuentaUser: "+rol.data);
                   
                 }catch(e){
 

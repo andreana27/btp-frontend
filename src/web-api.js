@@ -744,14 +744,34 @@ getUpdateRole(roleData) {
 
   getBotDetails(id) {
     this.isRequesting = true;
-    return this.client.fetch(`bot/id/${id}.json`)
-      .then(response => response.json())
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot/id/${id}.json`)
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.content[0];
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         console.log("botlistArray: "+data.content)
         return data.content[0];
 
-      });
+      });*/
   }
   saveBot(bot) {
     this.isRequesting = true;
@@ -767,11 +787,31 @@ getUpdateRole(roleData) {
         method: 'PUT',
         body: formData
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.content[0];
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data.content[0];
-      });
+      });*/
   }
 
   createBot(bot) {
@@ -787,19 +827,44 @@ getUpdateRole(roleData) {
         formData.append(key, bot[key]);
       }
     }
-    return this.client.fetch('bot.json', {
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot.json`, {
         method: 'POST',
         body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        this.isRequesting = false;
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
         /*call the method that creates the ai file*/
         //console.log(JSON.stringify(data.content[0].id));
         this.createAIFile(data.content[0].id,'');
         //this.createAIConfigFile(data.content[0].id);
         return data.content[0];
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+
+      /*.then(response => response.json())
+      .then(data => {
+        this.isRequesting = false;
+        //call the method that creates the ai file
+        //console.log(JSON.stringify(data.content[0].id));
+        this.createAIFile(data.content[0].id,'');
+        //this.createAIConfigFile(data.content[0].id);
+        return data.content[0];
+      });*/
   }
   deleteBot(bot) {
     this.isRequesting = true;
@@ -814,19 +879,75 @@ getUpdateRole(roleData) {
   }
   getContextList(botid) {
     this.isRequesting = true;
-    return this.client.fetch(`bot-context/bot-id/${botid}.json`)
-      .then(response => response.json())
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot-context/bot-id/${botid}.json`)
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.content;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data.content;
-      });
+      });*/
   }
 
   //function that gets the list of contexts for an specified context parent
   getContextListByParentContext(botid,parentContextId) {
     this.isRequesting = true;
-    return this.client.fetch(`bot-context/bot-id/${botid}.json`)
-      .then(response => response.json())
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot-context/bot-id/${botid}.json`)
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        if (data.content != null)
+        {
+          let arr = data.content;
+          let filteredeContexts = [];
+          for(var i = arr.length - 1; i >= 0; i--) {
+            var obj = arr[i];
+            if (obj.parent_context == parentContextId)
+            {
+              filteredeContexts.push(obj);
+            }
+          }
+          //The return value only contains an array of matching parent context
+          return filteredeContexts;
+        }
+        //return data.content;
+
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         //return data.content;
@@ -844,12 +965,48 @@ getUpdateRole(roleData) {
           //The return value only contains an array of matching parent context
           return filteredeContexts;
         }
-      });
+      });*/
   }
   getContextListForQuick(botid,parentContextId) {
     this.isRequesting = true;
-    return this.client.fetch(`bot-context/bot-id/${botid}.json`)
-      .then(response => response.json())
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot-context/bot-id/${botid}.json`)
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        //return data.content;
+        if (data.content != null)
+        {
+          let arr = data.content;
+          let filteredeContexts = [];
+          for(var i = arr.length - 1; i >= 0; i--) {
+            var obj = arr[i];
+
+              filteredeContexts.push(obj);
+
+          }
+          //The return value only contains an array of matching parent context
+          return filteredeContexts;
+        }
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+
+
+
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         //return data.content;
@@ -866,7 +1023,7 @@ getUpdateRole(roleData) {
           //The return value only contains an array of matching parent context
           return filteredeContexts;
         }
-      });
+      });*/
   }
 
   createContext(context) {
@@ -879,15 +1036,35 @@ getUpdateRole(roleData) {
         formData.append(key, context[key]);
       }
     }
-    return this.client.fetch('bot_context.json', {
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot_context.json`, {
         method: 'POST',
         body: formData
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.content[0];
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data.content[0];
-      });
+      });*/
   }
 
   uploadFile(bot_id, file) {
@@ -896,26 +1073,66 @@ getUpdateRole(roleData) {
     console.log(file);
     formData.append('data', file[0]);
     formData.append('bot_id', bot_id);
-    return this.client_auth.fetch('upload.json', {
+    return this.client_auth.fetch(`upload/${sessionStorage.sessionToken}.json`, {
         method: 'POST',
         body: formData
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data;
-      });
+      });*/
   }
 
   getContextDetails(id) {
     this.isRequesting = true;
-    return this.client.fetch(`bot-context/id/${id}.json`)
-      .then(response => response.json())
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot-context/id/${id}.json`)
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.content[0];
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data.content[0];
 
-      });
+      });*/
   }
 
   saveContext(context) {
@@ -931,15 +1148,35 @@ getUpdateRole(roleData) {
         formData.append(key, context[key]);
       }
     }
-    return this.client.fetch(`bot_context/${context.id}.json`, {
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot_context/${context.id}.json`, {
         method: 'PUT',
         body: formData
       })
-      .then(response => response.json())
+       .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.content[0];
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data.content[0];
-      });
+      });*/
   }
 
   //Connectors
@@ -948,8 +1185,44 @@ getUpdateRole(roleData) {
   getConnectorList(botId,connectorType) {
     this.isRequesting = true;
     //call to backend api
-    return this.client.fetch(`bot/id/${botId}.json`)
-      .then(response => response.json())
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot/id/${botId}.json`)
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        if (data.content[0].connectors != null)
+        {
+          let arr = data.content[0].connectors;
+          let filteredConnectors = arr.filter(function( obj ) {
+            //connectos are filtred based on their type
+            return obj.type == connectorType;
+          });
+          //checking if null
+          if (filteredConnectors === null) filteredConnectors = [];
+          //The return value only contains an array of existing connectors
+          return filteredConnectors;
+        }
+        return [];
+        //return data.content;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+
+
+
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         if (data.content[0].connectors != null)
@@ -966,7 +1239,7 @@ getUpdateRole(roleData) {
         }
         return [];
 
-      });
+      });*/
   }
 
   activateConnector(botId, connectoridx){
@@ -996,14 +1269,34 @@ getUpdateRole(roleData) {
     //Function that gets the variable list for a bot
     getVariableList(botId) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_variables/${botId}.json`, {
+      return this.client_auth.fetch(`bot_variables/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Gets the record count for the variables registered to a bot
@@ -1022,40 +1315,101 @@ getUpdateRole(roleData) {
     //Returns a segment of the variable records stored fot the selected bot
     getBotVariablesRecords(botId,startLimit,endLimit) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_variables_records/${botId}/${startLimit}/${endLimit}.json`, {
+      return this.client_auth.fetch(`bot_variables_records/${sessionStorage.sessionToken}/${botId}/${startLimit}/${endLimit}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Gets the record count for the variables registered to a bot
     getBotMessageRecordCount(botId) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_conversations_recordcount/${botId}.json`, {
+      return this.client_auth.fetch(`bot_conversations_recordcount/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Returns a segment of the variable records stored fot the selected bot
     getBotMessages(botId,startLimit,endLimit) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_conversations/${botId}/${startLimit}/${endLimit}.json`, {
+      return this.client_auth.fetch(`bot_conversations/${sessionStorage.sessionToken}/${botId}/${startLimit}/${endLimit}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Returns a segment of the variable records stored fot the selected bot
@@ -1153,27 +1507,67 @@ getUpdateRole(roleData) {
     //Gets the record count for the variables registered to a bot
     getIntentCount(botId) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_intent_recordcount/${botId}.json`, {
+      return this.client_auth.fetch(`bot_intent_recordcount/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });/*
         .then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Returns a segment of the intent records stored fot the selected bot
     getBotIntents(botId,startLimit,endLimit) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_intents/${botId}/${startLimit}/${endLimit}.json`, {
+      return this.client_auth.fetch(`bot_intents/${sessionStorage.sessionToken}/${botId}/${startLimit}/${endLimit}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     updateBotIntent(parameters) {
@@ -1186,15 +1580,35 @@ getUpdateRole(roleData) {
         }
       }
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_intents.json`, {
+      return this.client_auth.fetch(`bot_intents/${sessionStorage.sessionToken}.json`, {
         method: 'PUT',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     deleteBotIntent(parameters) {
@@ -1207,15 +1621,35 @@ getUpdateRole(roleData) {
         }
       }
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_intents.json`, {
+      return this.client_auth.fetch(`bot_intents/${sessionStorage.sessionToken}.json`, {
         method: 'DELETE',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     insertBotIntent(parameters) {
@@ -1228,42 +1662,103 @@ getUpdateRole(roleData) {
         }
       }
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_intents.json`, {
+      return this.client_auth.fetch(`bot_intents/${sessionStorage.sessionToken}.json`, {
         method: 'POST',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*  .then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     /*------------------------------------*/
     /*INTENT EXAMPLES*/
     //Gets the record count for the variables registered to a bot
     getIntentExampleCount(intent_id) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`intent_example_count/${intent_id}.json`, {
+      return this.client_auth.fetch(`intent_example_count/${sessionStorage.sessionToken}/${intent_id}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Returns a segment of the intent records stored fot the selected bot
     getIntentExamples(intent_id,startLimit,endLimit) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`intent_example/${intent_id}/${startLimit}/${endLimit}.json`, {
+      return this.client_auth.fetch(`intent_example/${sessionStorage.sessionToken}/${intent_id}/${startLimit}/${endLimit}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     //Returns a segment of the intent records stored fot the selected bot
@@ -1295,15 +1790,35 @@ getUpdateRole(roleData) {
       }
       //sending the data
       this.isRequesting = true;
-      return this.client_auth.fetch(`intent_example.json`, {
+      return this.client_auth.fetch(`intent_example/${sessionStorage.sessionToken}.json`, {
         method: method,
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     /*------------------------------------*/
     /*------------------------------------*/
@@ -1320,15 +1835,35 @@ getUpdateRole(roleData) {
       }
       //bot_ai
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_ai.json`, {
+      return this.client_auth.fetch(`bot_ai/${sessionStorage.sessionToken}.json`, {
         method: 'POST',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     //
     createAIConfigFile(bot_id, bot_language){
@@ -1345,62 +1880,161 @@ getUpdateRole(roleData) {
       }
       //bot_ai
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_ai_config/10.json`, {
+      return this.client_auth.fetch(`bot_ai_config/${sessionStorage.sessionToken}.json`, {
         method: 'POST',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     /*------------------------------------*/
-
-
     deleteContext(contextId) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`deleteContext/${contextId}.json`, {
+      return this.client_auth.fetch(`deleteContext/${sessionStorage.sessionToken}/${contextId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     changeContextName(contextId,newName) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`changeContextName/${contextId}/${newName}.json`, {
+      return this.client_auth.fetch(`changeContextName/${sessionStorage.sessionToken}/${contextId}/${newName}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     existsContextName(botId,name) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`existsContextName/${botId}/${name}.json`, {
+      return this.client_auth.fetch(`existsContextName/${sessionStorage.sessionToken}/${botId}/${name}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     existsIntentName(botId,name) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`existsIntentName/${botId}/${name}.json`, {
+      return this.client_auth.fetch(`existsIntentName/${sessionStorage.sessionToken}/${botId}/${name}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     deleteMessengerConnector(botId,token)
     {
@@ -1429,50 +2063,130 @@ getUpdateRole(roleData) {
     getBotTrainStatus(botId)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`getBotTrainStatus/${botId}.json`, {
+      return this.client_auth.fetch(`getBotTrainStatus/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     setBotTrainStatus(botId)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`setBotTrainStatus/${botId}.json`, {
+      return this.client_auth.fetch(`setBotTrainStatus/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     setFalseBotTrainStatus(botId)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`setFalseBotTrainStatus/${botId}.json`, {
+      return this.client_auth.fetch(`setFalseBotTrainStatus/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     getTrainLog(botId)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`getTrainLog/${botId}.json`, {
+      return this.client_auth.fetch(`getTrainLog/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     sendMessageToMessenger(botId,clientId,message)
     {
@@ -1487,15 +2201,37 @@ getUpdateRole(roleData) {
       }
       //bot_ai
       this.isRequesting = true;
-      return this.client_auth.fetch(`sendMessageToMesseger.json`, {
+      return this.client_auth.fetch(`sendMessageToMesseger/${sessionStorage.sessionToken}.json`, {
         method: 'POST',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });/*
+      });*/
+
+      /*
       this.isRequesting = true;
       return this.client_auth.fetch(`sendMessageToMesseger/${botId}/${clientId}/${message}.json`, {
         method: 'GET'
@@ -1519,15 +2255,37 @@ getUpdateRole(roleData) {
       }
       //bot_ai
       this.isRequesting = true;
-      return this.client_auth.fetch(`sendMessageToTelegram.json`, {
+      return this.client_auth.fetch(`sendMessageToTelegram/${sessionStorage.sessionToken}.json`, {
         method: 'POST',
         body: data
       })
-        .then(response => response.json())
+        .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
+
       /*/
       this.isRequesting = true;
       return this.client_auth.fetch(`sendMessageToTelegram/${botId}/${clientId}/${message}.json`, {
@@ -1542,38 +2300,98 @@ getUpdateRole(roleData) {
     endChatCenter(botId,clientId,message)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`endChatCenter/${botId}/${clientId}.json`, {
+      return this.client_auth.fetch(`endChatCenter/${sessionStorage.sessionToken}/${botId}/${clientId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     getAiRequests(botId)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`getAiRequests/${botId}.json`, {
+      return this.client_auth.fetch(`getAiRequests/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     lookForMessages(botId)
     {//falta implementacion en el backend
       this.isRequesting = true;
-      return this.client_auth.fetch(`checkNeedChatCenter/${botId}.json`, {
+      return this.client_auth.fetch(`checkNeedChatCenter/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    }); 
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     sendMessageToBroadcast(botId,message)
     {
@@ -1588,15 +2406,37 @@ getUpdateRole(roleData) {
       }
       //bot_ai
       this.isRequesting = true;
-      return this.client_auth.fetch(`sendMessageToBroadcast.json`, {
+      return this.client_auth.fetch(`sendMessageToBroadcast/${sessionStorage.sessionToken}.json`, {
         method: 'POST',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    }); 
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
+
+
       /*
       return this.client_auth.fetch(`sendMessageToBroadcast/${botId}/${message}.json`, {
         method: 'GET'
