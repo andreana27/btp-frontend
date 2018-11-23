@@ -61,6 +61,10 @@ export class BotContext {
   //Child contexts of the current context
   contextChlidContexts = [];
 
+  //interfaz elements 
+  showExcludeUserModal = false
+
+  //context elements
   isTemplate = false;
   isAttachment = false;
   isSA = false;
@@ -75,6 +79,7 @@ export class BotContext {
   isValidationReply=false;
   isCheckPoint=false;
   isDecisionRest=false;
+  isCaptcha = false
   validationTextValue='';
   validationReplyValue='';
   validationTextValidationValue='0';
@@ -107,6 +112,24 @@ export class BotContext {
   suggestionService = null;
   variableService = null;
   selVar = null;
+  
+  //captcha elements
+  captchaItem = {
+    message: "",
+    validation: 0,
+    sendTo: null,
+    length: 0
+  }
+
+  //count validation elements
+  countValidationItem = {
+    message: "",
+    limit: 3,
+    sendTo: null,
+    users: []
+  }
+
+  temporalCountValidationItem = {...this.countValidationItem, index: 0}
 
   json_Context;
 
@@ -145,7 +168,9 @@ export class BotContext {
         this.isValidationText = false;
         this.isCheckPoint=false;
         this.isDecisionRest=false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isSA = false;
       }
@@ -165,7 +190,9 @@ export class BotContext {
         this.isCheckPoint=false;
         this.isDecisionRest=false;
         this.isValidationText = false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isTemplate = false;
       }
@@ -185,7 +212,9 @@ export class BotContext {
         this.isChatCenter=true;
         this.isDecisionRest=false;
         this.isValidationText = false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.chatCenter = false;
       }
@@ -205,7 +234,9 @@ export class BotContext {
         this.isChatCenter=false;
         this.isDecisionRest=false;
         this.isValidationText = false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isAttachment = false;
       }
@@ -225,7 +256,9 @@ export class BotContext {
         this.isCheckPoint=false;
         this.isDecisionRest=false;
         this.isValidationText = false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.istext = false;
       }
@@ -245,7 +278,9 @@ export class BotContext {
         this.isChatCenter=false;
         this.isDecisionRest=false;
         this.isValidationText = false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isQR = false;
       }
@@ -265,7 +300,9 @@ export class BotContext {
         this.isCheckPoint=false;
         this.isDecisionRest=false;
         this.isValidationText = false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isEnd = false;
       }
@@ -286,6 +323,8 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationText = false;
         this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isRest = false;
       }
@@ -311,6 +350,8 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationText = false;
         this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isSmartText = false;
       }
@@ -335,7 +376,9 @@ export class BotContext {
         this.isCheckPoint=false;
         this.isDecisionRest=false;
         this.isValidationText = false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isSmartReply = false;
       }
@@ -355,7 +398,9 @@ export class BotContext {
         this.isChatCenter=false;
         this.isCheckPoint=false;
         this.isDecisionRest=false;
-          this.isValidationReply = false;
+        this.isValidationReply = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isValidationText = false;
       }
@@ -376,6 +421,8 @@ export class BotContext {
         this.isCheckPoint=false;
         this.isDecisionRest=false;
         this.isValidationText = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isValidationReply = false;
       }
@@ -396,6 +443,8 @@ export class BotContext {
         this.isCheckPoint=true;
         this.isDecisionRest=false;
         this.isValidationText = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isCheckPoint = false;
       }
@@ -416,8 +465,54 @@ export class BotContext {
         this.isCheckPoint=false;
         this.isDecisionRest=true;
         this.isValidationText = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false
       } else {
         this.isDecisionRest = false;
+      }
+    } else 
+    if (selectedValType == 'captcha') {
+      if (!this.isCaptcha) {
+        this.isValidationReply=false;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+        this.isCheckPoint=false;
+        this.isDecisionRest=false;
+        this.isValidationText = false;
+        this.isCaptcha = true;
+        this.isCountValidation = false
+      } else {
+        this.isCaptcha = false;
+      }
+    } else 
+    if (selectedValType == 'countValidation') {
+      if (!this.isCountValidation) {
+        this.isValidationReply=false;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+        this.isCheckPoint=false;
+        this.isDecisionRest=false;
+        this.isValidationText = false;
+        this.isCaptcha = false;
+        this.isCountValidation = true
+      } else {
+        this.isCountValidation = true;
       }
     }
   }
@@ -610,6 +705,28 @@ export class BotContext {
       }];
       this.isSmartReply = false;
       toastr.success('Smart reply element added');
+    }else 
+    if(type == 'captcha') {
+      newElement = {...this.captchaItem, type}
+      this.captchaItem = {
+        message: "",
+        validation: 0,
+        sendTo: null,
+        length: 0
+      }
+      this.isCaptcha = false
+      toastr.success('Captcha element added');
+    } else 
+    if (type == 'countValidation') {
+      newElement = {...this.countValidationItem, type}
+      this.countValidationItem = {
+        message: "",
+        limit: 3,
+        sendTo: null,
+        users: []
+      }
+      this.isCountValidation = false
+      toastr.success('Count validation element added')
     }
 
     prom.then(r=>{
@@ -795,6 +912,45 @@ export class BotContext {
     this.context.context_json = JSON.stringify(this.json_Context);
     this.save();
   }
+  changeExcludeModal(value) {
+    this.showExcludeUserModal = value
+  }
+  editExcludeUsers(contextElement, index) {
+    this.temporalCountValidationItem = {...contextElement, index, contextElement, botUsers: false}
+    this.showExcludeUserModal = true
+    this.api.getConversationUsers(this.context.bot_id)
+      .then(botUsers => {
+        this.temporalCountValidationItem.botUsers = botUsers
+      })
+  }
+  deleteExcludeUser(idx, element, userToDelete) {
+    element.users = element.users.filter(item => item !== userToDelete)
+    this.json_Context[this.context.name][idx] = element
+    this.context.context_json = JSON.stringify(this.json_Context);
+    this.save();
+  }
+  filterBotUsers(array, array2) {
+    return array ? 
+      array.filter(item => !array2.includes(item))
+    : []
+  }
+  modalAddExcludeUser(user) {
+    this.temporalCountValidationItem.users = [...this.temporalCountValidationItem.users, user]
+  }
+  modalDeleteExcludeUser(element) {
+    this.temporalCountValidationItem.users = this.temporalCountValidationItem.users.filter(item => item !== element)
+  }
+  modalSaveExcludeUser() {
+    //get function temporal item elements
+    let {index, contextElement} = this.temporalCountValidationItem
+    //edit context element
+    contextElement.users = this.temporalCountValidationItem.users
+    //save context
+    this.json_Context[this.context.name][index] = contextElement
+    this.context.context_json = JSON.stringify(this.json_Context)
+    this.save()
+  }
+  
   elementChanged(idx, element) {
     this.json_Context[this.context.name][idx] = element;
     this.context.context_json = JSON.stringify(this.json_Context);

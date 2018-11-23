@@ -1,0 +1,42 @@
+.modal {
+  padding: 20px;
+}
+
+.modal.show {
+  display: block;
+  opacity: 1;
+}
+
+.modal-dialog {
+  margin: 0 auto;
+  top: 0;
+  transform: translate(0, 0) !important;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-header::after,
+.modal-header::before {
+  display: none;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-user-list-container {
+  width: 100%;
+  height: auto;
+  max-height: 166px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+a {
+  cursor: pointer;
+}

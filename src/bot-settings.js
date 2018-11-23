@@ -42,8 +42,10 @@ export class BotSettings {
     //getting the full context list
     this.api.getContextList(this.botid).then(contextos => {
       this.fullContextList = contextos;
+      console.log("contexts: ", this.fullContextList)
       this.api.getBotDetails(params.id).then(bot => {
         this.bot = bot;
+        console.log("bot", this.bot)
         //adding language value
         this.selectedLanguage = bot.bot_language;
         this.routeConfig.navModel.setTitle(bot.name);
