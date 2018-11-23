@@ -128,7 +128,7 @@
                 <label class="col-sm-2 control-label">ID User:</label>             
                   <div class="col-sm-5">
                     <select  class="form-control" value.bind="userData.data[x].id">
-                      <option repeat.for="x of userCuenta" value.bind="userData.data[x].id">${userData.data[x].first_name+" "+userData.data[x].last_name}</option>
+                      <option repeat.for="x of userCuenta" value.bind="userData.data[x].id">ID: ${userData.data[x].id+" - "+userData.data[x].first_name+" "+userData.data[x].last_name}</option>
                     </select>
                     <button type="button" class="btn btn-info btn-md"  click.delegate="Adduser(userData.data[x].id,roleInfo.id)">
                     <span class="fa fa-plus-circle" style="font-size:16px"></span> Add 
