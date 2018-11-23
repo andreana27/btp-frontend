@@ -17,17 +17,19 @@ export class Register {
       table:''
     };
     this.inrole={
-      id:''
+      id:'',
+      idfeature:''
     };
     this.router=router;
   }
-  //***************
-  //*******************
+  //*****************************************************
   //Function gets called whenever the class is created
-  created() {
+created() {
     this.api.getSelectFeatures().then(result => {
+      try{
             this.numerofeature=Object.keys(result.grid).length;
             this.feature=result;
+          }catch(e){}
         });
   }
 
@@ -39,17 +41,17 @@ export class Register {
     return this.register.role
       && this.register.description; //&& this.permiso.name && this.permiso.table;
   }
-
-  registerNewRole() {
+//********************************************************************************
+registerNewRole() {
     this.api.registerRole(this.register).then(result => {
-              console.log("creadoRole: "+result.data[0].id);
+      try{
               this.rolecreated=result;
+              //console.log(result.data);
               this.inrole.id=result.data[0].id;
               //this.permiso.id=result.data[0].id;
               //this.router.navigate('rol/roles');
-              //console.log("role No.:"+this.permiso.id);
               if(this.inrole.id>0){
-                this.clicked = !this.clicked; // toggle clicked true/false
+                this.clicked = !this.clicked;
               if (this.clicked==true){
                   this.oculto1=true;
                   
@@ -59,25 +61,35 @@ export class Register {
               }
               return true; 
               }
+           }catch(e){
+
+            }
             });            
   }// end 
 
   //*********************************************************************************************
   addFeature(id){
-              this.api.registerFeature(this.inrole.id,id).then(resultp => {
+    //this.inrole.id=5;
+    this.inrole.idfeature=id;
+    console.log(this.inrole.id+" "+this.inrole.idfeature);
+              this.api.registerFeature(this.inrole).then(resultp => {
                         //this.router.navigate('rol/roles');
+                        try{
+                          console.log(resultp.data);
                         if(resultp.data==='ok add'){
                             toastr.success("Add Functionality");
-                            window.location.reload();
+                            //window.location.reload();
                             
                         }else{
                           toastr.error("Module not added");
                         }
+                      }catch(e){
+
+                      }
                 });
   }
   addPermission(){
-    //this.permiso.id=5;
-    console.log("creadoPermission: "+this.permiso.id+" "+this.permiso.name+" "+this.permiso.table);
+    /*console.log("creadoPermission: "+this.permiso.id+" "+this.permiso.name+" "+this.permiso.table);
               this.api.registerPermission(this.permiso).then(resultp => {
                         console.log("creadoPermission: "+resultp.data);
                         if(resultado.data==='ok'){
@@ -87,9 +99,9 @@ export class Register {
                         }else{
                           toastr.error("Permission not created");
                         }
-                        //this.router.navigate('rol/roles');
-                });
+                });*/
   }
+  //*****************************************************************************
   cancelarpage(){
     this.router.navigate('rol/roles');
   }

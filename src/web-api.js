@@ -164,10 +164,11 @@ export class WebAPI {
   }
   //**********************************************************************************
   //-----------------------------------------------------------------
-  getSearchPermission(token,modules) {    
+  getSearchPermission(modules) {    
     this.isRequesting = true;
+    //a8ac53a0ce704cfd0377e93a583e79
     //sessionStorage.sessionToken
-    return this.client_auth.fetch(`feature_decorador/${token}/${modules}.json`, {
+    return this.client_auth.fetch(`feature_decorador/${sessionStorage.sessionToken}/${modules}.json`, {
       method: 'GET'
     })
     .then((response) => {
@@ -186,14 +187,6 @@ export class WebAPI {
       return "401 (UNAUTHORIZED)";
       this.app.setRoot('login');
     });
-    
-      /*.then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
-        console.log(response);
-        return response.json();
-      });*/
-
   }
   setLocations(value){
     localStorage.isRegister = value;
@@ -207,137 +200,251 @@ export class WebAPI {
     }
   }
     
-//------------------------------------------------------------------------------------
-  getCountUser() {   
-    this.isRequesting = true;
-    return this.client_auth.fetch(`count_users.json`, {
-      method: 'GET'//,
-      //body: loginData
+//----------------------------Politicas-----------------------------------
+getUpdateProfile(userData) {//pendiente
+      this.isRequesting = true;
+    let formData = new FormData();
+    for (let key in userData) {
+      if (typeof(userData[key]) === 'object'){
+        formData.append(key, JSON.stringify(userData[key]));
+        console.log(formData);
+      }else{
+        formData.append(key, userData[key]);
+      }
+    }
+    return this.client_auth.fetch(`update_profile.json`, {
+        method: 'PUT',
+        body: formData
+      })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
     })
-      .then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
-        return responseData.count;
-      });
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
   }
+  //--------------------------------Usuarios-----------------------------------------
   getUpdateUser(userData) {
       this.isRequesting = true;
     let formData = new FormData();
     for (let key in userData) {
       if (typeof(userData[key]) === 'object'){
         formData.append(key, JSON.stringify(userData[key]));
+        console.log(formData);
       }else{
         formData.append(key, userData[key]);
       }
-    }
-    return this.client_auth.fetch(`update_user.json`, {
+    }     
+    return this.client_auth.fetch(`update_user/${sessionStorage.sessionToken}.json`, {
         method: 'PUT',
         body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        //this.app.setRoot('app')
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
         return data;
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
   }
-  getSelectUser() {
-     //let loginData = new FormData();     
+  getSelectUser() {    
     this.isRequesting = true;
-    return this.client_auth.fetch(`auth_users.json`, {
+    return this.client_auth.fetch(`auth_users/${sessionStorage.sessionToken}.json`, {
       method: 'POST'
     })
-
-      .then(response => response.json())
-      .then((responseData) => {
-        
-        this.isRequesting = false;
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
         return responseData;
-      });
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+
+      //-----------------------------------------------------------
       /*.then((algo)=>{
         console.log("enumeracionUsuarios: "+algo);
         return algo;
       });*/
   }
-  //-------------------------------------------------------------------------
-  selectTables() {
-    this.isRequesting = true;
-    return this.client_auth.fetch(`table_name.json`, {
-        method: 'GET'
-      })
-      .then(response => response.json())
-      .then(data => {
-        return data;
-      });
-  }
   //----------------------------Roles----------------------------------------------------------
   getSelectRoles(id) {    
     this.isRequesting = true;
-    return this.client_auth.fetch(`group_membership/${id}.json`, {
-      method: 'GET'
-    })
-      .then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
-        return responseData;
-      });
-  }
-  getGroupRoles() {    
-    this.isRequesting = true;
-    return this.client_auth.fetch(`select_roles.json`, {
+    return this.client_auth.fetch(`group_membership/${sessionStorage.sessionToken}/${id}.json`, {
       method: 'POST'
     })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+  }
+  
+  getGroupRoles() {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_roles/${sessionStorage.sessionToken}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+     /* .then(response => response.json())
       .then((responseData) => {
         this.isRequesting = false;
         return responseData;
-      });
-  }
-
-  getCountRoles() {   
-    this.isRequesting = true;
-    return this.client_auth.fetch(`count_roles.json`, {
-      method: 'POST'//,
-      //body: loginData
-    })
-      .then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
-        return responseData.count;
-      });
+      });*/
   }
   
-  getCountUsersRoles(infoRole) {
+  getCountUsersRoles(infoRole) {//pendiente
     this.isRequesting = true;
     return this.client_auth.fetch(`count_membership/${infoRole}.json`, {
         method: 'GET'
       })
       .then(response => response.json())
       .then(data => {
-        //this.app.setRoot('app')
         return data.count;
       });
   }
-  deleteUsersRoles(id,role) {
+  deleteUsersRoles(userol) {
     this.isRequesting = true;
-    return this.client_auth.fetch(`delete_Userinroles/${id}/${role}.json`, {
-        method: 'GET'
+    let formData = new FormData();
+    for (let key in userol) {
+      if (typeof(userol[key]) === 'object'){
+        formData.append(key, JSON.stringify(userol[key]));
+      }else{
+        formData.append(key, userol[key]);
+      }
+    }
+    return this.client_auth.fetch(`delete_Userinroles/${sessionStorage.sessionToken}.json`, {
+        method: 'POST',
+        body: formData
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         return data;
-      });
+      });*/
   }
-  addUserMembership(id,role) {
+  addUserMembership(userol) {
     this.isRequesting = true;
-    return this.client_auth.fetch(`add_user_role/${id}/${role}.json`, {
-        method: 'GET'//GET
+    let formData = new FormData();
+    for (let key in userol) {
+      if (typeof(userol[key]) === 'object'){
+        formData.append(key, JSON.stringify(userol[key]));
+      }else{
+        formData.append(key, userol[key]);
+      }
+    }
+    return this.client_auth.fetch(`add_user_role/${sessionStorage.sessionToken}.json`, {
+        method: 'POST',//GET
+        body: formData
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         return data;
-      });
+      });*/
   }
-  getUpdateRole(roleData) {
+getUpdateRole(roleData) {
       this.isRequesting = true;
     let formData = new FormData();
     for (let key in roleData) {
@@ -347,15 +454,30 @@ export class WebAPI {
         formData.append(key, roleData[key]);
       }
     }
-    return this.client_auth.fetch(`update_role.json`, {
+    return this.client_auth.fetch(`update_role/${sessionStorage.sessionToken}.json`, {
         method: 'PUT',
         body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        //this.app.setRoot('app')
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
         return data;
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
   }
   registerRole(roleData) {
     this.isRequesting = true;
@@ -367,94 +489,158 @@ export class WebAPI {
         formData.append(key, roleData[key]);
       }
     }
-    return this.client_auth.fetch(`role.json`, {
+    return this.client_auth.fetch(`role/${sessionStorage.sessionToken}.json`, {
         method: 'PUT',
         body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        //this.app.setRoot('app')
-        return data;
-      });
-  }
-  //-------------------Permission------------------------------
-  registerPermission(permisoData) {
-    this.isRequesting = true;
-    return this.client_auth.fetch(`permission_role/${permisoData.id}/${permisoData.name}/${permisoData.table}.json`, {
-        method: 'GET'//,
-        //body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        //this.app.setRoot('app')
-        return data;
-      });
-  }
-  getSelectPermission(id) {    
-    this.isRequesting = true;
-    return this.client_auth.fetch(`select_permission/${id}.json`, {
-      method: 'GET'
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
     })
-      .then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
-        return responseData;
-      });
-  }
-  deletePermission(id,name,table) {
-    this.isRequesting = true;
-    return this.client_auth.fetch(`delete_permission/${id}/${name}/${table}.json`, {
-        method: 'GET'
-      })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+    /*
       .then(response => response.json())
       .then(data => {
         return data;
-      });
+      });*/
   }
   //---------------------------Features--------------------------------------------
   getSelectFeatures() {    
     this.isRequesting = true;
-    return this.client_auth.fetch(`select_features.json`, {
+    return this.client_auth.fetch(`select_features/${sessionStorage.sessionToken}.json`, {
       method: 'POST'
     })
-      .then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
         return responseData;
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
   }
-  registerFeature(role,feature) {
+  registerFeature(funcionData) {
     this.isRequesting = true;
-    return this.client_auth.fetch(`add_functionality/${role}/${feature}.json`, {
-        method: 'POST'//,
-        //body: formData
+    let formData = new FormData();
+    for (let key in funcionData) {
+      if (typeof(funcionData[key]) === 'object'){
+        formData.append(key, JSON.stringify(funcionData[key]));
+      }else{
+        formData.append(key, funcionData[key]);
+      }
+    }
+    return this.client_auth.fetch(`add_functionality/${sessionStorage.sessionToken}.json`, {
+        method: 'POST',
+        body: formData
       })
-      .then(response => response.json())
-      .then(data => {
-        //this.app.setRoot('app')
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
         return data;
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
   }
   getSelectFunction(role) {    
     this.isRequesting = true;
-    return this.client_auth.fetch(`select_functionality/${role}.json`, {
+    return this.client_auth.fetch(`select_functionality/${sessionStorage.sessionToken}/${role}.json`, {
       method: 'POST'
     })
-      .then(response => response.json())
-      .then((responseData) => {
-        this.isRequesting = false;
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
         return responseData;
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
   }
-  deleteFeature(role,feature) {
+  deleteFeature(funcionData) {
     this.isRequesting = true;
-    return this.client_auth.fetch(`delete_functionality/${role}/${feature}.json`, {
-        method: 'POST'
+    let formData = new FormData();
+    for (let key in funcionData) {
+      if (typeof(funcionData[key]) === 'object'){
+        formData.append(key, JSON.stringify(funcionData[key]));
+      }else{
+        formData.append(key, funcionData[key]);
+      }
+    }
+    return this.client_auth.fetch(`delete_functionality/${sessionStorage.sessionToken}.json`, {
+        method: 'POST',
+        body: formData
       })
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
         return data;
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
   }
     //**************************************************************************************************
 
@@ -473,15 +659,33 @@ export class WebAPI {
         formData.append(key, userData[key]);
       }
     }
-    return this.client_auth.fetch(`user.json`, {
+    return this.client_auth.fetch(`user/${sessionStorage.sessionToken}.json`, {
         method: 'PUT',
         body: formData
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
       .then(data => {
         //this.app.setRoot('app')
         return data;
-      });
+      });*/
   }
 
   validateNewUserEmail(email) {
@@ -510,12 +714,32 @@ export class WebAPI {
 
   getBotsList() {
     this.isRequesting = true;
-    return this.client.fetch('bot.json')
-      .then(response => response.json())
-      .then(data => {
-        this.isRequesting = false;
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot.json`)
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
         return data.content;
-      });
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+      /*.then(response => response.json())
+      .then(data => {
+        this.isRequesting = false;        
+        return data.content;
+      });*/
   }
 
   getBotDetails(id) {
@@ -524,6 +748,7 @@ export class WebAPI {
       .then(response => response.json())
       .then(data => {
         this.isRequesting = false;
+        console.log("botlistArray: "+data.content)
         return data.content[0];
 
       });
@@ -538,7 +763,7 @@ export class WebAPI {
         formData.append(key, bot[key]);
       }
     }
-    return this.client.fetch(`bot/${bot.id}.json`, {
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot/${bot.id}.json`, {
         method: 'PUT',
         body: formData
       })
@@ -578,7 +803,7 @@ export class WebAPI {
   }
   deleteBot(bot) {
     this.isRequesting = true;
-    return this.client.fetch(`bot/${bot.id}.json`, {
+    return this.client.fetch(`${sessionStorage.sessionToken}/bot/${bot.id}.json`, {
         method: 'DELETE'
       })
       .then(response => response.json())
@@ -914,7 +1139,7 @@ export class WebAPI {
         }
       }
       this.isRequesting = true;
-      return this.client_auth.fetch(`website_connector.json`, {
+      return this.client_auth.fetch(`website_connector/${sessionStorage.sessionToken}.json`, {
         method: 'DELETE',
         body: data
       })
@@ -1120,7 +1345,7 @@ export class WebAPI {
       }
       //bot_ai
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_ai_config.json`, {
+      return this.client_auth.fetch(`bot_ai_config/10.json`, {
         method: 'POST',
         body: data
       })
@@ -1397,7 +1622,7 @@ export class WebAPI {
     botClone(botId,name,full)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`botClone/${botId}/${name}/${full}.json`, {
+      return this.client_auth.fetch(`botClone/${sessionStorage.sessionToken}/${botId}/${name}/${full}.json`, {
         method: 'GET'
       })
         .then(response => response.json())

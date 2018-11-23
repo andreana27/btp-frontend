@@ -31,7 +31,7 @@ export class MenuBar {
   }
   metodo(nombre){
     //this.router.navigate('user/manager');
-    this.api.getSearchPermission("a8ac53a0ce704cfd0377e93a583e79",nombre).then(resultp => {
+    this.api.getSearchPermission(nombre).then(resultp => {
                         console.log("*********************"+resultp);
                         //this.router.navigate('user/manager');
                         if(resultp=="ok"){

@@ -49,12 +49,14 @@ export class Manager {
       {
         route: 'rol/roles',
         moduleId: 'user-roles',
-        name: 'user-roles'
+        name: 'user-roles',
+        title:'Roles'
       },
       {
         route: 'user/manager',
         moduleId: 'user-manager',
-        name: 'user-manager'
+        name: 'user-manager',
+        title:'Users'
       },
        {
         route: 'user/edit',

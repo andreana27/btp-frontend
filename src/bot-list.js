@@ -90,6 +90,7 @@ export class BotList {
     console.log(this.cloneName)
     this.api.botClone(botId,this.cloneName,type).then(response=>
       {
+        //console.log(response.cont)
         this.created();
         this.cloneName='';
         toastr.success(`The bot has been successfully clone`);

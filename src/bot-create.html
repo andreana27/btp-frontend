@@ -1,22 +1,26 @@
 <template>
+ 
  <section class="content-header">
-  <h1>
-    New Bot
-  </h1>
+  <h1 style="text-align:center;">New Bot</h1>
   <ol class="breadcrumb">
     <li>
       <a href="#"><i class="fa fa-dashboard"></i> Home</a>
     </li>
     <li>
-      <a href="#">Layout</a>
+      <a href="#">Bots</a>
     </li>
     <li class="active">New Bot</li>
   </ol>
   </section>
+  <br><br>
+   <div style="background-color:#bcf5bc; border-radius: 15px;width:750px;padding-top:5%; padding-bottom:auto; margin-right:auto; margin-left:auto;">
+
   <section class="content">
+
     <form role="form" class="form-horizontal" submit.delegate="save()">
+      
       <div class="form-group">
-        <label class="col-sm-2 control-label">Name</label>
+        <label class="col-sm-2 control-label">Bot Name</label>
         <div class="col-sm-10">
           <input type="text" placeholder="Enter Bot name" class="form-control" value.bind="bot.name">
         </div>
@@ -28,8 +32,9 @@
         </div>
       </div>
       <div class="button-bar">
-        <button class="btn btn-info pull-right" disabled.bind="!canSave">Create Bot</button>
+        <button class="btn btn-primary pull-right" disabled.bind="!canSave">Create Bot</button>
       </div>
     </form>
   </section>
+</div>
 </template>
