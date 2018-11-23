@@ -149,6 +149,16 @@ export class BotContext {
     this.ea = ea;
     this.router=router;
   }
+
+  generateRandomText() {
+    var text = ""
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length))
+
+    return text
+  }
   elementSelected(selectedValType) {
     console.log(selectedValType);
     //console.log(JSON.stringify(this.contextChlidContexts));
@@ -720,6 +730,7 @@ export class BotContext {
     if (type == 'countValidation') {
       newElement = {...this.countValidationItem, type}
       this.countValidationItem = {
+        id: this.generateRandomText(),
         message: "",
         limit: 3,
         sendTo: null,
