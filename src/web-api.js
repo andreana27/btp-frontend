@@ -166,8 +166,6 @@ export class WebAPI {
   //-----------------------------------------------------------------
   getSearchPermission(modules) {    
     this.isRequesting = true;
-    //a8ac53a0ce704cfd0377e93a583e79
-    //sessionStorage.sessionToken
     return this.client_auth.fetch(`feature_decorador/${sessionStorage.sessionToken}/${modules}.json`, {
       method: 'GET'
     })
@@ -201,7 +199,7 @@ export class WebAPI {
   }
     
 //----------------------------Politicas-----------------------------------
-getUpdateProfile(userData) {//pendiente
+getUpdateProfile(userData) {
       this.isRequesting = true;
     let formData = new FormData();
     for (let key in userData) {
@@ -211,8 +209,8 @@ getUpdateProfile(userData) {//pendiente
       }else{
         formData.append(key, userData[key]);
       }
-    }
-    return this.client_auth.fetch(`update_profile.json`, {
+    }     
+    return this.client_auth.fetch(`update_profile/${sessionStorage.sessionToken}.json`, {
         method: 'PUT',
         body: formData
       })
@@ -228,11 +226,13 @@ getUpdateProfile(userData) {//pendiente
       try{
         return data;
       }catch(err){
+        console.error(err);
           this.app.setRoot('login');
         }
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
+      //this.app.setRoot('login');
     });
   }
   //--------------------------------Usuarios-----------------------------------------
@@ -2450,14 +2450,34 @@ getUpdateRole(roleData) {
     getStatistics(botId,start,end)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`getStatistics/${botId}/${start}/${end}.json`, {
+      return this.client_auth.fetch(`getStatistics/${sessionStorage.sessionToken}/${botId}/${start}/${end}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    }); 
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     botClone(botId,name,full)
     {
