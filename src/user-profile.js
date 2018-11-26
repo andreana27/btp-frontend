@@ -78,30 +78,27 @@ export class UserProfile {
   UpdateUserData() {
     this.userData1.first_name=this.userData.firstName;
     this.userData1.last_name=this.userData.lastName;
-    //console.log(this.userData1.first_name+this.userData1.last_name+" "+this.userData1.password+"-- "+this.userData1.confirmPassword);
+    console.log(this.userData1.first_name+this.userData1.last_name+" "+this.userData1.password+"-- "+this.userData1.confirmPassword);
     try{
       if(this.isEqualPassword()){
-        //console.log("valor: "+this.isPassword());
-        
-          //console.log("paso: "+this.userData1.password);
-        this.api.getPolicies('password strength').then((datosF1)=>{
-          this.activa=datosF1.data.policies_active;
-          //console.log("politica fortaleza: "+this.activa);
-          if(this.activa==true){
-            if (this.isPassword()) {
-              this.actualizarPerfil();
-              this.userData1.password='';
-              this.userData1.confirmPassword='';
-            }
-          }else{//politica no activa
-              this.actualizarPerfil();
-              this.userData1.password='';
-              this.userData1.confirmPassword='';
+        console.log("iguales");
+        //if (this.isValidPassword()) {
+          this.api.getUpdateProfile(this.userData1).then((resultado)=>{
+            console.log(resultado.data);            
+      try{
+          if(resultado.data==1){
+            toastr.success('Profile has been update');
+          }else{
+            toastr.error('Action not done');
           }
-            
-        });
-          
-          }
+          //this.router.navigate('user/manager');
+        }catch(e){
+          console.log(e);
+        }
+
+         });
+          //}
+        }
       }catch(e){
         toastr.error('Fields are empty');
       }
