@@ -22,10 +22,10 @@ export class UserProfile {
   constructor(api, ea) {
     this.ea = ea;
     this.api = api;
-    this.userData = {
-      token:sessionStorage.sessionToken,
-      firstName:'',
-      lastName:'',
+    this.userData1 = {
+      //token:sessionStorage.sessionToken,
+      first_name:'',
+      last_name:'',
       password:'',
       confirmPassword:''
 
@@ -56,8 +56,8 @@ export class UserProfile {
   //**********************************************************************
   isEqualPassword()
   {
-    if (this.userData.password.length > 0){
-      if (this.userData.password === this.userData.confirmPassword) {
+    if (this.userData1.password.length > 0){
+      if (this.userData1.password === this.userData1.confirmPassword) {
         return true;
       }
       else {
@@ -79,18 +79,27 @@ export class UserProfile {
     return false;
   }
   UpdateUserData() {
-    console.log(this.userData.token+"   "+ this.userData.firstName+this.userData.lastName+" "+this.userData.password+"-- "+this.userData.confirmPassword);
+    this.userData1.first_name=this.userData.firstName;
+    this.userData1.last_name=this.userData.lastName;
+    console.log(this.userData1.first_name+this.userData1.last_name+" "+this.userData1.password+"-- "+this.userData1.confirmPassword);
     try{
       if(this.isEqualPassword()){
+        console.log("iguales");
         //if (this.isValidPassword()) {
-      /* this.api.getUpdateProfile(this.userInfo).then((resultado)=>{
+          this.api.getUpdateProfile(this.userData1).then((resultado)=>{
+            console.log(resultado.data);            
       try{
-          this.router.navigate('user/manager');
+          if(resultado.data==1){
+            toastr.success('Profile has been update');
+          }else{
+            toastr.error('Action not done');
+          }
+          //this.router.navigate('user/manager');
         }catch(e){
-          //exception
+          console.log(e);
         }
 
-         });*/
+         });
           //}
         }
       }catch(e){

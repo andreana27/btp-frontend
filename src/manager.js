@@ -68,6 +68,12 @@ export class Manager {
         moduleId: 'user-create',
         name: 'user-create'
       },
+      {
+        route: 'user/policies',
+        moduleId: 'user-policies',
+        name: 'user-policies',
+        title:'Policies'
+      },
       //*********************************
        {
         route: 'rol/edit',
