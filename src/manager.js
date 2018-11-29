@@ -89,6 +89,12 @@ export class Manager {
       },
       //---------------------------------
       {
+        route: 'user/temporal',
+        moduleId: 'temporal-password',
+        name: 'temporal-password',
+        title:'temporal-password'
+      },
+      {
         route: 'bot/intents',
         moduleId: 'bot-intents',
         name: 'bot-intents'

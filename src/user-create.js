@@ -23,19 +23,7 @@ export class UserCreate {
       password:'',
       confirmPassword:''
     };
-    this.longitud=false;
-    this.minuscula = false;
-    this.numero = false;
-    this.symbolo=false;
-    this.mayuscula = false;
-    this.lon='';
-    this.clases={
-      longitud:'',
-      min:'',
-      may:'',
-      sym:'',
-      num:''
-    };
+    this.activa=false;
     
 
     this.router=router;
@@ -57,20 +45,8 @@ export class UserCreate {
   //Function that gets called whenever the view is activated
   activated() {
   }
-  isPassword()
-  {
-      if(this.longitud && this.minuscula && this.mayuscula && this.numero && this.symbolo) {
-        //console.log(true);
-        return true;
-      }
-      else {
-        toastr.warning('Password doesn\'t meet requirements');
-        //console.log(false);
-        return false;
-      }
-    return false;
-  }
-  isValidPassword()
+  
+  isEqualPassword()
   {
     if (this.register.password.length > 0){
       if (this.register.password === this.register.confirmPassword) {
@@ -101,6 +77,18 @@ export class UserCreate {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email.toLowerCase());
   }
+  isPassword()
+  {
+    //verificar politica
+      if(this.longPassword() && this.validateSymbol() && this.validateLetter() && this.validateCapitalLetter() && this.validateNumber() ) {
+        return true;
+      }
+      else {
+        toastr.warning('Password doesn\'t meet requirements');
+        return false;
+      }
+    return false;
+  }
 
   registerNewUser() {
     console.log("fin: "+this.longitud+" ************ "+longitud);
@@ -109,10 +97,33 @@ export class UserCreate {
     try{
     if (this.validateEmail(this.register.email)) {
       //password matching validation
-      if (this.isValidPassword()) {
-        //if (this.isPassword()) {
+      if (this.isEqualPassword()) {
         //email existance validation
-        this.api.validateNewUserEmail(this.register.email).then(response => {
+        //--------------------------------------
+        this.api.getPolicies('password strength').then((datosF1)=>{
+          this.activa=datosF1.data.policies_active;
+          //console.log("politica fortaleza: "+this.activa);
+          if(this.activa==true){
+            if (this.isPassword()) {
+              this.crearUser();
+            }
+          }else{//politica no activa
+              this.crearUser();
+          }
+            
+        });
+        //----------------------------------------
+      }// end if - isValidPassword
+       }
+    else {
+      toastr.warning('Valid e-mail is required.');
+    }
+    }catch(e){
+        toastr.error('Fields are empty');
+      }
+  }// end registerNewUser
+  crearUser(){
+      this.api.validateNewUserEmail(this.register.email).then(response => {
           //if the user already exists
           if (response.count > 0) {
             toastr.warning(`E-mail ${this.register.email} already registered.`);
@@ -131,37 +142,51 @@ export class UserCreate {
             });
           }// end else - user existance
         });// end validateNewUserEmail
-      }// end if - isValidPassword
-    //}
-    }
-    else {
-      toastr.warning('Valid e-mail is required.');
-    }
-    }catch(e){
-        toastr.error('Fields are empty');
-      }
-  }// end registerNewUser
-
+  }
   cancelarpage(){
     this.router.navigate('user/manager');
   }
   //***********************************************************************************
-  /*keypressInput(e) {
-    
-     if (this.tiene_numeros(e)) {
-      console.log("Cumple");
-     }else{
-      console.log("no cumple");
-     }
-      //this.tiene_numeros(e);
-        //console.log(e);        
-    }*/
-
+  validateLetter() {
+    if (this.userData1.password.match(/[A-z]/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  validateCapitalLetter() {
+    if (this.userData1.password.match(/[A-Z]/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  validateNumber() {
+    if (this.userData1.password.match(/\d/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  validateSymbol() {
+    if (this.userData1.password.match(/\W/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  longPassword(){
+    if(this.userData1.password.length>=6){
+      return true;
+    }else{
+      return false;
+    } 
+  }
 //***********************************************************
 //JQuery
 attached(){
-  //var longitud = false,
-  var  minuscula = false,
+  var longitud = false,
+    minuscula = false,
     numero = false,
     symbolo=false,
     mayuscula = false;

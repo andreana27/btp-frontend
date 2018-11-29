@@ -16,6 +16,8 @@ export class WebAPI {
     localStorage.isRegister = false;
     //setting the session
     this.session = sessionStorage.sessionToken || null;
+    this.politica1=null;
+
     this.client_auth = new HttpClient();
     this.client_auth.configure(config => {
       config
@@ -89,14 +91,107 @@ export class WebAPI {
             sessionStorage.sessionToken = responseData.data[0]
             sessionStorage.userFirstName = responseData.data[1];
             sessionStorage.userLastName = responseData.data[2];
-            // .. and set root to app.
-            this.app.setRoot('app');
+            sessionStorage.temporal=responseData.data[3];
+            sessionStorage.datePassword=responseData.data[4];
+            //---------------------------------------------------
+            
+            //-------------------------------------------------------
+            this.getPolicies('temporal password').then((datosF)=>{
+               try{
+               this.politicas=datosF.data.policies_active;
+               //console.log("temporal: "+this.politicas);
+               if(this.politicas){
+
+                  if(sessionStorage.temporal=='true'){
+                    //console.log("pass temporal");
+                    this.app.setRoot('temporal-password');
+                  }else{
+                    //console.log("pass No temporal");
+                     //////this.app.setRoot('app');
+                    //------------------------------------
+                    //policitca de expiracion
+                    this.getPolicies('expirable password').then((datosF1)=>{
+                       try{
+                       this.politicas2=datosF1;
+                       var activa=this.politicas2.data.policies_active;
+                       //console.log("expirable: "+activa);
+                       if(activa){
+                          var diasExpira = new Date(this.politicas2.data.date_end);
+                          var fechahoy=new Date();
+                          var fechapass=new Date(sessionStorage.datePassword);
+                          var diasDif = fechahoy.getTime() - fechapass.getTime();
+                          var dias = Math.round(diasDif/(1000 * 60 * 60 * 24));
+                          //console.log("dias entre fechas: "+dias);
+                          if(dias<=diasExpira){//esta entre el rango de fechas adecuado
+                            //console.log("puede entrar");
+                            this.app.setRoot('app');
+                          }else{//cambiar el pass
+                            //console.log("cambiar el password");
+                            this.app.setRoot('temporal-password');
+                          }
+                          
+                       }else{
+                        //console.log("politica expirable no activa");
+                        this.app.setRoot('app');
+                       }
+                      }catch(e){
+                        console.log(e);
+                        this.app.setRoot('login');
+                       }
+                    });
+                    //---------------------------------------
+                  }
+               }else{
+                //console.log("politica temporal no activa");
+                 //---------------------------------------------
+                 //------------------------------------
+                    //policitca de expiracion
+                    this.getPolicies('expirable password').then((datosF1)=>{
+                       try{
+                       this.politicas2=datosF1;
+                       var activa=this.politicas2.data.policies_active;
+                       //console.log("expirable: "+activa);
+                       if(activa){
+                          var diasExpira = new Date(this.politicas2.data.date_end);
+                          var fechahoy=new Date();
+                          var fechapass=new Date(sessionStorage.datePassword);
+                          var diasDif = fechahoy.getTime() - fechapass.getTime();
+                          var dias = Math.round(diasDif/(1000 * 60 * 60 * 24));
+                          //console.log("dias entre fechas: "+dias);
+                          if(dias<=diasExpira){//esta entre el rango de fechas adecuado
+                            //console.log("puede entrar");
+                            this.app.setRoot('app');
+                          }else{//cambiar el pass
+                            //console.log("cambiar el password");
+                            this.app.setRoot('temporal-password');
+                          }
+                          
+                       }else{
+                        //console.log("politica expirable no activa");
+                        this.app.setRoot('app');
+                       }
+                      }catch(e){
+                        console.log(e);
+                        this.app.setRoot('login');
+                       }
+                    });
+                    //---------------------------------------
+                    //---------------------------------------
+               }
+              }catch(e){
+                this.app.setRoot('login');
+               }
+            });
+            //--------------------------------------------------------
+                            
+            //this.app.setRoot('app');
           } else {
             response.msg = 'The login data is not valid';
             response.type = 500;
           }
         }
         catch(err){
+          console.log(err);
           response.msg = 'The login data is not valid';
           response.type = 500;
         }
@@ -198,7 +293,160 @@ export class WebAPI {
     }
   }
     
-//----------------------------Politicas-----------------------------------
+//----------------------------Politicas & perfil-----------------------------------
+activePolicy(name){
+  var activated=false;
+  this.getPolicies(name).then((datosF)=>{
+             try{
+             this.politicas=datosF;
+             console.log("politica: "+this.politicas.data.policies_active);
+             if(this.politicas.data.policies_active){                
+                activated=true;
+                console.log("if "+activated);
+                return activated;
+             }else{
+              activated= false;
+              console.log("else "+activated);
+              return activated;
+             }
+                          
+            }catch(e){
+              console.log(e);
+              activated=false;
+              console.log("catch "+activated);
+              return activated;
+             }
+
+          });
+  /*console.log("retorno: "+activated);
+  return activated;*/
+}
+getPolicies(name) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_policies/${sessionStorage.sessionToken}/${name}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+  }
+updatePolicies(policyData) {    
+    this.isRequesting = true;
+
+    let formData = new FormData();
+    for (let key in policyData) {
+      if (typeof(policyData[key]) === 'object'){
+        formData.append(key, JSON.stringify(policyData[key]));
+        console.log(formData);
+      }else{
+        formData.append(key, policyData[key]);
+      }
+    }
+
+    return this.client_auth.fetch(`update_policies/${sessionStorage.sessionToken}.json`, {
+      method: 'POST',
+      body: formData
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+  }
+  //---------------------------------
+  temporalPassword(policyData) {    
+    this.isRequesting = true;
+
+    let formData = new FormData();
+    for (let key in policyData) {
+      if (typeof(policyData[key]) === 'object'){
+        formData.append(key, JSON.stringify(policyData[key]));
+        console.log(formData);
+      }else{
+        formData.append(key, policyData[key]);
+      }
+    }
+
+    return this.client_auth.fetch(`temp_password/${sessionStorage.sessionToken}.json`, {
+      method: 'PUT',
+      body: formData
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      console.log("401 UNAUTHORIZED");
+      //this.app.setRoot('login');
+    });
+  }
+  //----------------------------------
+  istemporalPassword() {    
+    this.isRequesting = true;
+
+    return this.client_auth.fetch(`view_temporal/${sessionStorage.sessionToken}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      console.log("401 UNAUTHORIZED");
+      //this.app.setRoot('login');
+    });
+  }
 getUpdateProfile(userData) {
       this.isRequesting = true;
     let formData = new FormData();
@@ -230,9 +478,9 @@ getUpdateProfile(userData) {
           this.app.setRoot('login');
         }
     }).catch((error) => {
-      console.log(error);
-      //console.log("401 UNAUTHORIZED");
-      //this.app.setRoot('login');
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
     });
   }
   //--------------------------------Usuarios-----------------------------------------
