@@ -1479,7 +1479,7 @@
               <div class="row">
                   <label class="col-sm-3 control-label">Limit: </label>
                   <div class='col-sm-9'>
-                    <input class="form-control" type="number" value.bind="countValidationItem.limit" change.delegate="changedItem($index, countValidationItem)">
+                    <input class="form-control" type="number" value.bind="countValidationItem.limit">
                   </div>
               </div>
               <br>
@@ -1487,7 +1487,7 @@
               <div class="row">
                 <label class="col-sm-3 control-label">Message if user is in the limit</label>
                 <div class="col-sm-9">
-                  <textarea class="form-control" rows="5" value.bind="countValidationItem.message" change.delegate="changedItem($index, countValidationItem)"></textarea>
+                  <textarea class="form-control" rows="5" value.bind="countValidationItem.message"></textarea>
                 </div>
               </div>
               <br>

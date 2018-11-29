@@ -728,9 +728,10 @@ export class BotContext {
       toastr.success('Captcha element added');
     } else 
     if (type == 'countValidation') {
-      newElement = {...this.countValidationItem, type}
+      newElement = {...this.countValidationItem, type, id: this.generateRandomText() }
+      console.log(newElement)
       this.countValidationItem = {
-        id: this.generateRandomText(),
+        id: "",
         message: "",
         limit: 3,
         sendTo: null,
