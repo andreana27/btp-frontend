@@ -293,7 +293,160 @@ export class WebAPI {
     }
   }
     
-//----------------------------Politicas-----------------------------------
+//----------------------------Politicas & perfil-----------------------------------
+activePolicy(name){
+  var activated=false;
+  this.getPolicies(name).then((datosF)=>{
+             try{
+             this.politicas=datosF;
+             console.log("politica: "+this.politicas.data.policies_active);
+             if(this.politicas.data.policies_active){                
+                activated=true;
+                console.log("if "+activated);
+                return activated;
+             }else{
+              activated= false;
+              console.log("else "+activated);
+              return activated;
+             }
+                          
+            }catch(e){
+              console.log(e);
+              activated=false;
+              console.log("catch "+activated);
+              return activated;
+             }
+
+          });
+  /*console.log("retorno: "+activated);
+  return activated;*/
+}
+getPolicies(name) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_policies/${sessionStorage.sessionToken}/${name}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+  }
+updatePolicies(policyData) {    
+    this.isRequesting = true;
+
+    let formData = new FormData();
+    for (let key in policyData) {
+      if (typeof(policyData[key]) === 'object'){
+        formData.append(key, JSON.stringify(policyData[key]));
+        console.log(formData);
+      }else{
+        formData.append(key, policyData[key]);
+      }
+    }
+
+    return this.client_auth.fetch(`update_policies/${sessionStorage.sessionToken}.json`, {
+      method: 'POST',
+      body: formData
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+  }
+  //---------------------------------
+  temporalPassword(policyData) {    
+    this.isRequesting = true;
+
+    let formData = new FormData();
+    for (let key in policyData) {
+      if (typeof(policyData[key]) === 'object'){
+        formData.append(key, JSON.stringify(policyData[key]));
+        console.log(formData);
+      }else{
+        formData.append(key, policyData[key]);
+      }
+    }
+
+    return this.client_auth.fetch(`temp_password/${sessionStorage.sessionToken}.json`, {
+      method: 'PUT',
+      body: formData
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      console.log("401 UNAUTHORIZED");
+      //this.app.setRoot('login');
+    });
+  }
+  //----------------------------------
+  istemporalPassword() {    
+    this.isRequesting = true;
+
+    return this.client_auth.fetch(`view_temporal/${sessionStorage.sessionToken}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      console.log("401 UNAUTHORIZED");
+      //this.app.setRoot('login');
+    });
+  }
 getUpdateProfile(userData) {
       this.isRequesting = true;
     let formData = new FormData();
@@ -325,9 +478,9 @@ getUpdateProfile(userData) {
           this.app.setRoot('login');
         }
     }).catch((error) => {
-      console.log(error);
-      //console.log("401 UNAUTHORIZED");
-      //this.app.setRoot('login');
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
     });
   }
   //--------------------------------Usuarios-----------------------------------------
