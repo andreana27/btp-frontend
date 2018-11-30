@@ -1,52 +1,59 @@
-import {WebAPI} from './web-api';
-import {inject, customElement, bindable} from 'aurelia-framework';
+import {
+  WebAPI
+} from './web-api';
+import {
+  inject, customElement, bindable
+} from 'aurelia-framework';
+import {
+  EventAggregator
+} from 'aurelia-event-aggregator';
 import * as toastr from 'toastr';
 import $ from 'jquery';
 
 @customElement('tag-it')
-@inject(WebAPI,Element)
-export class Register {
+@inject(WebAPI, EventAggregator,Element)
+export class UserProfile {
 
-  @bindable tags;
+   @bindable tags;
   @bindable id = '';
   @bindable name;
   @bindable options = {};
   //Class constructor
-  constructor(api) {
+  constructor(api, ea) {
+    this.ea = ea;
     this.api = api;
-    this.register = {
-      firstName:'',
-      lastName:'',
-      email:'',
+    this.userData1 = {
       password:'',
       confirmPassword:''
+
     };
     this.activa=false;
   }
 
-
   //Function gets called whenever the class is created
   created() {
+    this.userData = this.api.getUserData();
   }
 
   //Function that gets called whenever the view is activated
   activated() {
   }
-  isPassword()
-  {
-      if(this.longitud && this.minuscula && this.mayuscula && this.numero && this.symbolo) {
-        return true;
-      }
-      else {
-        toastr.warning('Password doesn\'t meet requirements');
-        return false;
-      }
-    return false;
+  cancelRecovery(){
+    this.api.setRegister(false);
   }
-  isValidPassword()
+
+  get canUpdateUserData() {
+    return this.register.firstName
+      && this.register.lastName
+      && this.register.password
+      && this.register.confirmPassword
+      && !this.api.isRequesting;
+  }
+  //**********************************************************************
+  isEqualPassword()
   {
-    if (this.register.password.length > 0){
-      if (this.register.password === this.register.confirmPassword) {
+    if (this.userData1.password.length > 0){
+      if (this.userData1.password === this.userData1.confirmPassword) {
         return true;
       }
       else {
@@ -56,73 +63,66 @@ export class Register {
     }
     return false;
   }
-
-  get canRegister() {
-    return this.register.email
-      && this.register.firstName
-      && this.register.lastName
-      && this.register.password
-      && this.register.confirmPassword
-      && !this.api.isRequesting;
+  isPassword()
+  {
+    //verificar politica
+      if(this.longPassword() && this.validateSymbol() && this.validateLetter() && this.validateCapitalLetter() && this.validateNumber() ) {
+        return true;
+      }
+      else {
+        toastr.warning('Password doesn\'t meet requirements');
+        return false;
+      }
+    return false;
   }
-
-  cancelRegistry(){
-    this.api.setRegister(false);
-  }
-
-  validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email.toLowerCase());
-  }
-
-  registerNewUser() {
-    //email validation
-    if (this.validateEmail(this.register.email)) {
-      //password matching validation
-      if (this.isValidPassword()) {
-        //--------------------------------------
+  UpdateUserData() {
+    this.userData1.first_name=this.userData.firstName;
+    this.userData1.last_name=this.userData.lastName;
+    //console.log(this.userData1.first_name+this.userData1.last_name+" "+this.userData1.password+"-- "+this.userData1.confirmPassword);
+    try{
+      if(this.isEqualPassword()){
+        //console.log("valor: "+this.isPassword());
+        
+          //console.log("paso: "+this.userData1.password);
         this.api.getPolicies('password strength').then((datosF1)=>{
           this.activa=datosF1.data.policies_active;
           //console.log("politica fortaleza: "+this.activa);
           if(this.activa==true){
             if (this.isPassword()) {
-              this.crearUser();
+              this.actualizarPerfil();
+              this.userData1.password='';
+              this.userData1.confirmPassword='';
             }
           }else{//politica no activa
-              this.crearUser();
+              this.actualizarPerfil();
+              this.userData1.password='';
+              this.userData1.confirmPassword='';
           }
             
         });
-        //----------------------------------------
-        
-      }// end if - isValidPassword
-    }
-    else {
-      toastr.warning('Valid e-mail is required.');
-    }
-  }// end registerNewUser
-  crearUser(){
-      //email existance validation
-        this.api.validateNewUserEmail(this.register.email).then(response => {
-          //if the user already exists
-          if (response.count > 0) {
-            toastr.warning(`E-mail ${this.register.email} already registered.`);
+          
           }
-          else {
-            this.api.registerUser(this.register).then(result => {
-              //a valid token is generated
-              if (result.data.length > 3) {
-                let login = { email:this.register.email,password:this.register.password};
-                this.api.logIn(login);
-              }
-              else {
-                toastr.error('Registration failed.');
-              }
-            });
-          }// end else - user existance
-        });// end validateNewUserEmail
+      }catch(e){
+        toastr.error('Fields are empty');
+      }
+   
   }
-//***********************************************************************************
+  actualizarPerfil(){
+    this.api.getUpdateProfile(this.userData1).then((resultado)=>{           
+      try{
+          if(resultado.data==1){
+            toastr.success('Profile has been update');
+          }else{
+            toastr.error('Action not done');
+          }
+          //this.router.navigate('user/manager');
+        }catch(e){
+          console.log(e);
+        }
+
+         });
+  }
+  //*****************************************************************
   validateLetter() {
     if (this.userData1.password.match(/[A-z]/)){
       return true;
@@ -158,14 +158,16 @@ export class Register {
       return false;
     } 
   }
-//***********************************************************
-//JQuery
+  //*****************************************************************
+  //JQuery
 attached(){
+  
   var longitud = false,
     minuscula = false,
     numero = false,
     symbolo=false,
     mayuscula = false;
+
   $("#pass").keyup(function() {
     var pswd = $(this).val();
     if (pswd.length < 6) {
@@ -200,7 +202,7 @@ attached(){
       numero = true;
     } else {
       $('#number').removeClass('valid').addClass('invalid');
-      numero = false;
+      this.numero = false;
     }
     //validate special character
     if (pswd.match(/\W/)) {
@@ -218,4 +220,5 @@ attached(){
     $('#pswd_info').hide();
   });
 } 
+
 }

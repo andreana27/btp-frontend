@@ -1,0 +1,129 @@
+<template>
+  <require from="bootstrap/css/bootstrap.css"></require>
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-black.css"></require>
+  <require from="toastr/build/toastr.css"></require>
+
+  
+  <loading-indicator loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
+  <div>
+    <div style="width:800px;padding-top:5%; padding-bottom:5%; margin-right:auto; margin-left:auto;">
+      <div class="login-logo">
+        <a href="/#/">
+          <img src="assets/images/logo-wide.png" height="40px">
+        </a>
+      </div>
+      <div class="login-box-body" style="background-color: #8bdac0;border-radius: 15px;">
+      	<div clas="container-fluid" style="width:650px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+      	<div class="form-inline">
+	      	<i class="fa fa-briefcase" style="font-size:36px;text-align:center;" ><h2> Configure User Policies </h2></i>
+	      	
+    	</div>
+    	<br>
+	      	<br>
+
+			<ul class="nav nav-tabs">
+			    <li><a data-toggle="tab" href="#home" click.delegate="selectPolicies('expirable password')"><h4><strong>Expirable password</strong></h4></a></li>
+			    <li><a data-toggle="tab" href="#menu1" click.delegate="selectPolicies('password strength')"><h4><strong>Password strength</strong></h4></a></li>
+			    <li><a data-toggle="tab" href="#menu2" click.delegate="selectPolicies('temporal password')"><h4><strong>Temporal password</strong></h4></a></li>
+			</ul>
+	      	<div class="tab-content">
+			    <div id="home" class="tab-pane fade" style="background-color:white;border-radius: 5px;" value.bind="politicas.data.policies_name">
+			    	<br>
+			    	<div style="position: relative;left: 40px;">
+			    		<div class="form-group">
+					  	<label><strong>Policy:</strong> Temporal password</label>
+					  	<br>
+						<label><strong>Status: </strong> ${politicas.data.policies_active}</label>
+					</div>
+
+					  <div class="form-inline has-feedback" >
+					  	<br>
+					  		<label>Set days to expiration: </label>
+					  		<br>
+
+					  		<br>
+					  		<!--<label>Start: </label>					  		
+					  		<input id="fecha1" type="text" class="form-control" name="fecha1" placeholder="YYYY-MM-DD" value.bind="politicas.data.date_start">-->
+					  		<label>End: </label>
+					  		<input id="fecha2" type="text" class="form-control" name="fecha2" placeholder="Dias" value.bind="politicas.data.date_end"> days
+					  		
+					  </div>
+					  <br>
+					  <label><input type="checkbox" value.bind="politicas.data.policies_active" click.trigger="handleClick()">
+				       Activo: ${politicas.data.policies_active}</label>
+				      <br>
+				      <button type="button" class="btn btn-success" click.delegate="actualizarPoliciesDate(politicas.data.policies_name,politicas.data.policies_active,politicas.data.date_end)">
+					    <span class="fa fa-spinner" style="font-size:16px"></span> Update Policy
+					  </button>
+					  
+					  <br>
+					  <br>
+					</div>
+			    </div>
+
+			    <div id="menu1" class="tab-pane fade" style="background-color:white;border-radius: 5px;" value.bind="politicas.data.policies_name">
+			      <br>
+			      <div style="position: relative;left: 20%;">
+
+			      		<div class="form-group">
+					  	<label><strong>Policy:</strong> Password strength</label>
+					  	<br>
+						<label><strong>Status: </strong> ${politicas.data.policies_active}</label>
+					</div>
+						<br>
+				      <label><input type="checkbox" value.bind="politicas.data.policies_active" click.trigger="handleClickPolitica2()">
+				       Activo: ${politicas.data.policies_active}</label>
+				      <br>
+				      <button type="button" class="btn btn-success" click.delegate="actualizarPolicies()">
+					    <span class="fa fa-spinner" style="font-size:16px"></span> Update Policy
+					  </button>
+					  <br><br>
+					</div>
+			    </div>
+			    <div id="menu2" class="tab-pane fade" style="background-color:white;border-radius: 5px;" value.bind="politicas.data.policies_name">
+			    	<div style="position: relative;left: 30%;">
+			      <br>
+			      	<div class="form-group">
+					  	<label><strong>Policy:</strong> Temporal password</label>
+					  	<br>
+						<label><strong>Status: </strong> ${politicas.data.policies_active}</label>
+					</div>
+					  <br>
+				      <label><input type="checkbox" value.bind="politicas.data.policies_active" click.trigger="handleClickPolitica3()">
+				       Activo: ${politicas.data.policies_active}</label>
+				      <br>
+				      <button type="button" class="btn btn-success" click.delegate="actualizarPolicies()">
+					    <span class="fa fa-spinner" style="font-size:16px"></span> Update Policy
+					  </button>
+					  <br><br>
+					</div>
+			    </div>
+			  </div>
+			</div>
+
+	      	<div class="form-group">
+	      		            
+	            
+		        <!-- <form>
+				  Birthday: <input type="date" name="bday">
+				</form>
+		         <div class="container-fluid">
+				  <div class="row">
+				   <div class="col-md-6 col-sm-6 col-xs-12">
+				      <div class="form-group">
+				        <label class="control-label" for="date">Date</label>
+				        <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+				      </div>
+				    </div>
+				  </div>    
+				 </div>-->
+
+	      			
+	      	</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

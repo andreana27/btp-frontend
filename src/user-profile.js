@@ -22,19 +22,15 @@ export class UserProfile {
   constructor(api, ea) {
     this.ea = ea;
     this.api = api;
-    this.userData = {
-      token:sessionStorage.sessionToken,
-      firstName:'',
-      lastName:'',
+    this.userData1 = {
+      //token:sessionStorage.sessionToken,
+      first_name:'',
+      last_name:'',
       password:'',
       confirmPassword:''
 
     };
-    this.longitud = false,
-    this.minuscula = false,
-    this.numero = false,
-    this.symbolo=false,
-    this.mayuscula = false;
+    this.activa=false;
   }
 
   //Function gets called whenever the class is created
@@ -56,8 +52,8 @@ export class UserProfile {
   //**********************************************************************
   isEqualPassword()
   {
-    if (this.userData.password.length > 0){
-      if (this.userData.password === this.userData.confirmPassword) {
+    if (this.userData1.password.length > 0){
+      if (this.userData1.password === this.userData1.confirmPassword) {
         return true;
       }
       else {
@@ -67,9 +63,10 @@ export class UserProfile {
     }
     return false;
   }
-  isValidPassword()
+  isPassword()
   {
-      if(this.longitud && this.minuscula && this.mayuscula && this.numero && this.symbolo) {
+    //verificar politica
+      if(this.longPassword() && this.validateSymbol() && this.validateLetter() && this.validateCapitalLetter() && this.validateNumber() ) {
         return true;
       }
       else {
@@ -79,78 +76,141 @@ export class UserProfile {
     return false;
   }
   UpdateUserData() {
-    console.log(this.userData.token+"   "+ this.userData.firstName+this.userData.lastName+" "+this.userData.password+"-- "+this.userData.confirmPassword);
+    this.userData1.first_name=this.userData.firstName;
+    this.userData1.last_name=this.userData.lastName;
+    //console.log(this.userData1.first_name+this.userData1.last_name+" "+this.userData1.password+"-- "+this.userData1.confirmPassword);
     try{
       if(this.isEqualPassword()){
-        //if (this.isValidPassword()) {
-      /* this.api.getUpdateProfile(this.userInfo).then((resultado)=>{
-      try{
-          this.router.navigate('user/manager');
-        }catch(e){
-          //exception
-        }
-
-         });*/
-          //}
-        }
+        //console.log("valor: "+this.isPassword());
+        
+          //console.log("paso: "+this.userData1.password);
+        this.api.getPolicies('password strength').then((datosF1)=>{
+          this.activa=datosF1.data.policies_active;
+          //console.log("politica fortaleza: "+this.activa);
+          if(this.activa==true){
+            if (this.isPassword()) {
+              this.actualizarPerfil();
+              this.userData1.password='';
+              this.userData1.confirmPassword='';
+            }
+          }else{//politica no activa
+              this.actualizarPerfil();
+              this.userData1.password='';
+              this.userData1.confirmPassword='';
+          }
+            
+        });
+          
+          }
       }catch(e){
         toastr.error('Fields are empty');
       }
    
   }
+  actualizarPerfil(){
+    this.api.getUpdateProfile(this.userData1).then((resultado)=>{           
+      try{
+          if(resultado.data==1){
+            toastr.success('Profile has been update');
+          }else{
+            toastr.error('Action not done');
+          }
+          //this.router.navigate('user/manager');
+        }catch(e){
+          console.log(e);
+        }
+
+         });
+  }
   //*****************************************************************
+  validateLetter() {
+    if (this.userData1.password.match(/[A-z]/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  validateCapitalLetter() {
+    if (this.userData1.password.match(/[A-Z]/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  validateNumber() {
+    if (this.userData1.password.match(/\d/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  validateSymbol() {
+    if (this.userData1.password.match(/\W/)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  longPassword(){
+    if(this.userData1.password.length>=6){
+      return true;
+    }else{
+      return false;
+    } 
+  }
+  //*************************************************************************
   //JQuery
 attached(){
   
-  /*var longitud = false,
+  var longitud = false,
     minuscula = false,
     numero = false,
     symbolo=false,
-    mayuscula = false;*/
+    mayuscula = false;
 
   $("#pass").keyup(function() {
     var pswd = $(this).val();
     if (pswd.length < 6) {
       $('#length').removeClass('valid').addClass('invalid');
-      this.longitud = false;
+      longitud = false;
     } else {
       $('#length').removeClass('invalid').addClass('valid');
-      this.longitud = true;
+      longitud = true;
     }
 
     //validate letter
     if (pswd.match(/[A-z]/)) {
       $('#letter').removeClass('invalid').addClass('valid');
-      this.minuscula = true;
+      minuscula = true;
     } else {
       $('#letter').removeClass('valid').addClass('invalid');
-      this.minuscula = false;
+      minuscula = false;
     }
 
     //validate capital letter
     if (pswd.match(/[A-Z]/)) {
       $('#capital').removeClass('invalid').addClass('valid');
-      this.mayuscula = true;
+      mayuscula = true;
     } else {
       $('#capital').removeClass('valid').addClass('invalid');
-      this.mayuscula = false;
+      mayuscula = false;
     }
 
     //validate number
     if (pswd.match(/\d/)) {
       $('#number').removeClass('invalid').addClass('valid');
-      this.numero = true;
+      numero = true;
     } else {
       $('#number').removeClass('valid').addClass('invalid');
-      this.numero = false;
+      numero = false;
     }
     //validate special character
     if (pswd.match(/\W/)) {
       $('#symbol').removeClass('invalid').addClass('valid');
-      this.symbolo = true;
+      symbolo = true;
     } else {
       $('#symbol').removeClass('valid').addClass('invalid');
-      this.symbolo = false;
+      symbolo = false;
     }
 
     return true;
