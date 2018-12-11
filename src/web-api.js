@@ -4,7 +4,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 @inject(Aurelia)
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
-  backend = 'https://demo-backend.botprotec.com/backend/';
+  //backend = 'https://demo-backend.botprotec.com/backend/';
+  backend = 'https://demo-backend.botprotec.com/backenddev1/';
   //backend = 'https://a2.botprotec.com/backend/';
 
   isRequesting = false;
@@ -3304,4 +3305,74 @@ sendMessageToBroadcast(botId,message)
       get
     }
   }
+
+    //get bot variables
+    botVariables() {
+      let get = (bot) => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/bot_variables_list?bot_id=${bot.id}`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          console.log('data: ', data)
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+      return {
+        get
+      }
+    }
+
+    //broadcast
+    broadcast() {
+      let getByBot = (bot) => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/broadcast?bot_id=${bot.id}`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+      
+      let getById = (id) => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch(`/broadcast?id=${id}`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+
+      let create = (broadcast) => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch('broadcast', {
+          method: 'POST',
+          body: JSON.stringify(broadcast)
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
+      return {
+        getByBot,
+        getById,
+        create
+      }
+    }
 }

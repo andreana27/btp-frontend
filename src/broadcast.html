@@ -1,0 +1,52 @@
+<template>
+  <require from="./broadcast.css"></require>
+  <section class="content-header">
+    <h1>
+      Data
+      <small>${title}</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a href="../../index.html">Data Management</a></li>
+      <li class="active">Bot Data Management</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="select-bot-panel">
+            <label for="">Select bot to manage Broadcast contexts and messages: </label>
+            <select value.bind="selectedBot" class="form-control" if.bind="bots.length > 0" change.delegate="changeSelectedBot()">
+              <option repeat.for="bot of bots" model.bind="bot">${bot.name}</option>
+            </select>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <article class="panel panel-primary">
+          <header class="panel-heading">
+            Broadcast rules
+          </header>
+          <div class="panel-body">
+            <ul class="broadcast-list">
+              <li repeat.for="broadcast of broadcastList" click.delegate="selectBroadcast(broadcast)" class="${broadcast.id == selectedBroadcast.id ? 'selected' : ''}">
+                ${broadcast.name}
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="panel panel-primary">
+          <header class="panel-heading">
+            New Broadcast Rule
+          </header>
+          <div class="panel-body create-form-content">
+            <input type="text" ref="newBroadcastName" class="form-control">
+            <input type="submit" value="Create Broadcast" class="btn btn-primary" click.delegate="createBroadcast(selectedBot.id)">
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</template>

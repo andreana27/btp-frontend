@@ -40,7 +40,12 @@ export class Manager {
         moduleId: 'widget-setup',
         name: 'widget-setup'
       },
-      //************************************
+      {
+        route: 'chat/broadcast',
+        moduleId: 'broadcast',
+        name: 'broadcast'
+      },
+      //-------------------------------------
       {
         route: 'bot/tracking',
         moduleId: 'bot-tracking',
