@@ -40,17 +40,18 @@ export class Manager {
         moduleId: 'widget-setup',
         name: 'widget-setup'
       },
-      //-------------------------------------
+      //************************************
+      {
+        route: 'bot/tracking',
+        moduleId: 'bot-tracking',
+        name: 'bot-tracking',
+        title:'tracking'
+      },
+      //************************************
       {
         route: 'user/profile',
         moduleId: 'user-profile',
         name: 'user-profile'
-      },
-      {
-        route: 'rol/roles',
-        moduleId: 'user-roles',
-        name: 'user-roles',
-        title:'Roles'
       },
       {
         route: 'user/manager',
@@ -68,6 +69,7 @@ export class Manager {
         moduleId: 'user-create',
         name: 'user-create'
       },
+      //**********************************
       {
         route: 'user/policies',
         moduleId: 'user-policies',
@@ -75,6 +77,13 @@ export class Manager {
         title:'Policies'
       },
       //*********************************
+      {
+        route: 'rol/roles',
+        moduleId: 'user-roles',
+        name: 'user-roles',
+        title:'Roles'
+      },
+
        {
         route: 'rol/edit',
         moduleId: 'rol-edit',
@@ -87,13 +96,14 @@ export class Manager {
         name: 'role-create',
         title:'create'
       },
-      //---------------------------------
+      //******************************************
       {
         route: 'user/temporal',
         moduleId: 'temporal-password',
         name: 'temporal-password',
         title:'temporal-password'
       },
+      //******************************************
       {
         route: 'bot/intents',
         moduleId: 'bot-intents',

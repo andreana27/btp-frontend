@@ -92,6 +92,8 @@ export class BotSettings {
         name:'connector-website',
         title: 'website'
       }
+      //---------------------------------------
+      
     ]);
     this.router = router;
   }

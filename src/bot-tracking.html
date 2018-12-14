@@ -1,0 +1,124 @@
+<template>
+
+  <section class="content-header">
+    <h1>
+      Data
+      <small>Bot Statistics</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Bot Statistics</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Bot</div>
+      <div class="panel-body">
+        <div class="row">
+          <label align="right" class="col-sm-2">Select a Bot</label>
+          <div class="col-sm-2">
+            <select value.bind="selectedBotId" class="form-control">
+              <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" type="submit" click.delegate="getStatistics()">
+                    <span class="fa fa-bookmark" style="font-size:16px"></span> View Percentage</button>
+          <button align="left" class="btn btn-info" type="submit" click.delegate="selectStatus()">
+                    <span class="fa fa-dashboard" style="font-size:16px"></span> View Status</button>
+        </div>
+        <br>
+        <div class="row" show.bind="botSelected">
+          <div class="col-md-1"></div>
+            <div class="col-md-3">
+              <label align="right">Start:</label>
+                <input value.bind='start_date' type="date">
+            </div>
+            <div class="col-md-3">
+              <label align="right">End:</label>
+              <input value.bind='end_date' type="date">
+            </div>
+            
+          </div>
+          
+      <br>
+      <div class="row" show.bind="botSelected">
+              <label align="right" class="col-sm-2">Status: </label>
+              <div class="col-sm-4">
+                  <select  class="form-control">
+                    <option repeat.for="key of key_list">${key.storage_key}</option>
+                  </select>
+              </div>
+              <div align="left" class="col-sm-2">
+                  <button class="btn btn-success" type="submit" click.delegate="viewReport()">
+                    <span class="fa fa-bar-chart" style="font-size:16px"></span> Get Report</button>
+            </div>
+            </div>
+
+
+      </div>
+    </div>
+<div class="panel panel-primary" show.bind='isStatistics'>
+      <div class="panel-heading" style="background-color: cornflowerblue;"><strong>Table No.1  Percentage of users</strong></div>
+      <div class="panel-body">
+        <div class="row panel-body" >         
+          <div class="col-md-3" style="border-left: 7px solid green;background-color:#e6e6e6;">
+          <p ><strong> Total Users: ${clientes} </strong>&nbsp;&nbsp;&nbsp;&nbsp;<label>&nbsp;&nbsp;Percentage:100%</label>     </p>
+        </div>
+        </div>
+        <div class="row">
+          
+          <div class="col-sm-12" style="text-align:center;">
+          <table class="table table-dark table-striped" >
+        <thead >
+          <tr >
+            <th style="text-align:center;">ID Ad</th>
+            <th style="text-align:center;">Channel</th>
+            <th style="text-align:center;">Users</th>
+            <th style="text-align:center;">percentage of users</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr repeat.for="i of long_canal">
+            <td>${data_list.anuncio[i]}</td>
+            <td>${data_list.canalito[i]}</td>
+            <td >${data_list.buser[i]}</td>
+            <td>${data_list.pocentajeU[i]}</td>
+          </tr>
+        </tbody>
+      </table>
+          </div>
+        </div>
+      </div>
+   </div>
+   <!--****************************************************************** -->
+    <div class="panel panel-primary" show.bind='isStatistics1'>
+      <div class="panel-heading" style="background-color: dodgerblue;"><strong>No.2   Detail</strong></div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-12" style="text-align:center;">
+          <table class="table table-dark table-striped" >
+        <thead >
+          <tr >
+            <th style="text-align:center;">Username</th>
+            <th style="text-align:center;">Contact First Date</th>
+            <th style="text-align:center;">Status</th>
+            <th style="text-align:center;">ID Ad</th>
+            <th style="text-align:center;">Channel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Doe</td>
+            <td>2018-11-01</td>
+            <td>estado</td>
+            <td>15</td>
+            <td>Facebook</td>
+          </tr>
+        </tbody>
+      </table>
+          </div>
+        </div>
+      </div>
+   </div>
+  </section>
+</template>

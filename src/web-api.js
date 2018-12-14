@@ -1,6 +1,6 @@
 import { HttpClient } from 'aurelia-fetch-client';
 import { Aurelia, inject } from 'aurelia-framework';
-
+//------------------------------
 @inject(Aurelia)
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
@@ -352,7 +352,6 @@ updatePolicies(policyData) {
     for (let key in policyData) {
       if (typeof(policyData[key]) === 'object'){
         formData.append(key, JSON.stringify(policyData[key]));
-        console.log(formData);
       }else{
         formData.append(key, policyData[key]);
       }
@@ -959,7 +958,34 @@ getUpdateRole(roleData) {
         return data;
       });
   }
-
+//****************************************************************************************************
+  getStorageKey(botId) {
+    this.isRequesting = true;
+    return this.client_auth.fetch(`tracking_status/${sessionStorage.sessionToken}/${botId}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData.content;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
+      //this.app.setRoot('login');
+    });
+  }
+//****************************************************************************************************
   getBotsList() {
     this.isRequesting = true;
     return this.client.fetch(`${sessionStorage.sessionToken}/bot.json`)
@@ -1565,7 +1591,7 @@ getUpdateRole(roleData) {
       this.isRequesting = true;
       return this.client_auth.fetch(`bot_variables_records/${sessionStorage.sessionToken}/${botId}/${startLimit}/${endLimit}.json`, {
         method: 'GET'
-      })
+      }) 
       .then((response) => {
       if (response.ok) {
           return response.json();
@@ -2682,7 +2708,65 @@ getUpdateRole(roleData) {
           return data;
       });*/
     }
-    getStatistics(botId,start,end)
+  //------------------------------------------------------------
+  getStartButton(token)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getStartedButton/${sessionStorage.sessionToken}/${token}.json`, {
+        method: 'GET'
+        //body:data
+      })
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    }); 
+    }
+  getDataStorage(botId)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getTracking/${sessionStorage.sessionToken}/${botId}.json`, {
+        method: 'GET'
+        //body:data
+      })
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    }); 
+    }
+  //------------------------------------------------------------
+  getStatistics(botId,start,end)
     {
       this.isRequesting = true;
       return this.client_auth.fetch(`getStatistics/${sessionStorage.sessionToken}/${botId}/${start}/${end}.json`, {
@@ -2714,7 +2798,8 @@ getUpdateRole(roleData) {
           return data;
       });*/
     }
-    botClone(botId,name,full)
+  
+  botClone(botId,name,full)
     {
       this.isRequesting = true;
       return this.client_auth.fetch(`botClone/${sessionStorage.sessionToken}/${botId}/${name}/${full}.json`, {
@@ -2726,7 +2811,8 @@ getUpdateRole(roleData) {
           return data;
       });
     }
-    tryNotify(data)
+  
+  tryNotify(data)
     {
       if (!("Notification" in window)) {
             alert("This browser does not support desktop notification");
