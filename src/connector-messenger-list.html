@@ -8,8 +8,30 @@
             <h4 class="">Token: ${connector.token}</h4>
             <p class="">Challenge: ${connector.challenge}</p>
           </a>
+          <div><p style="border-bottom: 1px solid lightslategrey;"></p></div>
+          <div>
+
+             <h4>
+            Configure the button: Get_started
+            <br>
+            <small>
+              The welcome screen of a bot can show the Start button.
+
+            </small>
+            </h4>
+            <div>
+              <button class="btn btn-primary" type="submit" click.delegate="viewToken(connector.token)">
+                <span class="fa fa-fire" style="font-size:16px"></span> Set Button</button>
+            </div>
+          </div>
+
+
         </li>
       </ul>
     </div>
+    
+    
+
+
   </div>
 </template>

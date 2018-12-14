@@ -52,8 +52,8 @@ export class UserManager {
     this.policyData.name=this.politicas.data.policies_name;
     this.policyData.status=this.politicas.data.policies_active;    
 
-    console.log("seleccion: "+this.politicas.data.policies_name);
-    console.log("activo: "+this.politicas.data.policies_active);
+    /*console.log("seleccion: "+this.politicas.data.policies_name);
+    console.log("activo: "+this.politicas.data.policies_active);*/
     return true; 
   }
   handleClickPolitica2(){
@@ -67,8 +67,8 @@ export class UserManager {
     }
     this.policyData.name=this.politicas.data.policies_name;
     this.policyData.status=this.politicas.data.policies_active;
-    console.log("seleccion: "+this.politicas.data.policies_name);
-    console.log("activo: "+this.politicas.data.policies_active);
+    //console.log("seleccion: "+this.politicas.data.policies_name);
+    //console.log("activo: "+this.politicas.data.policies_active);
     return true; 
   }
   handleClickPolitica3(){   
@@ -86,8 +86,8 @@ export class UserManager {
     //console.log(this.clicked+" "+this.politicas.data.policies_active);
     this.policyData.name=this.politicas.data.policies_name;
     this.policyData.status=this.politicas.data.policies_active;
-    console.log("seleccion: "+this.politicas.data.policies_name);
-    console.log("activo: "+this.politicas.data.policies_active);
+    /*console.log("seleccion: "+this.politicas.data.policies_name);
+    console.log("activo: "+this.politicas.data.policies_active);*/
     //this.actualizarPolicies(this.policyData);
     return true; 
   }

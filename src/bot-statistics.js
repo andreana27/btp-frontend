@@ -105,6 +105,7 @@ export class BotDataManagment {
       }
       else
       {
+        console.log("start: "+this.start_date+" end:"+this.end_date);
         this.api.getStatistics(this.selectedBotId,this.start_date,this.end_date).then(response=>
           {
             this.telegram=response.telegram_t;

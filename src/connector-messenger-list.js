@@ -54,4 +54,8 @@ export class ConnectorMessengerList {
     this.selectedToken = connector.token;
     return true;
   }
+
+  viewToken(token){
+    console.log("token: "+token);
+  }
 }
