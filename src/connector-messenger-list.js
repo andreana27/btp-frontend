@@ -7,6 +7,7 @@ import {
   ConnectorViewed
 } from './messages';
 import {inject} from 'aurelia-framework';
+import * as toastr from 'toastr';
 import {
   ConnectorMessenger
 } from './connector-messenger';
@@ -56,6 +57,29 @@ export class ConnectorMessengerList {
   }
 
   viewToken(token){
-    console.log("token: "+token);
+    //console.log("token: "+token);
+     this.api.getStartButton(token).then(tokendata => {
+        this.resultado=tokendata.token;
+        //console.log(this.resultado.split("\"")[1]);
+        //var result_ok=this.resultado.split("\"")[3];
+        if(this.resultado.split("\"")[1]=='result'){
+          toastr.success("Successfully added new_thread's CTAs");
+        }else{
+          toastr.error("The access token could not be decrypted");
+        }
+     });
+  }
+  deleteButtonStarted(token){
+    //console.log("token: "+token);
+    this.api.deleteStartButton(token).then(tokendata => {
+        this.resultado=tokendata.token;
+        console.log(this.resultado.split("\"")[1]);
+        //var result_ok=this.resultado.split("\"")[3];
+        if(this.resultado.split("\"")[1]=='result'){
+          toastr.success("Successfully deleted new_thread's CTAs");
+        }else{
+          toastr.error("The access token could not be decrypted");
+        }
+     });
   }
 }

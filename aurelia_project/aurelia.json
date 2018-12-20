@@ -83,6 +83,17 @@
           "text",
           "jquery",
           {
+            "name": "jquery-ui-datepicker",
+            "path": "../node_modules/jquery-ui/",
+            "main": "ui/widgets/datepicker",
+            "dep": ["jquery"],
+            "exports": "$",
+            "resources": [
+                "themes/base/datepicker.css",
+                "themes/base/theme.css"
+            ]
+          },
+          {
             "name": "bootstrap",
             "path": "../node_modules/bootstrap/dist",
             "main": "js/bootstrap",
