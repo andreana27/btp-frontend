@@ -1,0 +1,233 @@
+<template>
+  <require from="./segment.css"></require>
+  <section class="content-header" if.bind="segment">
+    <h1>${segment.name} <small>Segment ${segment.id}</small></h1>
+  </section>
+  <section class="content" if.bind="segment">
+    <div class="row">
+      <div class="col-xs-4">
+        <div class="box box-success">
+          <div class="box-header">
+            <h3 class="box-title">Information</h3>
+          </div>
+          <div class="box-body">
+            <ul class="list-group list-group-unbordered">
+              <li class="list-group-item">
+                <strong>Created at: </strong>
+                <span class="pull-right">${segment.created_at}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Updated at: </strong>
+                <span class="pull-right">${segment.updated_at}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Use variables: </strong>
+                <span class="pull-right">${filterVariables.join(', ')}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Can use in: </strong>
+                <span class="pull-right"></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="inline-buttons">
+          <button 
+            type="button" 
+            class="btn btn-success"  
+            data-toggle="modal" 
+            data-target="#editSegmentModal"
+            click.delegate="setSegmentValuesInModal()"
+          >Edit Segment</button>
+          <button 
+            type="button" 
+            class="btn btn-primary"
+            click.delegate="duplicateSegment()"
+          >Duplicate Segment</button>
+          <button type="button" class="btn btn-danger" click.delegate="deleteSegment()">Delete Segment</button>
+        </div>
+
+        <div class="panel panel-success">
+          <div class="panel-heading">
+            New filter in segment
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="">Variable to compare: </label>
+              <input type="text" class="form-control" ref="newFilterVariable" list="variablesDatalist">
+              <datalist id="variablesDatalist">
+                <option repeat.for="variable of variables" value="${variable}">${variable}</option>
+              </datalist>
+            </div>
+
+            <div class="form-group">
+              <label for="">Comparation format: </label>
+              <select class="form-control" ref="newFilterFormatInput" value.bind="newFilterFormat" change.delegate="changeFilterType(newFilterFormatInput.value)">
+                <option repeat.for="filterType of filterTypes" value="${filterType.type}">${filterType.type}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+                <label for="">Comparation Type: </label>
+                <select class="form-control" ref="newFilterComparation">
+                  <option repeat.for="filterType of newFilterType.comparations" value="${filterType.value}">${filterType.label}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+              <label for="">Value to compare: </label>
+              <input type="${newFilterType.inputType}" class="form-control" ref="newFilterValue">
+            </div>
+
+            <div class="form-group">
+              <button 
+                class="btn btn-success" 
+                click.delegate="createFilter({
+                  variable: newFilterVariable.value,
+                  type: newFilterFormatInput.value,
+                  comparation: newFilterComparation.value,
+                  value: newFilterValue.value
+                })"
+                disabled.bind="!variables.includes(newFilterVariable.value) || !newFilterValue.value"
+              >Create Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-8">
+        <div class="box box-warning segment-custom-box">
+          <div class="box-header">
+            <h3 class="box-title">Filters</h3>
+          </div>
+          <div class="box-body">
+            <div class="buttons-container">
+              <button 
+                class="btn ${segment.comparation == 'AND' ? 'btn-success' : 'btn-default'}" 
+                disabled.bind="segment.comparation == 'AND'"
+                click.delegate="changeComparation('AND')"
+              >Meet All</button>
+              <button 
+                class="btn ${segment.comparation == 'OR' ? 'btn-danger' : 'btn-default'}" 
+                disabled.bind="segment.comparation == 'OR'"
+                click.delegate="changeComparation('OR')"
+              >Meet Any</button>
+            </div>
+
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Variable</th>
+                  <th>Comparation</th>
+                  <th>Value</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr repeat.for="filter of filters">
+                  <td>${$index + 1}</td>
+                  <td>${filter.variable}</td>
+                  <td>${filter.comparation}</td>
+                  <td>${filter.value}</td>
+                  <td>
+                    <div class="pull-right">
+                      <button class="btn btn-success" click.delegate="setModalValues($index)" data-toggle="modal" data-target="#editFilterModal"><i class="fa fa-edit"></i></button>
+                      <button class="btn btn-danger" click.delegate="deleteFilter($index)"><i class="fa fa-trash"></i></button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="editFilterModal" tabindex="-1" role="dialog" aria-labelledby="editFilterModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editFilterModalLabel" style="display: inline-block;">Edit filter</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Field: </label>
+            <input type="text" class="form-control" value.bind="editFilter.variable" list="variablesEditDatalist">
+            <datalist id="variablesEditDatalist">
+              <option repeat.for="variable of variables" value="${variable}">${variable}</option>
+            </datalist>
+          </div>
+          <div class="form-group">
+            <label for="">Type: </label>
+            <select ref="editFilterTypeInput" class="form-control"  value.bind="editFilter.type" change.delegate="changeEditFilterType(editFilter.type)">
+              <option value="${filter.type}" repeat.for="filter of filterTypes">${filter.type}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <div class="row">
+                <div class="col-xs-6">
+                  <label for="">${filter.type} Comparation: </label>
+                  <select class="form-control" ref="editFilterComparation" value.bind="editFilter.comparation">
+                    <option value="${comparation.value}" repeat.for="comparation of editFilterType.comparations" >${comparation.label}</option>
+                  </select>
+                </div>
+                <div class="col-xs-6">
+                  <label for="">Value:</label>
+                  <input type="${editFilterType.inputType}"  value.bind="editFilter.value" class="form-control">
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button 
+            type="button" 
+            class="btn btn-primary" 
+            click.delegate="editFilters(editFilter)" 
+            disabled.bind="
+              !variables.includes(editFilter.variable) || 
+              (
+                editFilter.value == filters[activeFilterIndex].value && 
+                editFilter.variable == filters[activeFilterIndex].variable &&
+                editFilter.comparation == filters[activeFilterIndex].comparation
+              )
+            ">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="editSegmentModal" tabindex="-1" role="dialog" aria-labelledby="editSegmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editSegmentModalLabel" style="display: inline-block;">Edit Segment</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Name: </label>
+            <input type="text" class="form-control" value.bind="newSegmentName">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button 
+            type="button" 
+            class="btn btn-primary" 
+            disabled.bind="newSegmentName == segment.name"
+            click.delegate="editSegment({name: newSegmentName})"
+          >Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

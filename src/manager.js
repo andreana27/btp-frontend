@@ -45,6 +45,16 @@ export class Manager {
         moduleId: 'broadcast',
         name: 'broadcast'
       },
+      {
+        route: 'chat/segments',
+        moduleId: 'segments',
+        name: 'segments'
+      },
+      {
+        route: 'chat/segment/:id',
+        moduleId: 'segment',
+        name: 'segment' 
+      },
       //-------------------------------------
       {
         route: 'bot/tracking',

@@ -1,3 +1,7 @@
+h5 {
+  font-weight: bold;
+}
+
 .select-bot-panel {
   margin-bottom: 30px;
 }
@@ -34,4 +38,27 @@ color: #fff;
 
 .create-form-content input:last-child {
   margin-bottom: 0;
+}
+
+input, 
+option {
+  outline: none;
+}
+
+input[type="date"].form-control, 
+input[type="time"].form-control, 
+input[type="datetime-local"].form-control, 
+input[type="month"].form-control {
+  line-height: 14px;
+}
+
+.element-sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0; /* required */
+}
+
+.filter-content {
+  display: flex;
+  justify-content: space-between;
 }

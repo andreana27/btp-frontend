@@ -1,0 +1,25 @@
+.inline-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2em;
+}
+
+.list-group {
+  margin: 0;
+}
+
+.list-group .list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group .list-group-item:last-child {
+  border-bottom: none;
+}
+
+input[type="date"].form-control {
+  line-height: 12px;
+}
+
+.buttons-container {
+  padding-bottom: 1em;
+}

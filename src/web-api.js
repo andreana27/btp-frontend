@@ -3316,19 +3316,148 @@ sendMessageToBroadcast(botId,message)
         .then(response => response.json())
         .then(data => {
           this.isRequesting = false
-          console.log('data: ', data)
           return data
         })
         .catch(err => ({'status': 'error', 'error': err}))
       }
+
+
       return {
         get
       }
     }
 
+    variables() {
+      let get = () => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/variables`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+
+      return {
+        get
+      }
+    }
+
+    segments() {
+      let get = (page, search) => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/segments`, {
+          method: 'GET'
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let find = id => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`segment/${id}`, {
+          method: 'get',
+          mode: 'cors'
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let create = segment => {
+        this.isRequesting = true
+        return  this.client_auth.fetch(`/segment`, {
+          method: 'POST',
+          body: JSON.stringify(segment)
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let update = segment => {
+        this.isRequesting = true
+        return  this.client_auth.fetch(`/segment`, {
+          method: 'PUT',
+          body: JSON.stringify(segment)
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let destroy = segment => {
+        this.isRequesting = true
+        return  this.client_auth.fetch(`/segment`, {
+          method: 'DELETE',
+          body: JSON.stringify(segment)
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      return {
+        get,
+        create,
+        find,
+        update,
+        destroy
+      }
+    }
+
     //broadcast
     broadcast() {
-      let getByBot = (bot) => {
+      let getByBot = bot => {
         this.isRequesting = true
         return this.client_auth.fetch(`/broadcast?bot_id=${bot.id}`, {
           method: 'GET'
@@ -3341,7 +3470,7 @@ sendMessageToBroadcast(botId,message)
         .catch(err => ({'status': 'error', 'error': err}))
       }
       
-      let getById = (id) => {
+      let getById = id => {
         this.isRequesting = true
 
         return this.client_auth.fetch(`/broadcast?id=${id}`, {
@@ -3355,7 +3484,7 @@ sendMessageToBroadcast(botId,message)
         .catch(err => ({'status': 'error', 'error': err}))
       }
 
-      let create = (broadcast) => {
+      let create = broadcast => {
         this.isRequesting = true
 
         return this.client_auth.fetch('broadcast', {
@@ -3369,10 +3498,41 @@ sendMessageToBroadcast(botId,message)
         })
       }
 
+      let update = broadcast => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch('broadcast', {
+          method: 'PUT',
+          body: JSON.stringify(broadcast)
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
+      let destroy = broadcast => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch('broadcast', {
+          method: 'DELETE',
+          body: JSON.stringify(broadcast)
+        })
+
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
       return {
         getByBot,
         getById,
-        create
+        create,
+        update,
+        destroy
       }
     }
 }

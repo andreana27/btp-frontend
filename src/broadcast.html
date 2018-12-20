@@ -23,8 +23,8 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-3">
-        <article class="panel panel-primary">
+      <div class="col-md-3" if.bind="broadcastList.length > 0">
+        <article class="panel panel-primary element-sticky">
           <header class="panel-heading">
             Broadcast rules
           </header>
@@ -42,11 +42,129 @@
             New Broadcast Rule
           </header>
           <div class="panel-body create-form-content">
-            <input type="text" ref="newBroadcastName" class="form-control">
-            <input type="submit" value="Create Broadcast" class="btn btn-primary" click.delegate="createBroadcast(selectedBot.id)">
+            <input type="text" ref="newBroadcastName" class="form-control" value.bind="newNameBroadcast">
+            <input 
+              type="submit" 
+              value="Create Broadcast" 
+              class="btn btn-primary" 
+              click.delegate="createBroadcast(selectedBot.id)"
+              disabled.bind="!newNameBroadcast || isWorking"
+            >
           </div>
         </article>
       </div>
+
+      <div class="col-md-3">
+        <article class="panel panel-primary element-sticky" if.bind="selectedBroadcast">
+          <header class="panel-heading">Broadcast Rule Information</header>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="">Name: </label>
+              <input value.bind="selectedBroadcast.name" type="text" ref="activeBroadcastName" class="form-control" disabled.bind="isWorking">
+            </div>
+            <div class="form-group">
+              <label for="">Action type</label>
+              <select ref="activeBroadcastActionType" value.bind="selectedBroadcast.action_type" class="form-control" disabled.bind="isWorking">Send Message
+                <option value="send_message" class="form-control">Send Message</option>
+                <option value="change_to_context" class="form-control">Change to context</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="">Action Value: </label>
+              <input value.bind="selectedBroadcast.action_value" type="text" ref="activeBroadcastActionValue" class="form-control" disabled.bind="isWorking">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary" click.delegate="updateBroadcast(selectedBroadcast)" disabled.bind="isWorking">Update</button>
+              <button class="btn btn-danger" click.delegate="deleteBroadcast(selectedBroadcast)" disabled.bind="isWorking">Delete</button>
+              <button class="btn btn-success" disabled.bind="isWorking">Execute</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-md-6">
+        <div class="nav-tabs-custom" if.bind="selectedBroadcast">
+          <ul class="nav nav-tabs">
+            <li class="active"><a href="#filters" data-toggle="tab" aria-expanded="true">Filters</a></li>
+            <li class=""><a href="#aditional-info" data-toggle="tab" aria-expanded="false">Aditional Info</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="filters">
+              <h5>filters</h5>
+              <div if.bind="broadcastFilters">
+                <article class="panel panel-default" repeat.for="filter of broadcastFilters">
+                  <header class="panel-heading">
+                      ${filter.type}
+                  </header>
+                  <div class="panel-body">
+                    <div class="filter-content">
+                      <div><strong>${filter.variable}</strong></div>
+                      <div>
+                        <span if.bind="filter.comparation == 'equals'">=</span>
+                        <span if.bind="filter.comparation == 'not-equals'">!=</span>
+                        <span if.bind="filter.comparation == 'greater-than'">></span>
+                        <span if.bind="filter.comparation == 'lower-than'"><</span>
+                        <span if.bind="filter.comparation == 'before'">Before</span>
+                        <span if.bind="filter.comparation == 'after'">After</span>
+                      </div>
+                      <div><strong>${filter.value}</strong></div>
+                    </div>
+                  </div>
+                </article class="panel panel-primary">
+              </div>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add new Filter</button>
+            </div>
+            <div class="tab-pane" id="aditional-info">
+              <span>aditional</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" style="display: inline-block;">Add new filter</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Field: </label>
+            <select ref="filterVariableInput" class="form-control" disabled.bind="isWorking">
+              <option value="${variable}" repeat.for="variable of botVariables">${variable}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="">Type: </label>
+            <select ref="filterTypeInput" class="form-control" value.bind="filterType" disabled.bind="isWorking">
+              <option value="${filter.type}" repeat.for="filter of filterTypes">${filter.type}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <div class="row"  repeat.for="filter of filterTypes" if.bind="filterType == filter.type">
+                <div class="col-xs-6">
+                  <label for="">${filter.type} Comparation: </label>
+                  <select class="form-control" value.bind="newFilter.comparation" disabled.bind="isWorking">
+                    <option value="${comparation.value}" repeat.for="comparation of filter.comparations" >${comparation.label}</option>
+                  </select>
+                </div>
+                <div class="col-xs-6">
+                  <label for="">Value:</label>
+                  <input type="${filter.inputType}" class="form-control"  disabled.bind="isWorking" value.bind="newFilter.comparationValue">
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" click.delegate="createFilter()" disabled.bind="!newFilter.comparationValue" disabled.bind="isWorking">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
