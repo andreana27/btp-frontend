@@ -77,6 +77,8 @@ export class BotTracking{
     }*/
     getTable1()
     {
+      this.isStatistics1=false;
+      this.botSelected=false;
       var fechahoy = new Date();
       this.submitDateToServer();
       var fechauno=new Date(this.dateSelected1);
@@ -125,6 +127,7 @@ export class BotTracking{
       });
   }
   viewTable2(key){
+    this.isStatistics=false;
     var fechahoy = new Date();
       this.submitDateToServer();
       var fechauno=new Date(this.dateSelected1);
