@@ -10,11 +10,12 @@ import {
 import {
   TableFilterUpdated
 } from './messages';
+import $ from 'jquery';
+import datepicker from 'jquery-ui-datepicker'
 import * as toastr from 'toastr';
 
-
 @inject(WebAPI, EventAggregator)
-export class BotDataManagment {
+export class BotTracking{
   //Local variables
 
   selectedBotId = [];
@@ -26,15 +27,16 @@ export class BotDataManagment {
   constructor(api, ea) {
     this.ea = ea;
     this.api = api;
+     this.dateSelected1 = null;
+     this.dateSelected2 = null;
         this.dates=true;
-        this.end_date=null;
-        this.start_date=null;
+        //this.end_date=null;
+        //this.start_date=null;
         this.canal=null;
+        this.prueba='hola';
+        this.selectedId='';
   }
 
-  //attached functionallity
-  attached(){
-  }
   //Function gets called whenever the class is created
   created() {
   }
@@ -73,64 +75,127 @@ export class BotDataManagment {
         this.getStatistics();
       }
     }*/
-    getStatistics()
+    getTable1()
     {
-      /*var fechahoy = new Date();
-      console.log("start: "+this.start_date+" end:"+this.end_date+" hoy: "+fechahoy);
-      var fechauno=new Date(this.start_date);
-      var fechados=new Date(this.end_date);
+      var fechahoy = new Date();
+      this.submitDateToServer();
+      var fechauno=new Date(this.dateSelected1);
+      var fechados=new Date(this.dateSelected2);
       if(fechauno.getTime()<=fechados.getTime() && fechados.getTime()<=fechahoy.getTime()){
-        console.log("entro");*/
-         this.canales = [];
-         this.ads=[];
-         this.user=[];
-         this.usuarios=null;
-         this.resul=null;
-        this.api.getDataStorage(this.selectedBotId,this.start_date,this.end_date).then(keys=>
+        console.log("entro");
+        try{
+        this.api.getDataStorage(this.selectedBotId,this.dateSelected1,this.dateSelected2).then(keys=>
           {
            this.isStatistics=true;
            this.data_list = keys;
            this.long_canal=Object.keys(this.data_list.canalito).length;
            this.clientes=this.data_list.Total_interStorage;
            //-------------------------------------------------------
-           console.log(this.data_list.anuncio[0]+" "+this.data_list.canalito[0]+" "+this.data_list.buser[0]);
+           //console.log(this.data_list.adpropio[0]+" "+this.data_list.anuncio[0]+" "+this.data_list.canalito[0]+" "+this.data_list.buser[0]);
            
             this.resul=(parseInt(this.usuarios)*100)/parseInt(this.clientes);
-            console.log("clientes:"+this.data_list.Total_interStorage+" largo: "+this.long_canal);
+            //console.log("clientes:"+this.data_list.Total_interStorage+" largo: "+this.long_canal);
             
           });
-      
-      /*}else{
-        console.log("no entro");
+      }catch(ex){
+        toastr.error('Check the dates field');
+      }
+      }else{
+        //console.log("no entro");
          this.isStatistics=false;
         toastr.error('Incorrect date range');
-      }*/
+      }
        
     }
-    getdata(){
-      console.log("canal: "+this.canal);
-     
-    }
     selectStatus(){
-     console.log("numbot: "+this.selectedBotId);
+     //console.log("numbot: "+this.selectedBotId);
      this.api.getStorageKey(this.selectedBotId).then(keys => {
         this.key_list = keys;
         if(this.key_list.length > 0){
 
           this.botSelected = true;
-          this.isStatistics1=true;
+          //this.isStatistics1=true;
         }else {
           this.botSelected = false;
            this.isStatistics1=false;
           toastr.error('The selected bot has no status registered');
           //alert("");
         }
-        console.log("estatus: "+keys);
+        //console.log("estatus: "+keys);
       });
   }
-  viewReport(){
+  viewTable2(key){
+    var fechahoy = new Date();
+      this.submitDateToServer();
+      var fechauno=new Date(this.dateSelected1);
+      var fechados=new Date(this.dateSelected2);
+      if(fechauno.getTime()<=fechados.getTime() && fechados.getTime()<=fechahoy.getTime()){
+        console.log("entro");
+        try{
+    console.log(this.selectedBotId+"/"+key+"/"+this.dateSelected1+"/"+this.dateSelected2);
+   
+    this.api.getDataTable2(this.selectedBotId,key,this.dateSelected1,this.dateSelected2).then(keysdata => {
+        this.canalT2=[];
+        this.adT2=[];
+        this.datastorage=keysdata.datos1;
+        this.total=keysdata.Total;
+        this.isStatistics1=true;
+        this.long_storage=Object.keys(this.datastorage).length;
+        try{
+        for (var i = 0;i<=this.long_storage; i++) {
+            this.largo_cadena=this.datastorage[0].bot_internal_storage.channel_id.split(",").length;
+          this.canalT2.push(this.datastorage[0].bot_internal_storage.channel_id.split(",")[0]);
+          console.log(this.datastorage[0].bot_internal_storage.channel_id.split(",")[0]);
+          if(this.largo_cadena==2){
+            this.adT2.push(this.datastorage[0].bot_internal_storage.channel_id.split(",")[1]);
+          }
+          
+        }
+      }catch(ex1){}
+      });
+    }catch(ex){
+        toastr.error('Check the dates field');
+      }
+      }else{
+         this.isStatistics=false;
+        toastr.error('Incorrect date range');
+      }
 
+  }
+  confirmName(id){
+    this.selectedId = id;
+  }
+  addNameAd(id,adname){
+    
+    if(id==null || id==""){
+      toastr.warning('Check if there is a FB ad ID');
+    }else{
+      if(adname==null || adname==""){
+        toastr.warning('Check the ad name field');
+      }else{
+        console.log(this.selectedBotId,adname,id);
+        //updateAdName
+        this.api.updateAdName(this.selectedBotId,id,adname).then(infodata => {
+          this.info=infodata.info;
+          if(this.info==1){
+            toastr.success('Action done');
+          }else{
+            toastr.warning('Action not done');
+          }
+        });
+        window.location.reload();
+      }
+      
+    }
+  }
+  submitDateToServer() {
+    console.log('SENDING TO SERVER:', this.dateSelected1,this.dateSelected2)
+  }
+  attached(){
+    $('#datepicker').datepicker({dateFormat:'yy-mm-dd',startDate: '-3d'});
+    $('#datepicker1').datepicker({dateFormat:'yy-mm-dd',startDate: '-3d'});
   }
 
 
 }
+

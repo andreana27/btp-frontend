@@ -19,10 +19,15 @@
 
             </small>
             </h4>
-            <div>
+            <div class="row">
+              <div class="col-md-6">
               <button class="btn btn-primary" type="submit" click.delegate="viewToken(connector.token)">
-                <span class="fa fa-fire" style="font-size:16px"></span> Set Button</button>
+                <span class="fa fa-fire" style="font-size:16px"></span> Add Button</button>
+            
+              <button class="btn btn-danger" type="submit" click.delegate="deleteButtonStarted(connector.token)">
+                <span class="fa fa-times-circle" style="font-size:16px"></span> Remove Button</button>
             </div>
+          </div>
           </div>
 
 

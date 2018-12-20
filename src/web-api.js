@@ -2654,7 +2654,7 @@ getUpdateRole(roleData) {
           return data;
       });*/
     }
-    sendMessageToBroadcast(botId,message)
+sendMessageToBroadcast(botId,message)
     {
       let parameters = {bot_id: botId, message:message}
       let data = new FormData();
@@ -2709,10 +2709,48 @@ getUpdateRole(roleData) {
       });*/
     }
   //------------------------------------------------------------
-  getStartButton(token)
+  updateAdName(idbot,idad,name)
+    {
+      let parameters = {idbot: idbot,idad:idad,adname:name}
+      let data = new FormData();
+      for (let key in parameters) {
+        if (typeof(parameters[key]) === 'object'){
+          data.append(key, JSON.stringify(parameters[key]));
+        }else{
+          data.append(key, parameters[key]);
+        }
+      }
+      //bot_ai
+      this.isRequesting = true;
+      return this.client_auth.fetch(`insertNameAd/${sessionStorage.sessionToken}.json`, {
+        method: 'PUT',
+        body: data
+      })
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    });
+    }
+  getStartButton(bot_token)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`getStartedButton/${sessionStorage.sessionToken}/${token}.json`, {
+      return this.client_auth.fetch(`getStartedButton/${sessionStorage.sessionToken}/${bot_token}.json`, {
         method: 'GET'
         //body:data
       })
@@ -2737,10 +2775,10 @@ getUpdateRole(roleData) {
       this.app.setRoot('login');
     }); 
     }
-  getDataStorage(botId)
+  deleteStartButton(bot_token)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`getTracking/${sessionStorage.sessionToken}/${botId}.json`, {
+      return this.client_auth.fetch(`deleteStartedButton/${sessionStorage.sessionToken}/${bot_token}.json`, {
         method: 'GET'
         //body:data
       })
@@ -2761,6 +2799,62 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    }); 
+    }
+  getDataTable2(botId,key,start,end)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getTrackingTable2/${sessionStorage.sessionToken}/${botId}/${key}/${start}/${end}.json`, {
+        method: 'GET'
+        //body:data
+      })
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');
+    }); 
+    }
+  getDataStorage(botId,start,end)
+    {
+      this.isRequesting = true;
+      return this.client_auth.fetch(`getTracking/${sessionStorage.sessionToken}/${botId}/${start}/${end}.json`, {
+        method: 'GET'
+        //body:data
+      })
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.app.setRoot('login');
+        }
+    }).catch((error) => {
+      console.log(error);
       console.log("401 UNAUTHORIZED");
       this.app.setRoot('login');
     }); 
