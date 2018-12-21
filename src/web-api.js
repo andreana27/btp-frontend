@@ -3456,10 +3456,10 @@ sendMessageToBroadcast(botId,message)
     }
 
     //broadcast
-    broadcast() {
-      let getByBot = bot => {
+    broadcasts() {
+      let get = () => {
         this.isRequesting = true
-        return this.client_auth.fetch(`/broadcast?bot_id=${bot.id}`, {
+        return this.client_auth.fetch(`/broadcasts`, {
           method: 'GET'
         })
         .then(response => response.json())
@@ -3487,7 +3487,7 @@ sendMessageToBroadcast(botId,message)
       let create = broadcast => {
         this.isRequesting = true
 
-        return this.client_auth.fetch('broadcast', {
+        return this.client_auth.fetch('broadcasts', {
           method: 'POST',
           body: JSON.stringify(broadcast)
         })
@@ -3528,7 +3528,7 @@ sendMessageToBroadcast(botId,message)
       }
 
       return {
-        getByBot,
+        get,
         getById,
         create,
         update,

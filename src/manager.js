@@ -41,9 +41,19 @@ export class Manager {
         name: 'widget-setup'
       },
       {
-        route: 'chat/broadcast',
+        route: 'chat/broadcast/:id',
         moduleId: 'broadcast',
         name: 'broadcast'
+      },
+      {
+        route: 'chat/broadcasts',
+        moduleId: 'broadcasts',
+        name: 'broadcasts'
+      },
+      {
+        route: 'chat/new_broadcast',
+        moduleId: 'new_broadcast',
+        name: 'new_broadcast'
       },
       {
         route: 'chat/segments',
