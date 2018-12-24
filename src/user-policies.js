@@ -32,6 +32,15 @@ export class UserManager {
   }//fin constructor
 
     //Function gets called whenever the class is created
+  activate(){
+    this.api.getPoliciesAll().then((datosF)=>{
+             try{
+             this.politicasAll=datosF.data;
+             console.log("politicas: ",this.politicasAll[0].policies_name,this.politicasAll[1].policies_name);
+            }catch(e){
+             }
+          });
+  }
   created() {    
 
        this.txtSaveExButton = ''; 
@@ -44,13 +53,13 @@ export class UserManager {
     //console.log("sale: "+this.clicked);
     if (this.clicked==true){
         this.txtSaveExButton='Active: true';
-      this.politicas.data.policies_active='true';
+      this.politicasAll[0].policies_active='true';
     }else{
       this.txtSaveExButton='Active: false';
-      this.politicas.data.policies_active='false';       
+      this.politicasAll[0].policies_active='false';       
     }
-    this.policyData.name=this.politicas.data.policies_name;
-    this.policyData.status=this.politicas.data.policies_active;    
+    this.policyData.name=this.politicasAll[0].policies_name;
+    this.policyData.status=this.politicasAll[0].policies_active;    
 
     /*console.log("seleccion: "+this.politicas.data.policies_name);
     console.log("activo: "+this.politicas.data.policies_active);*/
@@ -60,39 +69,31 @@ export class UserManager {
     this.clicked = !this.clicked;
     if (this.clicked==true){
         //this.txtbutton1='Active: true';
-        this.politicas.data.policies_active='true';
+        this.politicasAll[1].policies_active='true';
     }else{
       //this.txtbutton1='Active: false';
-      this.politicas.data.policies_active='false';       
+      this.politicasAll[1].policies_active='false';       
     }
-    this.policyData.name=this.politicas.data.policies_name;
-    this.policyData.status=this.politicas.data.policies_active;
-    //console.log("seleccion: "+this.politicas.data.policies_name);
-    //console.log("activo: "+this.politicas.data.policies_active);
+    this.policyData.name=this.politicasAll[1].policies_name;
+    this.policyData.status=this.politicasAll[1].policies_active;
     return true; 
   }
   handleClickPolitica3(){   
-
-    //this.clicked=false;
     this.clicked = !this.clicked; // toggle clicked true/false
     console.log("sale: "+this.clicked);
     if (this.clicked==true){
         //this.txtbutton2='Active: true';
-      this.politicas.data.policies_active='true';
+      this.politicasAll[2].policies_active='true';
     }else{
       //this.txtbutton2='Active: false';
-      this.politicas.data.policies_active='false';       
+      this.politicasAll[2].policies_active='false';       
     }
-    //console.log(this.clicked+" "+this.politicas.data.policies_active);
-    this.policyData.name=this.politicas.data.policies_name;
-    this.policyData.status=this.politicas.data.policies_active;
-    /*console.log("seleccion: "+this.politicas.data.policies_name);
-    console.log("activo: "+this.politicas.data.policies_active);*/
-    //this.actualizarPolicies(this.policyData);
+    this.policyData.name=this.politicasAll[2].policies_name;
+    this.policyData.status=this.politicasAll[2].policies_active;
     return true; 
   }
   //*****************************************************************************
-  selectPolicies(name) {
+  /*selectPolicies(name) {
    this.api.getPolicies(name).then((datosF)=>{
              try{
              this.politicas=datosF;
@@ -100,7 +101,7 @@ export class UserManager {
              }
           });
    
-  }
+  }*/
   actualizarPoliciesDate(name,estado,fecha2) {
           if(this.formato(fecha2)){
                   this.policyData.fecha2=fecha2;

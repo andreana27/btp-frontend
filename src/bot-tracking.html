@@ -125,20 +125,20 @@
           <table class="table table-dark table-striped" >
         <thead >
           <tr >
-            <th style="text-align:center;"><span title="ad number according to FB" style="border-bottom: 1px dashed #00cc00;cursor: help; ">ID Own Ad</span></th>
             <th style="text-align:center;"><span title="Own ad number" style="border-bottom: 1px dashed #00cc00;cursor: help;">ID FB Ad</span></th>
+            <th style="text-align:center;"><span title="ad number according to FB" style="border-bottom: 1px dashed #00cc00;cursor: help; ">ID Own Ad</span></th>            
             <th style="text-align:center;">Ad Name</th>
             <th style="text-align:center;"><span title="Channel where the user comes from" style="border-bottom: 1px dashed #00cc00;cursor: help;">Channel</span></th>
             <th style="text-align:center;"><span title="ID/User name on Facebook" style="border-bottom: 1px dashed #00cc00;cursor: help;">Username</span></th>
             <th style="text-align:center;"><span title="Date of first contact" style="border-bottom: 1px dashed #00cc00;cursor: help;">First Contact Date</span></th>
-            <th style="text-align:center;"><span>Status</span></th>
+            <th style="text-align:center;"><span>Value</span></th>
            
           </tr>
         </thead>
         <tbody>
           <tr repeat.for="i of long_storage">
-            <td>${datastorage[i].bot_internal_storage.ad_id=="" ? 'N/A' : datastorage[i].bot_internal_storage.ad_id}</td>
-            <td>${adT2[i]=="" ?'N/A':adT2[i]}</td>
+            <td>${datastorage[i].bot_internal_storage.ad_id==Null || datastorage[i].bot_internal_storage.ad_id=="" ? 'N/A' : datastorage[i].bot_internal_storage.ad_id}</td>
+            <td>${adT2[i]==Null || adT2[i]=="" ?'N/A':adT2[i]}</td>
             <td>
                 <!--<div class="input-group-prepend">
                   <button class="btn btn-secondary" type="button"><span class="fa fa-newspaper-o" title="Ad Name: ${datastorage[i].bot_internal_storage.storage_owner}" style="font-size:16px"></span></button>
@@ -149,13 +149,13 @@
                       data-target="#modal-name"
                       title="Ad Name: ${datastorage[i].bot_internal_storage.ad_name}"
                       click.delegate="confirmName(datastorage[i].bot_internal_storage.ad_id)">
-                <i class="fa fa-newspaper-o"></i>
+                <i class="fa fa-newspaper-o"></i> Ad Name: ${datastorage[i].bot_internal_storage.ad_name==Null || datastorage[i].bot_internal_storage.ad_name=="" ? 'not assigned': datastorage[i].bot_internal_storage.ad_name}
               </button>
             </td>            
             <td>${canalT2[i]}</td>
             <td>${datastorage[i].bot_internal_storage.storage_owner}</td>
             <td>${datastorage[i].bot_internal_storage.first_contact}</td>
-            <td>${datastorage[i].bot_storage.storage_key}</td>
+            <td>${datastorage[i].bot_storage.storage_value}</td>
           </tr>
         </tbody>
       </table>

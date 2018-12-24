@@ -17,6 +17,7 @@ export class HeaderView {
     this.userName = this.api.getUserName();
   }
 
+
   logout(){
     this.api.logout();
   }

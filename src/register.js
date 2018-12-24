@@ -30,7 +30,21 @@ export class Register {
   }
 
   //Function that gets called whenever the view is activated
-  activated() {
+  activate() {
+    this.api.getPolicies('password strength').then((datosF3)=>{
+                       try{
+                       this.politicas3=datosF3;
+                       var activa=this.politicas3.data.policies_active;
+                       //console.log("expirable: "+activa);
+                       if(activa){
+                          this.isVisible=true;
+                       }else{
+                         this.isVisible=false;
+                       }
+                      }catch(e){
+                       }
+                    });
+    
   }
   isPassword()
   {
