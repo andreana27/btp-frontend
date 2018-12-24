@@ -42,8 +42,12 @@ export class Login {
     this.api.logIn(this.login).then(loginResponse => {
       //if a sucessfull login takes place
       if (loginResponse.type == 200) {
+        this.login.email="";
+        this.login.password="";
         this.router.navigate('manager');
       } else {
+        this.login.email="";
+        this.login.password="";
         toastr.error(`${loginResponse.msg}`);
       }
     });

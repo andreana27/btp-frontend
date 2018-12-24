@@ -236,7 +236,12 @@ export class WebAPI {
     //TODO set roles or permission
 		return true;
   }
-
+  logoutTemporal(){
+    sessionStorage.clear();
+    // .. and from the session object
+    this.session = null;
+    return true;
+  }
   logout() {
   	// Clear from sessionStorage
     sessionStorage.clear();
@@ -255,6 +260,11 @@ export class WebAPI {
   getUserData()
   {
       let data = {firstName: sessionStorage.userFirstName, lastName: sessionStorage.userLastName}
+      return data;
+  }
+  getUserDataTemporal()
+  {
+      let data = {firstName: sessionStorage.userFirstName, lastName: sessionStorage.userLastName,tokenApi: sessionStorage.sessionToken}
       return data;
   }
   //**********************************************************************************
@@ -278,7 +288,7 @@ export class WebAPI {
     })
     .catch((error) => {
       return "401 (UNAUTHORIZED)";
-      this.app.setRoot('login');
+      this.logout();
     });
   }
   setLocations(value){
@@ -294,7 +304,7 @@ export class WebAPI {
   }
     
 //----------------------------Politicas & perfil-----------------------------------
-activePolicy(name){
+activePolicy(name){//not used
   var activated=false;
   this.getPolicies(name).then((datosF)=>{
              try{
@@ -318,9 +328,57 @@ activePolicy(name){
              }
 
           });
-  /*console.log("retorno: "+activated);
-  return activated;*/
 }
+getPoliciesTemporal(name,token) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_policies/${token}/${name}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.logout();
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+  }
+getPoliciesAll() {  //not used  
+    this.isRequesting = true;
+    return this.client_auth.fetch(`select_policiesALL/${sessionStorage.sessionToken}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((responseData) => {
+      this.isRequesting = false;
+      try{
+        return responseData;
+      }catch(err){
+          this.logout();
+        }
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+      /*console.log("401 UNAUTHORIZED");
+      this.app.setRoot('login');*/
+    });
+  }
 getPolicies(name) {    
     this.isRequesting = true;
     return this.client_auth.fetch(`select_policies/${sessionStorage.sessionToken}/${name}.json`, {
@@ -338,11 +396,11 @@ getPolicies(name) {
       try{
         return responseData;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
   }
 updatePolicies(policyData) {    
@@ -373,12 +431,12 @@ updatePolicies(policyData) {
       try{
         return responseData;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
-      console.log(error);
+      //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
   }
   //---------------------------------
@@ -411,12 +469,12 @@ updatePolicies(policyData) {
       try{
         return responseData;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
-      console.log(error);
+      //console.log(error);
       console.log("401 UNAUTHORIZED");
-      //this.app.setRoot('login');
+      this.logout();
     });
   }
   //----------------------------------
@@ -438,15 +496,15 @@ updatePolicies(policyData) {
       try{
         return responseData;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
-      console.log(error);
+      //console.log(error);
       console.log("401 UNAUTHORIZED");
-      //this.app.setRoot('login');
+      this.logout();
     });
   }
-getUpdateProfile(userData) {
+  getUpdateProfile(userData) {
       this.isRequesting = true;
     let formData = new FormData();
     for (let key in userData) {
@@ -474,12 +532,48 @@ getUpdateProfile(userData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
+    });
+  }
+  getUpdatePassTemporal(userData,token) {
+      this.isRequesting = true;
+    let formData = new FormData();
+    for (let key in userData) {
+      if (typeof(userData[key]) === 'object'){
+        formData.append(key, JSON.stringify(userData[key]));
+        console.log(formData);
+      }else{
+        formData.append(key, userData[key]);
+      }
+    }     
+    return this.client_auth.fetch(`update_passTemporal/${token}.json`, {
+        method: 'PUT',
+        body: formData
+      })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+        this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
     });
   }
   //--------------------------------Usuarios-----------------------------------------
@@ -511,12 +605,12 @@ getUpdateProfile(userData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
-      console.log(error);
-      //console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
     });
   }
   getSelectUser() {    
@@ -536,11 +630,11 @@ getUpdateProfile(userData) {
       try{
         return responseData;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
 
       //-----------------------------------------------------------
@@ -567,11 +661,11 @@ getUpdateProfile(userData) {
       try{
         return responseData;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
   }
   
@@ -593,12 +687,12 @@ getUpdateProfile(userData) {
         return responseData;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
      /* .then(response => response.json())
       .then((responseData) => {
@@ -612,10 +706,30 @@ getUpdateProfile(userData) {
     return this.client_auth.fetch(`count_membership/${infoRole}.json`, {
         method: 'GET'
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.count;
+      }catch(err){
+        console.error(err);
+          this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+      /*.then(response => response.json())
       .then(data => {
         return data.count;
-      });
+      });*/
   }
   deleteUsersRoles(userol) {
     this.isRequesting = true;
@@ -643,11 +757,11 @@ getUpdateProfile(userData) {
       try{
         return data;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -680,11 +794,11 @@ getUpdateProfile(userData) {
       try{
         return data;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -718,12 +832,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
-      console.log(error);
-      //console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
     });
   }
   registerRole(roleData) {
@@ -753,12 +867,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
-      console.log(error);
-      //console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
     });
     /*
       .then(response => response.json())
@@ -785,12 +899,12 @@ getUpdateRole(roleData) {
         return responseData;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
   }
   registerFeature(funcionData) {
@@ -820,12 +934,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
   }
   getSelectFunction(role) {    
@@ -846,12 +960,12 @@ getUpdateRole(roleData) {
         return responseData;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
   }
   deleteFeature(funcionData) {
@@ -881,12 +995,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+         this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
   }
     //**************************************************************************************************
@@ -922,11 +1036,11 @@ getUpdateRole(roleData) {
       try{
         return responseData;
       }catch(err){
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -938,13 +1052,31 @@ getUpdateRole(roleData) {
   validateNewUserEmail(email) {
     this.isRequesting = true;
     return this.client_auth.fetch(`user/${email}.json`, {
-        method: 'GET'
+        method: 'GET'//GET
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+          this.logout();
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data;
-      });
+      });*/
   }
 
   resetPassword(email) {
@@ -952,11 +1084,29 @@ getUpdateRole(roleData) {
     return this.client_auth.fetch(`password_reset/${email}.json`, {
         method: 'GET'
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+          this.logout();
+        }
+    }).catch((error) => {
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data;
-      });
+      });*/
   }
 //****************************************************************************************************
   getStorageKey(botId) {
@@ -977,12 +1127,12 @@ getUpdateRole(roleData) {
         return responseData.content;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+           this.logout();
         }
     }).catch((error) => {
-      console.log(error);
-      //console.log("401 UNAUTHORIZED");
-      //this.app.setRoot('login');
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+       this.logout();
     });
   }
 //****************************************************************************************************
@@ -1002,12 +1152,12 @@ getUpdateRole(roleData) {
         return data.content;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+           this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+       this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1032,12 +1182,12 @@ getUpdateRole(roleData) {
         return data.content[0];
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+           this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+       this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1074,12 +1224,12 @@ getUpdateRole(roleData) {
         return data.content[0];
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+           this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+       this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1122,12 +1272,12 @@ getUpdateRole(roleData) {
         return data.content[0];
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+           this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+       this.logout();
     });
 
       /*.then(response => response.json())
@@ -1145,11 +1295,31 @@ getUpdateRole(roleData) {
     return this.client.fetch(`${sessionStorage.sessionToken}/bot/${bot.id}.json`, {
         method: 'DELETE'
       })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.content;
+      }catch(err){
+        console.error(err);
+          this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data.content;
-      });
+      });*/
   }
   getContextList(botid) {
     this.isRequesting = true;
@@ -1167,12 +1337,12 @@ getUpdateRole(roleData) {
         return data.content;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1213,12 +1383,12 @@ getUpdateRole(roleData) {
 
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       
       /*.then(response => response.json())
@@ -1270,12 +1440,12 @@ getUpdateRole(roleData) {
         }
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
 
 
@@ -1327,12 +1497,12 @@ getUpdateRole(roleData) {
         return data.content[0];
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1364,12 +1534,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1394,12 +1564,12 @@ getUpdateRole(roleData) {
         return data.content[0];
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1439,12 +1609,12 @@ getUpdateRole(roleData) {
         return data.content[0];
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*.then(response => response.json())
       .then(data => {
@@ -1486,12 +1656,12 @@ getUpdateRole(roleData) {
         //return data.content;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
 
 
@@ -1521,27 +1691,67 @@ getUpdateRole(roleData) {
     return this.client_auth.fetch(`bot_register/${botId}/${connectoridx}.json`, {
       method: 'GET'
     })
-      .then(response => response.json())
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+      /*.then(response => response.json())
       .then(data => {
         this.isRequesting = false;
         return data;
-    });
+    });*/
   }
 
-    deactivateConnector(botId, connectoridx){
+  deactivateConnector(botId, connectoridx){
       this.isRequesting = true;
       return this.client_auth.fetch(`bot_register/${botId}/${connectoridx}.json`, {
         method: 'DELETE'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+          this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     //Function that gets the variable list for a bot
-    getVariableList(botId) {
+getVariableList(botId) {
       this.isRequesting = true;
       return this.client_auth.fetch(`bot_variables/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
@@ -1559,12 +1769,12 @@ getUpdateRole(roleData) {
         return data.data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -1579,11 +1789,31 @@ getUpdateRole(roleData) {
       return this.client_auth.fetch(`bot_variables_recordcount/${botId}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+          this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Returns a segment of the variable records stored fot the selected bot
@@ -1605,12 +1835,12 @@ getUpdateRole(roleData) {
         return data.data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       
         /*.then(response => response.json())
@@ -1639,12 +1869,12 @@ getUpdateRole(roleData) {
         return data.data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -1672,12 +1902,12 @@ getUpdateRole(roleData) {
         return data.data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -1692,11 +1922,31 @@ getUpdateRole(roleData) {
       return this.client_auth.fetch(`bot_conversations_contact/${botId}/${contact}/${startLimit}/${endLimit}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data.data;
+      }catch(err){
+        console.error(err);
+        this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data.data;
-      });
+      });*/
     }
 
     //Generates and stores a website connector for the specified bot
@@ -1714,11 +1964,31 @@ getUpdateRole(roleData) {
         method: 'PUT',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+        this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     //Updates a website connector for the specified bot
@@ -1736,11 +2006,31 @@ getUpdateRole(roleData) {
         method: 'POST',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+        this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     //Deletes a website connector for the specified bot
@@ -1758,11 +2048,31 @@ getUpdateRole(roleData) {
         method: 'DELETE',
         body: data
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+        this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
 
     //Gets the record count for the variables registered to a bot
@@ -1784,12 +2094,12 @@ getUpdateRole(roleData) {
         return data.data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });/*
         .then(response => response.json())
         .then(data => {
@@ -1817,12 +2127,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -1858,12 +2168,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+     this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -1899,12 +2209,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -1940,12 +2250,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
       /*  .then(response => response.json())
         .then(data => {
@@ -1974,12 +2284,12 @@ getUpdateRole(roleData) {
         return data.data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
 
         /*.then(response => response.json())
@@ -2008,12 +2318,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2068,12 +2378,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2113,12 +2423,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2158,12 +2468,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2190,12 +2500,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2221,12 +2531,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
 
         /*.then(response => response.json())
@@ -2253,12 +2563,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2284,12 +2594,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2303,11 +2613,31 @@ getUpdateRole(roleData) {
       return this.client_auth.fetch(`deleteMessengerConnector/${botId}/${token}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+        this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     deleteTelegramConnector(botId,token)
     {
@@ -2315,11 +2645,31 @@ getUpdateRole(roleData) {
       return this.client_auth.fetch(`deleteTelegramConnector/${botId}/${token}.json`, {
         method: 'GET'
       })
-        .then(response => response.json())
+      .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      try{
+        return data;
+      }catch(err){
+        console.error(err);
+        this.logout();
+        }
+    }).catch((error) => {
+      //console.log(error);
+      console.log("401 UNAUTHORIZED");
+      this.logout();
+    });
+        /*.then(response => response.json())
         .then(data => {
           this.isRequesting = false;
           return data;
-      });
+      });*/
     }
     getBotTrainStatus(botId)
     {
@@ -2340,12 +2690,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+          this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2372,12 +2722,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2404,12 +2754,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2436,12 +2786,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2479,12 +2829,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2533,12 +2883,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
 
         /*.then(response => response.json())
@@ -2577,12 +2927,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2609,12 +2959,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
         /*.then(response => response.json())
         .then(data => {
@@ -2641,12 +2991,12 @@ getUpdateRole(roleData) {
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     }); 
         /*.then(response => response.json())
         .then(data => {
@@ -2684,12 +3034,12 @@ sendMessageToBroadcast(botId,message)
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+     this.logout();
     }); 
         /*.then(response => response.json())
         .then(data => {
@@ -2739,12 +3089,12 @@ sendMessageToBroadcast(botId,message)
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     });
     }
   getStartButton(bot_token)
@@ -2767,12 +3117,12 @@ sendMessageToBroadcast(botId,message)
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     }); 
     }
   deleteStartButton(bot_token)
@@ -2795,12 +3145,12 @@ sendMessageToBroadcast(botId,message)
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     }); 
     }
   getDataTable2(botId,key,start,end)
@@ -2823,12 +3173,12 @@ sendMessageToBroadcast(botId,message)
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     }); 
     }
   getDataStorage(botId,start,end)
@@ -2851,12 +3201,12 @@ sendMessageToBroadcast(botId,message)
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     }); 
     }
   //------------------------------------------------------------
@@ -2879,12 +3229,12 @@ sendMessageToBroadcast(botId,message)
         return data;
       }catch(err){
         console.error(err);
-          this.app.setRoot('login');
+        this.logout();
         }
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
-      this.app.setRoot('login');
+      this.logout();
     }); 
         /*.then(response => response.json())
         .then(data => {

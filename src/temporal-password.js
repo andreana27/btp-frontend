@@ -25,20 +25,44 @@ export class UserProfile {
     this.userData1 = {
       password:'',
       confirmPassword:''
-
     };
+    this.datos={
+      nombre:'',
+      apellido:''
+    }
+    this.token=this.api.getUserDataTemporal().tokenApi;
     this.activa=false;
   }
 
   //Function gets called whenever the class is created
   created() {
     this.userData = this.api.getUserData();
+    this.datos.nombre=this.userData.firstName;
+    this.datos.apellido=this.userData.lastName;
+    this.api.logoutTemporal();
   }
 
   //Function that gets called whenever the view is activated
-  activated() {
+  activate() {
+    this.api.getPoliciesTemporal('password strength',this.token).then((datosF3)=>{
+                       try{
+                       this.politicas3=datosF3;
+                       var activa=this.politicas3.data.policies_active;
+                       //console.log("expirable: "+activa);
+                       if(activa){
+                          this.isVisible=true;
+                       }else{
+                         this.isVisible=false;
+                       }
+                      }catch(e){
+                       }
+                    });
+    
   }
   cancelRecovery(){
+    this.userData1.password="";
+    this.userData1.confirmPassword="";
+    this.token="";
     this.api.setRegister(false);
   }
 
@@ -76,15 +100,15 @@ export class UserProfile {
     return false;
   }
   UpdateUserData() {
-    this.userData1.first_name=this.userData.firstName;
-    this.userData1.last_name=this.userData.lastName;
+    /*this.userData1.first_name=this.userData.firstName;
+    this.userData1.last_name=this.userData.lastName;*/
     //console.log(this.userData1.first_name+this.userData1.last_name+" "+this.userData1.password+"-- "+this.userData1.confirmPassword);
     try{
       if(this.isEqualPassword()){
         //console.log("valor: "+this.isPassword());
         
           //console.log("paso: "+this.userData1.password);
-        this.api.getPolicies('password strength').then((datosF1)=>{
+        this.api.getPoliciesTemporal('password strength',this.token).then((datosF1)=>{
           this.activa=datosF1.data.policies_active;
           //console.log("politica fortaleza: "+this.activa);
           if(this.activa==true){
@@ -108,7 +132,7 @@ export class UserProfile {
    
   }
   actualizarPerfil(){
-    this.api.getUpdateProfile(this.userData1).then((resultado)=>{           
+    this.api.getUpdatePassTemporal(this.userData1,this.token).then((resultado)=>{           
       try{
           if(resultado.data==1){
             toastr.success('Profile has been update');
