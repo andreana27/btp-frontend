@@ -1,21 +1,127 @@
 <template>
   <require from="./broadcast.css"></require>
-  <section class="content-header">
-    <h1>
-      Data
-    </h1>
+  <section class="content-header" if.bind="broadcast">
+    <h1>${broadcast.alias_name ? broadcast.alias_name : broadcast.name} <small if.bind="broadcast.alias_name">${broadcast.name}</small></h1>
     <ol class="breadcrumb">
     </ol>
   </section>
-  <section class="content">
-    <h1>broadcast</h1>
+  <section class="content"  if.bind="broadcast">
+    <div class="row">
+      <div class="col-xs-6">
+        <div class="box box-success">
+          <div class="box-header">
+            <h3 class="box-title">Info: </h3>
+          </div>
+          <div class="box-body">
+            <ul class="list-group list-group-unbordered">
+              <li class="list-group-item">
+                  <strong>Status: </strong>
+                  <span class="pull-right">${broadcast.status}</span>
+                </li>
+              <li class="list-group-item">
+                <strong>Created at: </strong>
+                <span class="pull-right">${broadcast.created_at}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Updated at: </strong>
+                <span class="pull-right">${broadcast.updated_at}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Segment: </strong>
+                <span class="pull-right">${segment.name}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Action: </strong>
+                <span class="pull-right">${broadcast.action_type}</span>
+              </li>
+              <li class="list-group-item">
+                <strong>Value: </strong>
+                <span class="pull-right">${broadcast.action_value}</span>
+              </li>
+            </ul>
+            <div>
+              <button class="btn btn-success">Execute for New Users</button>
+              <button class="btn btn-primary">Execute for All Users</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xs-6">
+        <div class="box box-danger">
+          <div class="box-header">
+            <h3 class="box-title">Users</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-warning">
+          <div class="box-header">
+            <h3 class="box-title">Timer: </h3>
+          </div>
+          <div class="box-body">
+            <div class="row">
+              <div class="col-xs-4">
+                <div class="form-group">
+                  <label for="">Time: </label>
+                  <select name="" id="" class="form-control">
+                    <option value="">1 day</option>
+                    <option value="">1 week</option>
+                    <option value="">1 month</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="form-group">
+                  <label for="">Users: </label>
+                  <select name="" id="" class="form-control">
+                    <option value="">All Users</option>
+                    <option value="">New Users</option>
+                    <option value="">Not Interactuate Users</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <label for="">Action: </label>
+                <div>
+                  <button class="btn btn-success">Activate</button>
+                  <button class="btn btn-danger">Deactivate</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title">History: </h3>
+          </div>
+          <div class="box-body">
+              <ul class="list-group list-group-unbordered">
+                <li class="list-group-item data-item" repeat.for="itemInfo of broadcast.info">
+                  <strong>${itemInfo.label}</strong>
+                  <span>${itemInfo.date}</span>
+                  <span></span>
+                </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel" style="display: inline-block;">Add new filter</h5>
+          <h5 class="modal-title" id="exampleModalLabel" style="display: inline-block;">Edit broadcast</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

@@ -40,11 +40,6 @@ color: #fff;
   margin-bottom: 0;
 }
 
-input, 
-option {
-  outline: none;
-}
-
 input[type="date"].form-control, 
 input[type="time"].form-control, 
 input[type="datetime-local"].form-control, 
@@ -52,13 +47,22 @@ input[type="month"].form-control {
   line-height: 14px;
 }
 
-.element-sticky {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0; /* required */
+.list-group {
+  margin: 0;
 }
 
-.filter-content {
+.list-group .list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group .list-group-item:last-child {
+  border-bottom: none;
+}
+
+.data-item {
   display: flex;
-  justify-content: space-between;
+}
+
+.data-item * {
+  width: 33.33%;
 }

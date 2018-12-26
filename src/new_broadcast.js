@@ -50,11 +50,15 @@ export class NewBroadCast {
   selectSegment(segment) {
     this.segment = {...segment}
     console.log(this.segment)
+    $('#segments-container').fadeOut(300)
+    !this.bot ? $('#bots-container').delay(300).fadeIn(300) : $('#broadcast-container').delay(300).fadeIn(300)
   }
 
   selectBot(bot) {
     this.bot = {...bot}
     console.log(this.bot)
+    $('#bots-container').fadeOut(300)
+    $('#broadcast-container').delay(300).fadeIn(300)
   }
 
   getSegments() {
@@ -71,5 +75,15 @@ export class NewBroadCast {
           this.router.navigate(`chat/broadcast/${response.data.id}`)
         }
       })
+  }
+
+  showBots() {
+    $('#broadcast-container').fadeOut(300)
+    $('#bots-container').delay(300).fadeIn(300)
+  }
+
+  showSegments() {
+    $('#broadcast-container').fadeOut(300)
+    $('#segments-container').delay(300).fadeIn(300)
   }
 }

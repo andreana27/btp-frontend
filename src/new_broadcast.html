@@ -1,4 +1,5 @@
 <template>
+  <require from="./new_broadcast.css"></require>
   <section class="content-header">
     <h1>New Broadcast</h1>
     <ol class="breadcrumb">
@@ -9,41 +10,49 @@
   </section>
 
   <section class="content">
-    <div class="segments-container">
-      <h3>Change Segment</h3>
-      <div class="row">
-        <div class="col-sm-4 col-md-3" repeat.for="segment of segments" if.bind="segments.length > 0" click.delegate="selectSegment(segment)">
-          <div class="small-box bg-gray">
-            <div class="inner">
-              <h3>${segment.name}</h3>
-              <p>${segment.comparation} Conditional</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-user"></i>
+    <div class="segments-container box box-primary" id="segments-container" if.bind="segments">
+      <div class="box-header">
+        <h3 class="box-title">Change Segment</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-sm-4 col-md-3" repeat.for="segment of segments" if.bind="segments.length > 0" click.delegate="selectSegment(segment)">
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3>${segment.name}</h3>
+                <p>${segment.comparation} Conditional</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-user"></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="bots-container">
-      <h3>Change Bot</h3>
-      <div class="row">
-        <div class="col-sm-4 col-md-3" repeat.for="bot of bots" if.bind="bots.length > 0" click.delegate="selectBot(bot)">
-          <div class="small-box bg-gray">
-            <div class="inner">
-              <h3>${bot.name}</h3>
-              <p>${bot.enabled}</p>
-            </div>
-            <div class="icon">
-              <i class="fa fa-user"></i>
+    <div class="bots-container  box box-primary" id="bots-container">
+      <div class="box-header">
+        <h3 class="box-title">Change Bot</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-sm-4 col-md-3" repeat.for="bot of bots" if.bind="bots.length > 0" click.delegate="selectBot(bot)">
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3>${bot.name}</h3>
+                <p>${bot.enabled}</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-user"></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default" id="broadcast-container">
       <div class="panel-heading">
         <h3 class="panel-title">Broadcast info</h3>
       </div>
@@ -59,10 +68,12 @@
           <div class="col-xs-3 form-group">
             <label for="">Segment</label>
             <input type="text" disabled class="form-control" value.bind="segment.name">
+            <div class="hoverclick"  click.delegate="showSegments()"></div>
           </div>
           <div class="col-xs-3 form-group">
             <label for="">Bot</label>
             <input type="text" disabled class="form-control" value.bind="bot.name">
+            <div class="hoverclick"  click.delegate="showBots()"></div>
           </div>
           <div class="col-xs-3 form-group">
             <label for="">Action</label>

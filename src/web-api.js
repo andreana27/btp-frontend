@@ -3470,10 +3470,10 @@ sendMessageToBroadcast(botId,message)
         .catch(err => ({'status': 'error', 'error': err}))
       }
       
-      let getById = id => {
+      let find = id => {
         this.isRequesting = true
 
-        return this.client_auth.fetch(`/broadcast?id=${id}`, {
+        return this.client_auth.fetch(`/broadcast/${id}`, {
           method: 'GET'
         })
         .then(response => response.json())
@@ -3529,7 +3529,7 @@ sendMessageToBroadcast(botId,message)
 
       return {
         get,
-        getById,
+        find,
         create,
         update,
         destroy
