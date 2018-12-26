@@ -1,0 +1,197 @@
+<template>
+   <require from="./datepicker"></require>
+  <require from="jquery-ui-datepicker/themes/base/theme.css"></require>
+  <require from="jquery-ui-datepicker/themes/base/datepicker.css"></require>
+  <require from="style-panel.css"></require>
+  <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />-->
+  <section class="content-header">
+    <h1>
+      Data
+      <small>Bot Tracking</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Bot Tracking</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Bot</div>
+      <div class="panel-body">
+        <div class="row">
+          <label align="right" class="col-sm-2">Select a Bot</label>
+          <div class="col-sm-6">
+            <select value.bind="selectedBotId" class="form-control">
+              <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+            </select>
+          </div>
+          
+        </div>
+        
+        <br>
+          <!-- ***********************************************************************************-->
+          
+      <div class="row">
+        <label align="right" class="col-md-2">Initial Date</label>
+          <div class="col-md-2">
+            <div class="form-group has-feedback">
+              <input datepicker id="datepicker" value.bind="dateSelected1" class="form-control" placeholder="dd/mm/yyyy">
+              <span class="fa fa-calendar form-control-feedback"></span>
+            </div>
+          </div>
+          <label align="right" class="col-md-2">Final Date</label>
+          <div class="col-md-2">
+            <div class="form-group has-feedback">
+              <input datepicker id="datepicker1" value.bind="dateSelected2" class="form-control" placeholder="dd/mm/yyyy">
+              <span class="fa fa-calendar form-control-feedback"></span>
+            </div>
+          </div>
+          <!--<button click.delegate="submitDateToServer()">Send to Server</button>-->
+      </div>
+
+  <div class="row">
+    <label align="right" class="col-sm-2"></label>
+          <div class="col-sm-6">
+            <button class="btn btn-primary" type="submit" click.delegate="getTable1()">
+                    <span class="fa fa-bookmark" style="font-size:16px"></span> View Percentage</button>
+          <button align="left" class="btn btn-info" type="submit" click.delegate="selectStatus()">
+                    <span class="fa fa-dashboard" style="font-size:16px"></span> View Status</button>
+          </div>
+  </div>
+          <!-- ***********************************************************************************-->
+      <br>
+      <div class="row" show.bind="botSelected">
+              <label align="right" class="col-sm-2">Status: </label>
+              <div class="col-sm-4">
+                  <select  value.bind="key.storage_key" class="form-control">
+                    <option repeat.for="key of key_list">${key.storage_key}</option>
+                  </select>
+              </div>
+              <div align="left" class="col-sm-2">
+                  <button class="btn btn-success" type="submit" click.delegate="viewTable2(key.storage_key)">
+                    <span class="fa fa-bar-chart" style="font-size:16px"></span> Get Details by Bot</button>
+            </div>
+            </div>            
+
+      </div>
+    </div>
+    <!-- ***** Table No. 1 ************************************************************************************** -->
+<div class="panel panel-primary" show.bind='isStatistics'>
+      <div class="panel-heading" style="background-color: cornflowerblue;"><strong>Table No.1  Percentage of users</strong></div>
+      <div class="panel-body">
+        <div class="row panel-body" >         
+          <div class="col-md-12" style="border-left: 7px solid green;background-color:#e6e6e6;">
+          <p ><strong> Total Users: ${clientes} </strong>&nbsp;&nbsp;&nbsp;&nbsp;<label>&nbsp;&nbsp;Percentage:100%</label>     </p>
+        </div>
+        </div>
+        <div class="row">
+          
+          <div class="col-sm-12" style="text-align:center;">
+          <table class="table table-dark table-striped" >
+        <thead >
+          <tr >
+            <th style="text-align:center;"><span title="ad number according to FB" style="border-bottom: 1px dashed #00cc00;cursor: help; ">ID FB Ad</span></th>
+            <th style="text-align:center;"><span title="Own ad number" style="border-bottom: 1px dashed #00cc00;cursor: help;">ID Own Ad</span></th>
+            <th style="text-align:center;"><span title="Channel where the user comes from" style="border-bottom: 1px dashed #00cc00;cursor: help;">Channel</span></th>
+            <th style="text-align:center;"><span title="Users per channel and ad" style="border-bottom: 1px dashed #00cc00;cursor: help;">Users</span></th>
+            <th style="text-align:center;"><span title="Percentage of users" style="border-bottom: 1px dashed #00cc00;cursor: help;">Percentage of users</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr repeat.for="i of long_canal">
+            <td>${data_list.anuncio[i]}</td>
+            <td>${data_list.adpropio[i]}</td>
+            <td>${data_list.canalito[i]}</td>
+            <td >${data_list.buser[i]}</td>
+            <td>${data_list.pocentajeU[i]}</td>
+          </tr>
+        </tbody>
+      </table>
+          </div>
+        </div>
+      </div>
+   </div>
+   <!--************************** Table No.2 **************************************** -->
+    <div class="panel panel-primary" show.bind='isStatistics1'>
+      <div class="panel-heading" style="background-color: dodgerblue;"><strong>Table No.2   Detail by Bot</strong></div>
+      <div class="panel-body">
+        <div class="row panel-body" >         
+          <div class="col-md-12" style="border-left: 7px solid green;background-color:#e6e6e6;">
+          <p ><strong> Total Users: ${total} </strong>&nbsp;&nbsp;&nbsp;&nbsp;<label></label>     </p>
+        </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12" style="text-align:center;">
+          <table class="table table-dark table-striped" >
+        <thead >
+          <tr >
+            <th style="text-align:center;"><span title="Own ad number" style="border-bottom: 1px dashed #00cc00;cursor: help;">ID FB Ad</span></th>
+            <th style="text-align:center;"><span title="ad number according to FB" style="border-bottom: 1px dashed #00cc00;cursor: help; ">ID Own Ad</span></th>            
+            <th style="text-align:center;">Ad Name</th>
+            <th style="text-align:center;"><span title="Channel where the user comes from" style="border-bottom: 1px dashed #00cc00;cursor: help;">Channel</span></th>
+            <th style="text-align:center;"><span title="ID/User name on Facebook" style="border-bottom: 1px dashed #00cc00;cursor: help;">Username</span></th>
+            <th style="text-align:center;"><span title="Date of first contact" style="border-bottom: 1px dashed #00cc00;cursor: help;">First Contact Date</span></th>
+            <th style="text-align:center;"><span>Value</span></th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr repeat.for="i of long_storage">
+            <td>${datastorage[i].bot_internal_storage.ad_id==Null || datastorage[i].bot_internal_storage.ad_id=="" ? 'N/A' : datastorage[i].bot_internal_storage.ad_id}</td>
+            <td>${adT2[i]==Null || adT2[i]=="" ?'N/A':adT2[i]}</td>
+            <td>
+                <!--<div class="input-group-prepend">
+                  <button class="btn btn-secondary" type="button"><span class="fa fa-newspaper-o" title="Ad Name: ${datastorage[i].bot_internal_storage.storage_owner}" style="font-size:16px"></span></button>
+                </div>-->
+                <button type="button"
+                      class="btn btn-secondary"
+                      data-toggle="modal"
+                      data-target="#modal-name"
+                      title="Ad Name: ${datastorage[i].bot_internal_storage.ad_name}"
+                      click.delegate="confirmName(datastorage[i].bot_internal_storage.ad_id)">
+                <i class="fa fa-newspaper-o"></i> Ad Name: ${datastorage[i].bot_internal_storage.ad_name==Null || datastorage[i].bot_internal_storage.ad_name=="" ? 'not assigned': datastorage[i].bot_internal_storage.ad_name}
+              </button>
+            </td>            
+            <td>${canalT2[i]}</td>
+            <td>${datastorage[i].bot_internal_storage.storage_owner}</td>
+            <td>${datastorage[i].bot_internal_storage.first_contact}</td>
+            <td>${datastorage[i].bot_storage.storage_value}</td>
+          </tr>
+        </tbody>
+      </table>
+          </div>
+        </div>
+      </div>
+   </div>
+  </section>
+
+
+
+  <div class="modal modal-primary fade" id="modal-name">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span></button>
+              <h4 class="modal-title">Ad Name</h4>
+            </div>           
+            <div class="modal-body">
+              <label class="col-sm-2 control-label">Name</label>
+              <div class="col-sm-10">
+                <input type="text" placeholder="Enter Bot name" class="form-control" value.bind="adName">
+              </div>
+              <br><br><br>
+              <p align="right">Are you sure of the name of the ad?</p>
+            </div>
+
+            <div class="modal-footer"> 
+                       
+              <button type="button" class="btn btn-outline" data-dismiss="modal" click.delegate="addNameAd(selectedId,adName)">Add name</button>
+              <button type="button" class="btn btn-outline" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+</template>

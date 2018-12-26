@@ -39,7 +39,21 @@ export class UserProfile {
   }
 
   //Function that gets called whenever the view is activated
-  activated() {
+  activate() {
+    this.api.getPolicies('password strength').then((datosF3)=>{
+                       try{
+                       this.politicas3=datosF3;
+                       var activa=this.politicas3.data.policies_active;
+                       //console.log("expirable: "+activa);
+                       if(activa){
+                          this.isVisible=true;
+                       }else{
+                         this.isVisible=false;
+                       }
+                      }catch(e){
+                       }
+                    });
+    
   }
 
   get canUpdateUserData() {
@@ -106,6 +120,21 @@ export class UserProfile {
         toastr.error('Fields are empty');
       }
    
+  }
+  actualizarPerfil(){
+    this.api.getUpdateProfile(this.userData1).then((resultado)=>{           
+      try{
+          if(resultado.data==1){
+            toastr.success('Profile has been update');
+          }else{
+            toastr.error('Action not done');
+          }
+          //this.router.navigate('user/manager');
+        }catch(e){
+          console.log(e);
+        }
+
+         });
   }
   actualizarPerfil(){
     this.api.getUpdateProfile(this.userData1).then((resultado)=>{           

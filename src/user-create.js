@@ -43,7 +43,21 @@ export class UserCreate {
   }
 
   //Function that gets called whenever the view is activated
-  activated() {
+  activate() {
+    this.api.getPolicies('password strength').then((datosF3)=>{
+                       try{
+                       this.politicas3=datosF3;
+                       var activa=this.politicas3.data.policies_active;
+                       //console.log("expirable: "+activa);
+                       if(activa){
+                          this.isVisible=true;
+                       }else{
+                         this.isVisible=false;
+                       }
+                      }catch(e){
+                       }
+                    });
+    
   }
   
   isEqualPassword()
@@ -91,9 +105,6 @@ export class UserCreate {
   }
 
   registerNewUser() {
-    console.log("fin: "+this.longitud+" ************ "+longitud);
-    //console.log("variables: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
-    //email validation
     try{
     if (this.validateEmail(this.register.email)) {
       //password matching validation
@@ -239,10 +250,10 @@ attached(){
     return true;
   }).focus(function() {
     $('#pswd_info').show();
-    console.log("variables3: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
+    //console.log("variables3: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
   }).blur(function() {
     $('#pswd_info').hide();
-    console.log("variables4: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
+    //console.log("variables4: "+this.longitud+" "+this.minuscula+" "+this.mayuscula+" "+this.numero+" "+this.symbolo);
     //this.isPassword(longitud,minuscula,mayuscula,numero,symbolo);
   });
 } 
