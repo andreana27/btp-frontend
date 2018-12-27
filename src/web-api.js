@@ -3535,4 +3535,23 @@ sendMessageToBroadcast(botId,message)
         destroy
       }
     }
+
+    bots() {
+      let bySegment = segment_id => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch(`bots?segment_id=${segment_id}`, {
+          'method': 'GET'
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+      }
+
+      return {
+        bySegment
+      }
+    }
 }

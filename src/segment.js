@@ -24,6 +24,7 @@ export class Segment {
   filters = null
   filterVariables = null
   newSegmentName = null
+  bots = null
 
   constructor(api, ea, router) {
     this.ea = ea
@@ -36,6 +37,7 @@ export class Segment {
     this.getSegmentInfo(params.id)
     this.getVariables()
     this.changeFilterType(this.filterTypes[0].type)
+    this.getBots(params.id)
   }
 
   getSegmentInfo(id) {
@@ -59,6 +61,16 @@ export class Segment {
       })
   }
 
+  getBots(segment_id) {
+    this.api.bots()
+      .bySegment(segment_id)
+      .then(response => {
+        if (response.status !== 'error') {
+          this.bots = [...response.data]
+        }
+      })
+  }
+
   changeFilterType(type) {
     this.newFilterType = this.filterTypes.filter(item => item.type === type)[0]
   }
@@ -79,6 +91,7 @@ export class Segment {
           this.newFilterVariable.value = null
           this.newFilterValue.value = null
           this.changeSegmentVariables()
+          this.getBots(id)
         }
       })
   }
@@ -105,6 +118,7 @@ export class Segment {
           this.segment.updated_at = response.data.updated_at
           this.changeSegmentVariables()
           $('#editFilterModal').modal('hide')
+          this.getBots(id)
         }
       })
   }
@@ -121,6 +135,7 @@ export class Segment {
             this.filters = response.data.filters
             this.segment.updated_at = response.data.updated_at
             this.changeSegmentVariables()
+            this.getBots(id)
           }
         })
     }
@@ -132,6 +147,7 @@ export class Segment {
     .then(response => {
       if(response.status !== 'error') {
         this.segment = response.data
+        this.getBots(id)
       }
     })
   }
