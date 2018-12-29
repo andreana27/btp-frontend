@@ -33,8 +33,6 @@ export class NewBroadCast {
 
   activate() {
     this.setSegments()
-    this.api.getBotsList()
-      .then(response => {this.bots = [...response]; console.log(this.bots)})
   }
 
   setSegments() {
@@ -49,9 +47,14 @@ export class NewBroadCast {
 
   selectSegment(segment) {
     this.segment = {...segment}
-    console.log(this.segment)
-    $('#segments-container').fadeOut(300)
-    !this.bot ? $('#bots-container').delay(300).fadeIn(300) : $('#broadcast-container').delay(300).fadeIn(300)
+    this.getBots(this.segment.id)
+      .then(response => {
+        if(response.status !== 'error') {
+          this.bots = [...response.data]
+          $('#segments-container').fadeOut(300)
+          $('#bots-container').delay(300).fadeIn(300)
+        }
+      })
   }
 
   selectBot(bot) {
@@ -64,6 +67,12 @@ export class NewBroadCast {
   getSegments() {
     return this.api.segments()
       .get()
+      .then(response => response)
+  }
+
+  getBots(segment_id) {
+    return this.api.bots()
+      .bySegment(segment_id)
       .then(response => response)
   }
 

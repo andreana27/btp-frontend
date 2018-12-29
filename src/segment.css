@@ -23,3 +23,12 @@ input[type="date"].form-control {
 .buttons-container {
   padding-bottom: 1em;
 }
+
+.bot-list-item {
+  display: inline-block;
+  padding: 0 2px;
+}
+
+.bot-list-item i {
+  font-style: normal;
+}

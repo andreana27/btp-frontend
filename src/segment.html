@@ -27,7 +27,7 @@
               <li class="list-group-item">
                 <strong>Can use in: </strong>
                 <div class="pull-right">
-                  <span repeat.for="bot of bots">${bot.name}</span>
+                  <span class="bot-list-item" repeat.for="bot of bots">${bot.name} <i class="badge bg-light-blue">${bot.qualified_users}</i></span>
                 </div>
               </li>
             </ul>
