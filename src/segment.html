@@ -27,7 +27,7 @@
               <li class="list-group-item">
                 <strong>Can use in: </strong>
                 <div class="pull-right">
-                  <span class="bot-list-item" repeat.for="bot of bots">${bot.name} <i class="badge bg-light-blue">${bot.qualified_users}</i></span>
+                  <span class="bot-list-item" repeat.for="bot of bots">${bot.name} <i class="badge bg-light-blue">${bot.qualified_users_count}</i></span>
                 </div>
               </li>
             </ul>
@@ -144,6 +144,51 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12">
+        <article class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title">Get Bot statistics with this segment</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-xs-4">
+                <div class="form-group">
+                  <select ref="statisticsBotIdInput" class="form-control">
+                    <option value="${bot.id}" repeat.for="bot of bots">${bot.name}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div class="form-group">
+                  <button class="btn btn-success" click.delegate="getBotStatistics(segment.id, statisticsBotIdInput.value)">Show results in Selected bot</button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12" if.bind="botStatistics">
+                ${botStatistics.name}
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>User id</th>
+                      <th repeat.for="variable of botStatistics.variables">${variable}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr repeat.for="user of botStatistics.qualified_users">
+                      <td>${user.id}</td>
+                      <td repeat.for="variable of botStatistics.variables">${showValue(variable, user)}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>

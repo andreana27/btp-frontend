@@ -3540,10 +3540,10 @@ sendMessageToBroadcast(botId,message)
       let bySegment = (segment_id, bot_id = null, show_users = false) => {
         bot_id == '_' ? bot_id = null : null
         this.isRequesting = true
-        let request = `bots?segment_id=${segment_id}${bot_id && '&bot_id=' + bot_id}${show_users && '&show_users=true'}`
+        let request = `bots/?segment_id=${segment_id}${bot_id ? '&bot_id=' + bot_id : ""}${show_users ? "&show_users=true" : ""}`
         console.log(request)
 
-        return this.client_auth.fetch(`bots?segment_id=${segment_id}`, {
+        return this.client_auth.fetch(request, {
           'method': 'GET'
         })
           .then(response => response.json())

@@ -25,6 +25,7 @@ export class Segment {
   filterVariables = null
   newSegmentName = null
   bots = null
+  botStatistics = null
 
   constructor(api, ea, router) {
     this.ea = ea
@@ -67,8 +68,26 @@ export class Segment {
       .then(response => {
         if (response.status !== 'error') {
           this.bots = [...response.data]
+          console.log(response)
         }
       })
+  }
+
+  getBotStatistics(segment_id, bot_id = 1) {
+    this.api.bots()
+      .bySegment(segment_id, bot_id, true)
+      .then(response => {
+        if (response.status != 'error') {
+          console.log(response.data[0])
+          this.botStatistics = response.data[0]
+        }
+      })
+  }
+
+  showValue(variable, user) {
+    let item = user.responses.filter(item => item.storage_key == variable)[0]
+    console.log(item)
+    return item.storage_value
   }
 
   changeFilterType(type) {
