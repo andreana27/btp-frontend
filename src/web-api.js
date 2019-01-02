@@ -4,7 +4,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 @inject(Aurelia)
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
-  backend = 'https://demo-backend.botprotec.com/backend/';
+  //backend = 'https://demo-backend.botprotec.com/backend/';
+  backend = 'https://demo-backend.botprotec.com/backenddev1/';
   //backend = 'https://a2.botprotec.com/backend/';
 
   isRequesting = false;
@@ -3304,4 +3305,256 @@ sendMessageToBroadcast(botId,message)
       get
     }
   }
+
+    //get bot variables
+    botVariables() {
+      let get = (bot) => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/bot_variables_list?bot_id=${bot.id}`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+
+
+      return {
+        get
+      }
+    }
+
+    variables() {
+      let get = () => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/variables/${sessionStorage.sessionToken}`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+
+      return {
+        get
+      }
+    }
+
+    segments() {
+      let get = (page, search) => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/segments/${sessionStorage.sessionToken}`, {
+          method: 'GET'
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let find = id => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`segment/${sessionStorage.sessionToken}/${id}`, {
+          method: 'get',
+          mode: 'cors'
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let create = segment => {
+        this.isRequesting = true
+        return  this.client_auth.fetch(`/segment/${sessionStorage.sessionToken}`, {
+          method: 'POST',
+          body: JSON.stringify(segment)
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let update = segment => {
+        this.isRequesting = true
+        return  this.client_auth.fetch(`/segment/${sessionStorage.sessionToken}`, {
+          method: 'PUT',
+          body: JSON.stringify(segment)
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      let destroy = segment => {
+        this.isRequesting = true
+        return  this.client_auth.fetch(`/segment/${sessionStorage.sessionToken}`, {
+          method: 'DELETE',
+          body: JSON.stringify(segment)
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+          .catch(err => {
+            this.isRequesting = false
+            return {
+              'status': 'error',
+              err
+            }
+          })
+      }
+
+      return {
+        get,
+        create,
+        find,
+        update,
+        destroy
+      }
+    }
+
+    //broadcast
+    broadcasts() {
+      let get = () => {
+        this.isRequesting = true
+        return this.client_auth.fetch(`/broadcasts/${sessionStorage.sessionToken}`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+      
+      let find = id => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch(`/broadcast/${sessionStorage.sessionToken}/${id}`, {
+          method: 'GET'
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+        .catch(err => ({'status': 'error', 'error': err}))
+      }
+
+      let create = broadcast => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch(`broadcasts/${sessionStorage.sessionToken}`, {
+          method: 'POST',
+          body: JSON.stringify(broadcast)
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
+      let update = broadcast => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch(`broadcast/${sessionStorage.sessionToken}`, {
+          method: 'PUT',
+          body: JSON.stringify(broadcast)
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
+      let destroy = broadcast => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch('broadcast', {
+          method: 'DELETE',
+          body: JSON.stringify(broadcast)
+        })
+
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
+      return {
+        get,
+        find,
+        create,
+        update,
+        destroy
+      }
+    }
+
+    bots() {
+      let bySegment = (segment_id, bot_id = null, show_users = false) => {
+        bot_id == '_' ? bot_id = null : null
+        this.isRequesting = true
+        let request = `bots/${sessionStorage.sessionToken}/?segment_id=${segment_id}${bot_id ? '&bot_id=' + bot_id : ""}${show_users ? "&show_users=true" : ""}`
+        console.log(request)
+
+        return this.client_auth.fetch(request, {
+          'method': 'GET'
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+      }
+
+      return {
+        bySegment
+      }
+    }
 }

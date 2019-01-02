@@ -1,0 +1,112 @@
+<template>
+  <require from="./new_broadcast.css"></require>
+  <section class="content-header">
+    <h1>New Broadcast</h1>
+    <ol class="breadcrumb">
+      <li><a href="../../"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a route-href="broadcasts">Broadcasts</a></li>
+      <li class="active">New Broadcast</li>
+    </ol>
+  </section>
+
+  <section class="content">
+    <div class="segments-container box box-primary" id="segments-container" if.bind="segments">
+      <div class="box-header">
+        <h3 class="box-title">Change Segment</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-sm-4 col-md-3" repeat.for="segment of segments" if.bind="segments.length > 0" click.delegate="selectSegment(segment)">
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3>${segment.name}</h3>
+                <p>${segment.comparation} Conditional</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-user"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bots-container  box box-primary" id="bots-container">
+      <div class="box-header">
+        <h3 class="box-title">Change Bot</h3>
+      </div>
+      <div class="box-body">
+        <div class="row">
+          <div class="col-sm-4 col-md-3" repeat.for="bot of bots" if.bind="bots.length > 0" click.delegate="selectBot(bot)">
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3>${bot.name}</h3>
+                <p>${bot.qualified_users}/${bot.users}</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-user"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default" id="broadcast-container">
+      <div class="panel-heading">
+        <h3 class="panel-title">Broadcast info</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-4 form-group">
+            <label for="">Alias</label>
+            <input type="text" value.bind="newBroadcast.alias_name" class="form-control">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-3 form-group">
+            <label for="">Segment</label>
+            <input type="text" disabled class="form-control" value.bind="segment.name">
+            <div class="hoverclick"  click.delegate="showSegments()"></div>
+          </div>
+          <div class="col-xs-3 form-group">
+            <label for="">Bot</label>
+            <input type="text" disabled class="form-control" value.bind="bot.name">
+            <div class="hoverclick"  click.delegate="showBots()"></div>
+          </div>
+          <div class="col-xs-3 form-group">
+            <label for="">Action</label>
+            <select value.bind="newBroadcast.action_type" class="form-control">
+              <option value="change_context">Change Context</option>
+              <option value="send_message">Send Message</option>
+            </select>
+          </div>
+          <div class="col-xs-3 form-group">
+            <label for="">Action Value: </label>
+            <input type="text" value.bind="newBroadcast.action_value" class="form-control">
+          </div>
+          <div class="form-group pull-right col-xs-3">
+            <button 
+              class="btn btn-success pull-right"
+              disabled.bind="
+                !bot ||
+                !segment ||
+                !newBroadcast.action_type ||
+                !newBroadcast.action_value
+              "
+              click.delegate="createBroadcast({
+                alias_name: newBroadcast.alias_name,
+                action_type: newBroadcast.action_type,
+                action_value: newBroadcast.action_value,
+                bot_id: bot.id,
+                segments_id: segment.id
+              })"
+            >Create Broadcast</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</template>

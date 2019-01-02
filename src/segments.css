@@ -1,0 +1,21 @@
+.small-box {
+  transition: all .2s;
+}
+
+.small-box .small-box-footer{
+  color: #000;
+  transition: all .2s;
+}
+
+.bg-gray:hover {
+  background: #f39c12 !important;
+  cursor: pointer;
+}
+
+.bg-gray:hover .small-box-footer{
+  color: #fff;
+}
+
+.segments-container {
+  padding-top: 2em;
+}
