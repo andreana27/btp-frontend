@@ -1,0 +1,64 @@
+<template>
+  <require from="./segments.css"></require>
+  <section class="content-header">
+    <h1>Segments <small>${title}</small></h1>
+    <ol class="breadcrumb">
+      <li><a href="../../"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a route-href="segments">Segments</a></li>
+      <li class="active">Segments List</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-default" data-toggle="modal" data-target="#createSegmentModal">Add new Segment</button>
+      </div>
+    </div>
+    <div class="segments-container">
+      <span if.bind="loading">loading...</span>
+      <div class="row">
+        <div class="col-sm-4 col-md-3" repeat.for="segment of segments" if.bind="segments.length > 0 && !loading">
+          <a route-href="route: segment; params.bind: {id:segment.id}">
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3>${segment.name}</h3>
+                <p>${segment.comparation} Conditional</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-user"></i>
+              </div>
+              <div class="small-box-footer">
+                View segment <i class="fa fa-arrow-right"></i>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal fade" id="createSegmentModal" tabindex="-1" role="dialog" aria-labelledby="createSegmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="createSegmentModalLabel" style="display: inline-block;">Add new Segment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <div class="row">
+                <div class="col-xs-3"><label for="">Name for Segment: </label></div>
+                <div class="col-xs-9"><input type="text" ref="newSegmentName" class="form-control"></div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" click.delegate="createSegment()" disabled.bind="newSegmentName.value.length < 3">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</template>

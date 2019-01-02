@@ -40,3 +40,29 @@
 a {
   cursor: pointer;
 }
+
+.list-group-user-item {
+  display: flex;
+  align-items: center;
+}
+
+.list-group-user-item *{
+  display: block;
+}
+
+.list-group-user-item span {
+  font-size: .8em;
+  color: #bebebe;
+}
+
+.list-group-user-item .image-container {
+  width: 40px;
+  height: 40px;
+  margin-right: 5px;
+}
+
+.list-group-user-item img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}

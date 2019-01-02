@@ -1,0 +1,40 @@
+<template>
+  <require from="./broadcasts.css"></require>
+  
+  <section class="content-header">
+    <h1>Broadcasts</h1>
+    <ol class="breadcrumb">
+      <li><a href="../../"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li><a route-href="broadcasts">Broadcasts</a></li>
+      <li class="active">Broadcasts List</li>
+    </ol>
+  </section>
+
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <a class="btn btn-default" route-href="new_broadcast">Create new Broadcast</a>
+      </div>
+    </div>
+    <div class="broadcasts-container">
+      <div class="row">
+        <div class="col-sm-4 col-md-3" repeat.for="broadcast of broadcasts" if.bind="broadcasts.length > 0 && !loading">
+          <a route-href="route: broadcast; params.bind: {id:broadcast.id}">
+            <div class="small-box bg-gray">
+              <div class="inner">
+                <h3>${broadcast.alias_name}</h3>
+                <p>${broadcast.name}</p>
+              </div>
+              <div class="icon">
+                <i class="fa fa-envelope"></i>
+              </div>
+              <div class="small-box-footer">
+                View broadcast <i class="fa fa-arrow-right"></i>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>

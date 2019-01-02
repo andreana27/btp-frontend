@@ -930,10 +930,6 @@ export class BotContext {
   editExcludeUsers(contextElement, index) {
     this.temporalCountValidationItem = {...contextElement, index, contextElement, botUsers: false}
     this.showExcludeUserModal = true
-    this.api.getConversationUsers(this.context.bot_id)
-      .then(botUsers => {
-        this.temporalCountValidationItem.botUsers = botUsers
-      })
   }
   deleteExcludeUser(idx, element, userToDelete) {
     element.users = element.users.filter(item => item !== userToDelete)
@@ -1059,6 +1055,15 @@ export class BotContext {
     this.context.context_json = JSON.stringify(this.json_Context);
     //console.log(JSON.stringify(this.context.context_json));
     this.save();
+  }
+
+  searchFBUser(bot_id, string) {
+    this.api.fbUsers()
+      .get(bot_id, string)
+      .then(response => {
+        this.temporalCountValidationItem.botUsers = response.data
+        console.log(this.temporalCountValidationItem.botUsers)
+      })
   }
 
 }
