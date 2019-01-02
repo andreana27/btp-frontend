@@ -828,7 +828,7 @@
                       <label class="col-sm-2 control-label">Limit exclude users</label>
                       <div class="col-sm-10">
                         <ul class="exclude-user-list">
-                          <li repeat.for="excludeUser of element.users"><span>${excludeUser}</span> - <a click.delegate="deleteExcludeUser($index, element, excludeUser)">Delete</a></li>
+                          <li repeat.for="excludeUser of element.users"><span>${excludeUser[1]}</span> - <a click.delegate="deleteExcludeUser($index, element, excludeUser)">Delete</a></li>
                         </ul>
                       </div>
                   </div>
@@ -1617,16 +1617,51 @@
           <div class="text-center" if.bind="!temporalCountValidationItem.users.length">Nothing to show</div>
           <div class="modal-user-list-container">
             <ul class="list-group">
-              <li class="list-group-item" repeat.for="userExcluded of temporalCountValidationItem.users"><span>${userExcluded}</span> <button class="btn btn-danger" click.delegate="modalDeleteExcludeUser(userExcluded)"><i class="fa fa-trash" aria-hidden="true"></i></button></li>
+              <li class="list-group-item" repeat.for="userExcluded of temporalCountValidationItem.users">
+                <div class="list-group-user-item">
+                  <div class="image-container">
+                    <img src="${userExcluded[2]}" alt="">
+                  </div>
+                  <div>
+                    <strong>${userExcluded[1]}</strong><span>${userExcluded[[0]]}</span>
+                  </div>
+                </div>
+                <button class="btn btn-danger" click.delegate="modalDeleteExcludeUser(userExcluded)">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </button>
+              </li>
             </ul>
           </div>
 
           <h4>Facebook users for this bot: </h4>
-          <div class="text-center" if.bind="temporalCountValidationItem.botUsers === false">Loading...</div>
-          <div class="text-center" if.bind="temporalCountValidationItem.botUsers !== false && filterBotUsers(temporalCountValidationItem.botUsers, temporalCountValidationItem.users).length == 0">Nothing to show</div>
+          <div>
+            <div class="col-xs-8">
+              <div class="form-group">
+                <input type="text" class="form-control" ref="searchFBUserInput">
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <div class="form-group">
+                  <button class="btn btn-primary" click.delegate="searchFBUser(context.bot_id, searchFBUserInput.value)" disabled.bind="!searchFBUserInput.value">Search</button>
+              </div>
+            </div>
+          </div>
           <div class="modal-user-list-container">
             <ul class="list-group">
-              <li class="list-group-item" repeat.for="botUser of filterBotUsers(temporalCountValidationItem.botUsers, temporalCountValidationItem.users)"><span>${botUser}</span> <button class="btn btn-success" click.delegate="modalAddExcludeUser(botUser)"><i class="fa fa-plus" aria-hidden="true"></i></button></li>
+              <li 
+                class="list-group-item" 
+                if.bind="temporalCountValidationItem.botUsers" 
+                repeat.for="botUser of filterBotUsers(temporalCountValidationItem.botUsers, temporalCountValidationItem.users)">
+                <div class="list-group-user-item">
+                  <div class="image-container">
+                    <img src="${botUser[2]}" alt="">
+                  </div>
+                  <div>
+                    <strong>${botUser[1]}</strong><span>${botUser[[0]]}</span>
+                  </div>
+                </div>
+                <button class="btn btn-success" click.delegate="modalAddExcludeUser(botUser)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+              </li>
             </ul>
           </div>
         </div>

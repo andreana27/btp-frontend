@@ -3285,4 +3285,23 @@ sendMessageToBroadcast(botId,message)
         });
       }
     }
+
+  fbUsers() {
+    let get = (bot_id, string) => {
+      this.isRequesting = true
+      let request = `user_filters/${sessionStorage.sessionToken}/${bot_id}/${string}.json`
+      console.log(request)
+      return this.client_auth.fetch(request, {
+        method: 'GET'
+      })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+    }
+    return {
+      get
+    }
+  }
 }
