@@ -3330,7 +3330,7 @@ sendMessageToBroadcast(botId,message)
     variables() {
       let get = () => {
         this.isRequesting = true
-        return this.client_auth.fetch(`/variables`, {
+        return this.client_auth.fetch(`/variables/${sessionStorage.sessionToken}`, {
           method: 'GET'
         })
         .then(response => response.json())
@@ -3349,7 +3349,7 @@ sendMessageToBroadcast(botId,message)
     segments() {
       let get = (page, search) => {
         this.isRequesting = true
-        return this.client_auth.fetch(`/segments`, {
+        return this.client_auth.fetch(`/segments/${sessionStorage.sessionToken}`, {
           method: 'GET'
         })
           .then(response => response.json())
@@ -3368,7 +3368,7 @@ sendMessageToBroadcast(botId,message)
 
       let find = id => {
         this.isRequesting = true
-        return this.client_auth.fetch(`segment/${id}`, {
+        return this.client_auth.fetch(`segment/${sessionStorage.sessionToken}/${id}`, {
           method: 'get',
           mode: 'cors'
         })
@@ -3388,7 +3388,7 @@ sendMessageToBroadcast(botId,message)
 
       let create = segment => {
         this.isRequesting = true
-        return  this.client_auth.fetch(`/segment`, {
+        return  this.client_auth.fetch(`/segment/${sessionStorage.sessionToken}`, {
           method: 'POST',
           body: JSON.stringify(segment)
         })
@@ -3408,7 +3408,7 @@ sendMessageToBroadcast(botId,message)
 
       let update = segment => {
         this.isRequesting = true
-        return  this.client_auth.fetch(`/segment`, {
+        return  this.client_auth.fetch(`/segment/${sessionStorage.sessionToken}`, {
           method: 'PUT',
           body: JSON.stringify(segment)
         })
@@ -3428,7 +3428,7 @@ sendMessageToBroadcast(botId,message)
 
       let destroy = segment => {
         this.isRequesting = true
-        return  this.client_auth.fetch(`/segment`, {
+        return  this.client_auth.fetch(`/segment/${sessionStorage.sessionToken}`, {
           method: 'DELETE',
           body: JSON.stringify(segment)
         })
@@ -3459,7 +3459,7 @@ sendMessageToBroadcast(botId,message)
     broadcasts() {
       let get = () => {
         this.isRequesting = true
-        return this.client_auth.fetch(`/broadcasts`, {
+        return this.client_auth.fetch(`/broadcasts/${sessionStorage.sessionToken}`, {
           method: 'GET'
         })
         .then(response => response.json())
@@ -3473,7 +3473,7 @@ sendMessageToBroadcast(botId,message)
       let find = id => {
         this.isRequesting = true
 
-        return this.client_auth.fetch(`/broadcast/${id}`, {
+        return this.client_auth.fetch(`/broadcast/${sessionStorage.sessionToken}/${id}`, {
           method: 'GET'
         })
         .then(response => response.json())
@@ -3487,7 +3487,7 @@ sendMessageToBroadcast(botId,message)
       let create = broadcast => {
         this.isRequesting = true
 
-        return this.client_auth.fetch('broadcasts', {
+        return this.client_auth.fetch(`broadcasts/${sessionStorage.sessionToken}`, {
           method: 'POST',
           body: JSON.stringify(broadcast)
         })
@@ -3501,7 +3501,7 @@ sendMessageToBroadcast(botId,message)
       let update = broadcast => {
         this.isRequesting = true
 
-        return this.client_auth.fetch('broadcast', {
+        return this.client_auth.fetch(`broadcast/${sessionStorage.sessionToken}`, {
           method: 'PUT',
           body: JSON.stringify(broadcast)
         })
@@ -3540,7 +3540,7 @@ sendMessageToBroadcast(botId,message)
       let bySegment = (segment_id, bot_id = null, show_users = false) => {
         bot_id == '_' ? bot_id = null : null
         this.isRequesting = true
-        let request = `bots/?segment_id=${segment_id}${bot_id ? '&bot_id=' + bot_id : ""}${show_users ? "&show_users=true" : ""}`
+        let request = `bots/${sessionStorage.sessionToken}/?segment_id=${segment_id}${bot_id ? '&bot_id=' + bot_id : ""}${show_users ? "&show_users=true" : ""}`
         console.log(request)
 
         return this.client_auth.fetch(request, {
