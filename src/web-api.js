@@ -2624,7 +2624,7 @@ getVariableList(botId) {
     deleteMessengerConnector(botId,token)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`deleteMessengerConnector/${botId}/${token}.json`, {
+      return this.client_auth.fetch(`deleteMessengerConnector/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
       .then((response) => {
@@ -2656,7 +2656,7 @@ getVariableList(botId) {
     deleteTelegramConnector(botId,token)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`deleteTelegramConnector/${botId}/${token}.json`, {
+      return this.client_auth.fetch(`deleteTelegramConnector/${sessionStorage.sessionToken}/${botId}.json`, {
         method: 'GET'
       })
       .then((response) => {

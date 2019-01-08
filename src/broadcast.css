@@ -66,3 +66,8 @@ input[type="month"].form-control {
 .data-item * {
   width: 33.33%;
 }
+
+.history-list-group {
+  display: flex;
+  flex-direction: column-reverse;
+}
