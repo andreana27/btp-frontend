@@ -40,8 +40,16 @@
               </li>
             </ul>
             <div>
-              <button class="btn btn-success">Execute for New Users</button>
-              <button class="btn btn-primary">Execute for All Users</button>
+              <button 
+                class="btn btn-success" 
+                disabled.bind="broadcast.status !== 'completed'"
+                click.delegate="sendBroadcast(broadcast.id, 'NEW')"
+              >Execute for New Users</button>
+              <button 
+                class="btn btn-primary" 
+                disabled.bind="broadcast.status !== 'completed'"
+                click.delegate="sendBroadcast(broadcast.id, 'ALL')"
+              >Execute for All Users</button>
             </div>
           </div>
         </div>
@@ -104,13 +112,15 @@
             <h3 class="box-title">History: </h3>
           </div>
           <div class="box-body">
-              <ul class="list-group list-group-unbordered history-list-group">
-                <li class="list-group-item data-item" repeat.for="itemInfo of broadcast.info">
-                  <strong>${itemInfo.label}</strong>
-                  <span>${itemInfo.date}</span>
-                  <span>${itemInfo.message}</span>
-                </li>
-              </ul>
+              <div class="history-list-container">
+                <ul class="list-group list-group-unbordered history-list-group">
+                  <li class="list-group-item data-item" repeat.for="itemInfo of broadcast.info">
+                    <strong>${itemInfo.label}</strong>
+                    <span>${itemInfo.date}</span>
+                    <span>${itemInfo.message}</span>
+                  </li>
+                </ul>
+              </div>
           </div>
         </div>
       </div>

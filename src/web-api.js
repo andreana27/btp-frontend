@@ -3470,15 +3470,19 @@ sendMessageToBroadcast(botId,message)
         .catch(err => ({'status': 'error', 'error': err}))
       }
       
-      let find = id => {
-        this.isRequesting = true
+      let find = (id, show_request) => {
+        if (show_request) {
+          this.isRequesting = true
+        }
 
         return this.client_auth.fetch(`/broadcast/${sessionStorage.sessionToken}/${id}`, {
           method: 'GET'
         })
         .then(response => response.json())
         .then(data => {
-          this.isRequesting = false
+          if (show_request) {
+            this.isRequesting = false
+          }
           return data
         })
         .catch(err => ({'status': 'error', 'error': err}))
@@ -3515,11 +3519,25 @@ sendMessageToBroadcast(botId,message)
       let destroy = broadcast => {
         this.isRequesting = true
 
-        return this.client_auth.fetch('broadcast', {
+        return this.client_auth.fetch(`broadcast/${sessionStorage.sessionToken}/`, {
           method: 'DELETE',
           body: JSON.stringify(broadcast)
         })
 
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
+      let send = (broadcast_id, send_type = 'ALL') => {
+        this.isRequesting = true
+
+        return this.client_auth.fetch('send_broadcast', {
+          method: 'POST',
+          body: JSON.stringify({broadcast_id, send_type})
+        })
         .then(response => response.json())
         .then(data => {
           this.isRequesting = false
@@ -3532,7 +3550,8 @@ sendMessageToBroadcast(botId,message)
         find,
         create,
         update,
-        destroy
+        destroy,
+        send
       }
     }
 
