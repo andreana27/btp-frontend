@@ -13,6 +13,7 @@ export class Broadcast {
   broadcast = null
   segment = null
   bot = null
+  statusChecker = null
 
   constructor(api, ea, router) {
     this.ea = ea
@@ -21,24 +22,51 @@ export class Broadcast {
   }
 
   activate(params, routeConfig) {
-    this.getBroadcastInfo(params.id)
+    this.setBroadcastInfo(params.id)
+      .then(() => this.setStatusChecker())
   }
 
-  getBroadcastInfo(id) {
-    this.api.broadcasts()
-      .find(id)
+  getBroadcastInfo(id, show_request) {
+    return this.api.broadcasts()
+      .find(id, show_request)
+      .then(response => response)
+  }
+
+  setBroadcastInfo(id) {
+    return this.getBroadcastInfo(id, false)
       .then(response => {
-        if(response.status !== 'error') {
-          this.broadcast = response
-          console.log(response.info)
-          this.getSegmentInfo(response.segments_id)
-            .then(response => {
-              if(response.status !== 'error') {
-                this.segment = response.data
-              }
-            })
+        console.log(response)
+        if (response.status != "error") {
+          this.broadcast = response.data
+          this.getSegmentInfo(response.data.segments_id)
+          .then(response => {
+            if(response.status !== 'error') {
+              this.segment = response.data
+            }
+          })
         }
       })
+  }
+
+  setStatusChecker() {
+    this.statusChecker = setInterval(() => {
+      this.getBroadcastInfo(this.broadcast.id)
+        .then(response => {
+          console.log(this.broadcast.status, response.data.status)
+          if(response.data.status != this.broadcast.status) {
+            console.log(response.data)
+            this.broadcast = response.data
+          }
+          if(response.data.status == 'completed') {
+            console.log('response is completed')
+            this.unsetStatusChecker()
+          }
+        })
+    }, 3000)
+  }
+
+  unsetStatusChecker() {
+    clearInterval(this.statusChecker)
   }
 
   getSegmentInfo(id) {
@@ -51,5 +79,17 @@ export class Broadcast {
     this.api.segments()
       find(id)
       .then(response => console.log(response))
+  }
+
+  sendBroadcast(broadcast_id, send_type) {
+    return this.api.broadcasts()
+      .send(broadcast_id, send_type)
+      .then(response => {
+        if (response.errors != {}) {
+          console.log(response)
+          this.broadcast = {...this.broadcast, status: 'working'}
+          this.setStatusChecker()
+        }
+      })
   }
 }
