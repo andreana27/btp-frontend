@@ -66,3 +66,19 @@ input[type="month"].form-control {
 .data-item * {
   width: 33.33%;
 }
+
+.history-list-group {
+  display: flex;
+  flex-direction: column-reverse;
+  height: auto;
+}
+
+.history-list-container {
+  display: block;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  width: 100%;
+  height: auto;
+  max-height: 300px;
+}
