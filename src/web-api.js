@@ -4,8 +4,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 @inject(Aurelia)
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
-  //backend = 'https://demo-backend.botprotec.com/backend/';
-  backend = 'https://demo-backend.botprotec.com/backenddev1/';
+  backend = 'https://demo-backend.botprotec.com/backend/';
+  //backend = 'https://demo-backend.botprotec.com/backenddev1/';
   //backend = 'https://a2.botprotec.com/backend/';
 
   isRequesting = false;
@@ -3388,7 +3388,9 @@ sendMessageToBroadcast(botId,message)
 
       let create = segment => {
         this.isRequesting = true
-        return  this.client_auth.fetch(`/segment/${sessionStorage.sessionToken}`, {
+        let request_url = `/segment/${sessionStorage.sessionToken}`
+        console.log(request_url)
+        return  this.client_auth.fetch(request_url, {
           method: 'POST',
           body: JSON.stringify(segment)
         })
