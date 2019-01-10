@@ -3534,7 +3534,7 @@ sendMessageToBroadcast(botId,message)
       let send = (broadcast_id, send_type = 'ALL') => {
         this.isRequesting = true
 
-        return this.client_auth.fetch('send_broadcast', {
+        return this.client_auth.fetch(`send_broadcast/${sessionStorage.sessionToken}/`, {
           method: 'POST',
           body: JSON.stringify({broadcast_id, send_type})
         })
