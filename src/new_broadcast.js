@@ -18,9 +18,10 @@ export class NewBroadCast {
   segment = null
   bots = null
   bot = null
+  contexts = null
   newBroadcast = {
     alias: null,
-    action_type: 'change_context',
+    action_type: 'send_message',
     action_value: null
   }
   defaultNewBroadcast = {...this.newBroadcast}
@@ -60,8 +61,15 @@ export class NewBroadCast {
   selectBot(bot) {
     this.bot = {...bot}
     console.log(this.bot)
-    $('#bots-container').fadeOut(300)
-    $('#broadcast-container').delay(300).fadeIn(300)
+    this.getContexts(bot.id)
+      .then(response => {
+        if (response.status !== 'error') {
+          this.contexts = response.data
+          console.log(this.contexts)
+          $('#bots-container').fadeOut(300)
+          $('#broadcast-container').delay(300).fadeIn(300)
+        }
+      })
   }
 
   getSegments() {
@@ -84,6 +92,12 @@ export class NewBroadCast {
           this.router.navigate(`chat/broadcast/${response.data.id}`)
         }
       })
+  }
+
+  getContexts(bot_id) {
+    return this.api.contexts()
+      .byBotId(bot_id)
+      .then(response => response)
   }
 
   showBots() {

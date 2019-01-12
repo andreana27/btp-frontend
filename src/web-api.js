@@ -4,8 +4,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 @inject(Aurelia)
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
-  backend = 'https://demo-backend.botprotec.com/backend/';
-  //backend = 'https://demo-backend.botprotec.com/backenddev1/';
+  //backend = 'https://demo-backend.botprotec.com/backend/';
+  backend = 'https://demo-backend.botprotec.com/backenddev1/';
   //backend = 'https://a2.botprotec.com/backend/';
 
   isRequesting = false;
@@ -3576,6 +3576,28 @@ sendMessageToBroadcast(botId,message)
 
       return {
         bySegment
+      }
+    }
+
+    contexts() {
+      let byBotId = (bot_id) => {
+        this.isRequesting = true
+        //let request = `/contexts/${sessionStorage.sessionToken}/?bot_id=${bot_id}`
+        let request = `contexts/${sessionStorage.sessionToken}/?bot_id=${bot_id}`
+        console.log(request)
+
+        return this.client_auth.fetch(request, {
+          'method': 'GET'
+        })
+          .then(response => response.json())
+          .then(data => {
+            this.isRequesting = false
+            return data
+          })
+      }
+
+      return {
+        byBotId
       }
     }
 }

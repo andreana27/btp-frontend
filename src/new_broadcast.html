@@ -78,13 +78,16 @@
           <div class="col-xs-3 form-group">
             <label for="">Action</label>
             <select value.bind="newBroadcast.action_type" class="form-control">
-              <option value="change_context">Change Context</option>
               <option value="send_message">Send Message</option>
+              <option value="change_context" if.bind="contexts.length > 0">Change Context</option>
             </select>
           </div>
           <div class="col-xs-3 form-group">
             <label for="">Action Value: </label>
-            <input type="text" value.bind="newBroadcast.action_value" class="form-control">
+            <input type="text" value.bind="newBroadcast.action_value" class="form-control" if.bind="newBroadcast.action_type != 'change_context'">
+            <select name="" value.bind="newBroadcast.action_value" id="" class="form-control" if.bind="newBroadcast.action_type == 'change_context'">
+              <option value="${context.id}" repeat.for="context of contexts">${context.name}</option>
+            </select>
           </div>
           <div class="form-group pull-right col-xs-3">
             <button 
