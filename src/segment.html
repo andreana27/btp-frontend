@@ -243,7 +243,8 @@
                 editFilter.value == filters[activeFilterIndex].value && 
                 editFilter.variable == filters[activeFilterIndex].variable &&
                 editFilter.comparation == filters[activeFilterIndex].comparation
-              )
+              ) ||
+              editFilter.value.trim() == ''
             ">Save changes</button>
         </div>
       </div>
