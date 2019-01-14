@@ -82,3 +82,11 @@ input[type="month"].form-control {
   height: auto;
   max-height: 300px;
 }
+
+.last-data-users {
+  display: flex;
+}
+
+.last-data-users .small-box {
+  margin-left: 10px;
+}

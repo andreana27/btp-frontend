@@ -14,6 +14,7 @@ export class Broadcast {
   segment = null
   bot = null
   statusChecker = null
+  updating = false
 
   constructor(api, ea, router) {
     this.ea = ea
@@ -37,7 +38,7 @@ export class Broadcast {
       .then(response => {
         console.log(response)
         if (response.status != "error") {
-          this.broadcast = response.data
+          this.broadcast = {...response.data}
           this.getSegmentInfo(response.data.segments_id)
           .then(response => {
             if(response.status !== 'error') {
@@ -46,6 +47,38 @@ export class Broadcast {
           })
         }
       })
+  }
+
+  editBroadcast(broadcast) {
+    this.updating = true
+    this.updateBroadcast(broadcast)
+      .then(response => {
+        this.broadcast = {...response.data}
+        this.updating = false
+      })
+  }
+
+  setRecurrent(broadcast, activate) {
+    this.updating = true
+    this.changeRecurrent(broadcast.id, activate)
+      .then(response => {
+        this.updating = false
+        if(response.status != 'error') {
+          this.broadcast = {...response.data}
+        }
+      })
+  }
+
+  changeRecurrent(broadcast_id, activate) {
+    return this.api.broadcasts()
+      .setRecurrent(broadcast_id, activate)
+      .then(response => response)
+  }
+
+  updateBroadcast(broadcast) {
+    return this.api.broadcasts()
+      .update(broadcast)
+      .then(response => response)
   }
 
   setStatusChecker() {

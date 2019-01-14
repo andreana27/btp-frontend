@@ -91,7 +91,7 @@
                   comparation: newFilterComparation.value,
                   value: newFilterValue.value
                 })"
-                disabled.bind="!variables.includes(newFilterVariable.value) || !newFilterValue.value"
+                disabled.bind="!variables.includes(newFilterVariable.value) || !newFilterValue.value || newFilterValue.value.trim() == ''"
               >Create Filter</button>
             </div>
           </div>

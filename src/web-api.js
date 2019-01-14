@@ -3507,7 +3507,8 @@ sendMessageToBroadcast(botId,message)
       let update = broadcast => {
         this.isRequesting = true
 
-        return this.client_auth.fetch(`broadcast/${sessionStorage.sessionToken}`, {
+        return this.client_auth.fetch(`broadcasts/${sessionStorage.sessionToken}`, {
+        //return this.client_auth.fetch(`broadcasts/`, {
           method: 'PUT',
           body: JSON.stringify(broadcast)
         })
@@ -3547,13 +3548,29 @@ sendMessageToBroadcast(botId,message)
         })
       }
 
+      let setRecurrent = (broadcast_id, task_activate) => {
+        this.isRequesting = true
+        console.log(broadcast_id, task_activate)
+
+        return this.client_auth.fetch(`create_recurrent_broadcast/${sessionStorage.sessionToken}`, {
+          method: 'POST',
+          body: JSON.stringify({broadcast_id, task_activate})
+        })
+        .then(response => response.json())
+        .then(data => {
+          this.isRequesting = false
+          return data
+        })
+      }
+
       return {
         get,
         find,
         create,
         update,
         destroy,
-        send
+        send,
+        setRecurrent
       }
     }
 
