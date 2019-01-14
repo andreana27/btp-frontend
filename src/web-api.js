@@ -4,8 +4,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 @inject(Aurelia)
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
-  //backend = 'https://demo-backend.botprotec.com/backend/';
-  backend = 'https://demo-backend.botprotec.com/backenddev1/';
+  backend = 'https://demo-backend.botprotec.com/backend/';
+  //backend = 'https://demo-backend.botprotec.com/backenddev1/';
   //backend = 'https://a2.botprotec.com/backend/';
 
   isRequesting = false;
