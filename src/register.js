@@ -31,7 +31,7 @@ export class Register {
 
   //Function that gets called whenever the view is activated
   activate() {
-    this.api.getPolicies('password strength').then((datosF3)=>{
+    this.api.getPolicies('password-strength').then((datosF3)=>{
                        try{
                        this.politicas3=datosF3;
                        var activa=this.politicas3.data.policies_active;
@@ -95,7 +95,7 @@ export class Register {
       //password matching validation
       if (this.isValidPassword()) {
         //--------------------------------------
-        this.api.getPolicies('password strength').then((datosF1)=>{
+        this.api.getPolicies('password-strength').then((datosF1)=>{
           this.activa=datosF1.data.policies_active;
           //console.log("politica fortaleza: "+this.activa);
           if(this.activa==true){

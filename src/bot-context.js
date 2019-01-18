@@ -79,6 +79,7 @@ export class BotContext {
   isValidationReply=false;
   isCheckPoint=false;
   isDecisionRest=false;
+  isWebView=false;
   isCaptcha = false
   validationTextValue='';
   validationReplyValue='';
@@ -112,7 +113,10 @@ export class BotContext {
   suggestionService = null;
   variableService = null;
   selVar = null;
-  
+  //webview item
+  webViewValue="";
+  webViewButton="";
+  webViewurl="";
   //captcha elements
   captchaItem = {
     message: "",
@@ -160,7 +164,7 @@ export class BotContext {
     return text
   }
   elementSelected(selectedValType) {
-    console.log(selectedValType);
+    console.log("elemento: ",selectedValType);
     //console.log(JSON.stringify(this.contextChlidContexts));
     //console.log((this.contextChlidContexts));
     if (selectedValType == 'sa') {
@@ -180,6 +184,7 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isSA = false;
@@ -202,6 +207,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isTemplate = false;
@@ -224,6 +230,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.chatCenter = false;
@@ -246,6 +253,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isAttachment = false;
@@ -268,6 +276,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.istext = false;
@@ -290,6 +299,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isQR = false;
@@ -312,6 +322,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isEnd = false;
@@ -334,6 +345,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isRest = false;
@@ -361,6 +373,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isSmartText = false;
@@ -388,6 +401,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isSmartReply = false;
@@ -410,6 +424,7 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationReply = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isValidationText = false;
@@ -432,6 +447,7 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationText = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isValidationReply = false;
@@ -454,6 +470,7 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationText = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isCheckPoint = false;
@@ -476,6 +493,7 @@ export class BotContext {
         this.isDecisionRest=true;
         this.isValidationText = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = false
       } else {
         this.isDecisionRest = false;
@@ -498,7 +516,8 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationText = false;
         this.isCaptcha = true;
-        this.isCountValidation = false
+        this.isCountValidation = false;
+        this.isWebView = false
       } else {
         this.isCaptcha = false;
       }
@@ -520,9 +539,35 @@ export class BotContext {
         this.isDecisionRest=false;
         this.isValidationText = false;
         this.isCaptcha = false;
+        this.isWebView = false;
         this.isCountValidation = true
       } else {
         this.isCountValidation = true;
+      }
+    }
+    //---------------------------------------
+    else 
+    if (selectedValType == 'webView') {
+      if (!this.isWebView) {
+        this.isValidationReply=false;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+        this.isCheckPoint=false;
+        this.isDecisionRest=false;
+        this.isValidationText = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false;
+        this.isWebView = true
+      } else {
+        this.isWebView = false;
       }
     }
   }
@@ -739,6 +784,19 @@ export class BotContext {
       }
       this.isCountValidation = false
       toastr.success('Count validation element added')
+    }
+    //-----------------------------------------------------
+    else
+    if (type == 'webView') {
+      newElement.type=type;
+      newElement.content = this.webViewValue;
+      newElement.button = this.webViewButton;
+      newElement.url=this.webViewurl;
+      this.webViewValue = "";
+      this.webViewButton="";
+      this.webViewurl="";
+      this.isWebView = false;
+      toastr.success('WebView element added');
     }
 
     prom.then(r=>{

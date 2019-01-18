@@ -44,7 +44,7 @@ export class UserProfile {
 
   //Function that gets called whenever the view is activated
   activate() {
-    this.api.getPoliciesTemporal('password strength',this.token).then((datosF3)=>{
+    this.api.getPoliciesTemporal('password-strength',this.token).then((datosF3)=>{
                        try{
                        this.politicas3=datosF3;
                        var activa=this.politicas3.data.policies_active;
@@ -55,6 +55,7 @@ export class UserProfile {
                          this.isVisible=false;
                        }
                       }catch(e){
+                        console.log(e);
                        }
                     });
     
@@ -108,7 +109,7 @@ export class UserProfile {
         //console.log("valor: "+this.isPassword());
         
           //console.log("paso: "+this.userData1.password);
-        this.api.getPoliciesTemporal('password strength',this.token).then((datosF1)=>{
+        this.api.getPoliciesTemporal('password-strength',this.token).then((datosF1)=>{
           this.activa=datosF1.data.policies_active;
           //console.log("politica fortaleza: "+this.activa);
           if(this.activa==true){

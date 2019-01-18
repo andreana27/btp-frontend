@@ -4,8 +4,8 @@ import { Aurelia, inject } from 'aurelia-framework';
 @inject(Aurelia)
 export class WebAPI {
   //backend = 'https://developer.innovare.es/backend/';
+  //backend = 'https://des-backend-chatbot.bantrab.com.gt/backend/';
   backend = 'https://demo-backend.botprotec.com/backend/';
-  //backend = 'https://demo-backend.botprotec.com/backenddev1/';
   //backend = 'https://a2.botprotec.com/backend/';
 
   isRequesting = false;
@@ -94,11 +94,9 @@ export class WebAPI {
             sessionStorage.userLastName = responseData.data[2];
             sessionStorage.temporal=responseData.data[3];
             sessionStorage.datePassword=responseData.data[4];
-            //---------------------------------------------------
-            
             //-------------------------------------------------------
-            this.getPolicies('temporal password').then((datosF)=>{
-               try{
+            this.getPolicies('temporal-password').then((datosF)=>{
+               //try{
                this.politicas=datosF.data.policies_active;
                //console.log("temporal: "+this.politicas);
                if(this.politicas){
@@ -111,8 +109,8 @@ export class WebAPI {
                      //////this.app.setRoot('app');
                     //------------------------------------
                     //policitca de expiracion
-                    this.getPolicies('expirable password').then((datosF1)=>{
-                       try{
+                    this.getPolicies('expirable-password').then((datosF1)=>{
+                       //try{
                        this.politicas2=datosF1;
                        var activa=this.politicas2.data.policies_active;
                        //console.log("expirable: "+activa);
@@ -129,16 +127,15 @@ export class WebAPI {
                           }else{//cambiar el pass
                             //console.log("cambiar el password");
                             this.app.setRoot('temporal-password');
-                          }
-                          
+                          }                          
                        }else{
                         //console.log("politica expirable no activa");
                         this.app.setRoot('app');
                        }
-                      }catch(e){
+                      /*}catch(e){
                         console.log(e);
                         this.app.setRoot('login');
-                       }
+                       }*/
                     });
                     //---------------------------------------
                   }
@@ -147,8 +144,8 @@ export class WebAPI {
                  //---------------------------------------------
                  //------------------------------------
                     //policitca de expiracion
-                    this.getPolicies('expirable password').then((datosF1)=>{
-                       try{
+                    this.getPolicies('expirable-password').then((datosF1)=>{
+                       //try{
                        this.politicas2=datosF1;
                        var activa=this.politicas2.data.policies_active;
                        //console.log("expirable: "+activa);
@@ -171,17 +168,18 @@ export class WebAPI {
                         //console.log("politica expirable no activa");
                         this.app.setRoot('app');
                        }
-                      }catch(e){
+                      /*}catch(e){
                         console.log(e);
                         this.app.setRoot('login');
-                       }
+                       }*/
                     });
                     //---------------------------------------
                     //---------------------------------------
                }
-              }catch(e){
+              /*}catch(e){
+                console.log(e);
                 this.app.setRoot('login');
-               }
+               }*/
             });
             //--------------------------------------------------------
                             
@@ -350,7 +348,7 @@ getPoliciesTemporal(name,token) {
           this.logout();
         }
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
