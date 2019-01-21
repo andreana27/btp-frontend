@@ -2619,10 +2619,10 @@ getVariableList(botId) {
           return data;
       });*/
     }
-    deleteMessengerConnector(botId,token)
+    deleteMessengerConnector(botId,apitoken)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`deleteMessengerConnector/${sessionStorage.sessionToken}/${botId}.json`, {
+      return this.client_auth.fetch(`deleteMessengerConnector/${sessionStorage.sessionToken}/${botId}/${apitoken}.json`, {
         method: 'GET'
       })
       .then((response) => {
@@ -2634,15 +2634,15 @@ getVariableList(botId) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
+      /*try{*/
         return data;
-      }catch(err){
+      /*}catch(err){
         console.error(err);
         this.logout();
-        }
+        }*/
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      //console.log("401 UNAUTHORIZED");
       this.logout();
     });
         /*.then(response => response.json())
@@ -2651,10 +2651,10 @@ getVariableList(botId) {
           return data;
       });*/
     }
-    deleteTelegramConnector(botId,token)
+    deleteTelegramConnector(botId,apitoken)
     {
       this.isRequesting = true;
-      return this.client_auth.fetch(`deleteTelegramConnector/${sessionStorage.sessionToken}/${botId}.json`, {
+      return this.client_auth.fetch(`deleteTelegramConnector/${sessionStorage.sessionToken}/${botId}/${apitoken}.json`, {
         method: 'GET'
       })
       .then((response) => {
@@ -2666,12 +2666,12 @@ getVariableList(botId) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
+      /*try{*/
         return data;
-      }catch(err){
+      /*}catch(err){
         console.error(err);
         this.logout();
-        }
+        }*/
     }).catch((error) => {
       //console.log(error);
       console.log("401 UNAUTHORIZED");
