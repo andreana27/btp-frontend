@@ -16,7 +16,8 @@
 
   <section class="content">
     <div class="row">
-      <div class="col-sm-3">
+
+      <div class="col-sm-4">
         <div class="row">
           <div class="col-sm-12">
             <div class="box box-widget widget-user">
@@ -46,77 +47,94 @@
                     </a>
                   </div>
                 </div>
-                <hr />
-                <div>
-                  <h4 class="text-center">Select another Bot</h4>
+                <!-- *************************************************************************** -->
+                 <div class="panel panel-default">
+                <div style="margin-right:6%; margin-left:6%;">
+                  <br>
+                  <div>
+                    <h4 class="text-center">Select another Bot</h4>
+                  </div>
+                  <div>
+                    <select value.bind="selectedBotId" class="form-control">
+                      <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+                    </select>
+                  </div>
+                  <br>
+                  <div>
+                    <center>
+                      <button class="btn btn-primary" type="submit" click.delegate="getChats()">Get Messages</button>
+                    </center>
+                  </div>
+                  <br>
                 </div>
-                <div>
-                  <select value.bind="selectedBotId" class="form-control">
-                    <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
-                  </select>
-                </div>
-                <br>
-                <div>
-                  <center>
-                    <button class="btn btn-primary" type="submit" click.delegate="getChats()">Get Messages</button>
-                  </center>
-                </div>
+              </div>
+                <!-- *************************************************************************** -->
             </div>
           </div>
           </div>
         </div>
       </div><!-- bot section -->
-      <div class="col-sm-4">
+      
+     
+     <div class="col-sm-3">
         <div class="box box-widget widget-user">
           <div class="widget-user-header bg-yellow">
-            <h3>Contacts</h3>
+           <h3>Contacts</h3>
             <h4 innerhtml.bind="contactGroup"><h4>
           </div>
           <div class="box-footer">
-            <div class="row">
-              <div class="col-sm-12">
-                <ul class="friend-list" show.bind="botSelected">
-                  <li class="active bounceInDown"  repeat.for="contact of contactList">
-                  	<a click.delegate="getMessagerByContact(contact.id)" class="clearfix">
-                  		<img src="assets/images/person_64.png" alt="" class="img-circle">
-                  		<div class="friend-name">
-                  			<strong>${contact.id}<i style="color:${contact.unread===true? 'red' : ''}"class="${contact.unread===true? 'fa fa-circle' : ''}"></i></strong>
-                  		</div>
-                  	</a>
-                  </li>
-                </ul>
-                <!--<ul class="list-group" show.bind="botSelected">
-                  <li repeat.for="contact of contactList" class="list-group-item">
-                    <a click.delegate="getMessagerByContact(contact.id)">
-                      <label>${contact.id}</label>
-                      <h4 class="list-group-item-heading">${contact.id}</h4>
-                      <p class="list-group-item-text">${contact.id}</p>
-                    </a>
-                  </li>
-                </ul>-->
-              </div>
+             <div class="panel panel-default">
+            <div class="panel-body">
+            <div class="wrap">
+            <div class="pre-scrollable">
+              <ul class="friend-list" show.bind="botSelected" id="userchat">
+                <li class="active bounceInDown"  repeat.for="contact of contactList">
+                  <a click.delegate="getMessagerByContact(contact.id)" class="clearfix">
+                    <img src="${contact.imagen}" alt="" class="img-circle">
+                    <!--assets/images/person_64.png -->
+                    <div class="friend-name">
+                      <strong>${contact.userfb}</strong><br>${contact.id}
+                      <strong><i style="color:${contact.unread===true? 'red' : ''}"class="${contact.unread===true? 'fa fa-circle' : ''}"></i></strong>
+                    
+                    </div>
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
+          </div>
+          </div>
+          </div>
         </div>
-      </div><!-- contacts section -->
+      </div><!-- messages section -->
+
       <div class="col-sm-5">
         <div class="box box-widget widget-user">
           <div class="widget-user-header bg-lime-active">
-            <h3 innerhtml.bind="selectedContactName"><h3>
-            <h4>Message History</h4>
+            <h3>Message History</h3>
+            <h5 innerhtml.bind="selectedContactName"><h5>
+            
           </div>
+
           <div class="box-footer">
             <div class="panel panel-default">
               <div class="panel-body">
                 <div class="wrap">
                   <main>
-                    <div class="pre-scrollable">
+                    <!--
+                      
+                      style="overflow-y: scroll; height: 290px"
+                     -->
+                    <div class="pre-scrollable" id="final">
+
                       <ul class="chat" innerhtml.bind="messagesHTML">
-                      </ul>
+                      </ul>     
+                      <div id="divfin"></div>
                     </div>
                     <div class="scrollable" if.bind=selectedunread>
                       <input type="text" placeholder="Send message to client" class="form-control" value.bind="messageToClient">
-                      <button class="btn btn-info pull-left bg-red" click.delegate='endChat()'>End Chat</button>
+                      <!--<button class="btn btn-info pull-left bg-red" click.delegate='endChat()'>End Chat</button>-->
+                      <br>
                       <button class="btn btn-info pull-left" click.delegate='refreshmsg()'>Refresh</button>
                       <button class="btn btn-info pull-right" click.delegate='sendMessage()'>Send Message</button>
                     </div>

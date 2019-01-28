@@ -2999,15 +2999,10 @@ getVariableList(botId) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
         return data;
-      }catch(err){
-        console.error(err);
-        this.logout();
-        }
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
       this.logout();
     }); 
         /*.then(response => response.json())

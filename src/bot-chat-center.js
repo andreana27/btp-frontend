@@ -2,7 +2,7 @@ import {
   WebAPI
 } from './web-api';
 import {
-  inject
+  inject, customElement, bindable
 } from 'aurelia-framework';
 import {
   EventAggregator
@@ -10,10 +10,17 @@ import {
 import {
   TableFilterUpdated
 } from './messages';
+import $ from 'jquery';
 
-
+@customElement('tag-it')
 @inject(WebAPI, EventAggregator)
 export class BotChatCenter {
+
+   @bindable tags;
+  @bindable id = '';
+  @bindable name;
+  @bindable options = {};
+
   //Local variables
   selectedBotId = [];
   //bool indicator enables the bot variable table
@@ -43,6 +50,7 @@ export class BotChatCenter {
   messagesHTML = 'Select a contact';
   messageToClient='';
   unread=[];
+  limite=0;
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
@@ -50,8 +58,17 @@ export class BotChatCenter {
   }
 
   //attached functionallity
-  attached(){
+  attached(){    
+    var posicion = $("#divfin").offset().top;
+    var altura = $(document).height();
+    //console.log("altura:", altura);
+    $("#userchat").click(function(){
+      /*var altura = $('#final').height();
+      console.log("altura:", altura);*/
+      $("#final").animate({scrollTop:(altura*posicion)+"px"});
+    });
   }
+
   //Function gets called whenever the class is created
   created() {
   }
@@ -74,6 +91,7 @@ export class BotChatCenter {
     //User defined funtcions
     //------------------------
     getChats() {
+    //document.getElementById('final').scrollIntoView(false);
       //setting the selected bot
       this.bot = this.bot_list.filter(x => x.id == this.selectedBotId)[0];
       //clearing values
@@ -101,6 +119,7 @@ export class BotChatCenter {
           for(let iteration = 0; iteration < this.numberOfPetitions;iteration++) {
             let inf_limit = this.recordsPerPetition * iteration;
             let sup_limit = inf_limit + this.recordsPerPetition;
+            //console.log("limites ",inf_limit,sup_limit);
             this.api.getBotMessages(this.selectedBotId,inf_limit,sup_limit).then(recordList => {
               //getting all the contacts from the logged Messages
               for(let n = 0;n<recordList.length;n++) {
@@ -122,7 +141,7 @@ export class BotChatCenter {
               });
               this.totalRecords = this.tableRecords.length;
               this.hasRecords = true;
-              let contact = {id:'Broadcast',unread:true};
+              let contact = {id:'Broadcast',unread:true,userfb:'',imagen:"assets/images/person_64.png"};
               this.unread.push({owner:'Broadcast',chatcenter:true})
               if(!this.contactList.filter(x=>x.id=='Broadcast')[0])
               {
@@ -148,11 +167,15 @@ export class BotChatCenter {
       record.date = message_date;
       record.time = message_time;
       record.content_type = content_type;
-      record.unread=this.unread.filter(x=>x.owner==owner)[0].chatcenter
+      record.unread=this.unread.filter(x=>x.owner==owner)[0].chatcenter;
+      record.userfb=this.unread.filter(x=>x.owner==owner)[0].userfb;
+      record.imagen=this.unread.filter(x=>x.owner==owner)[0].imagen;
       //adding the Contacts
+      //console.log('probando',record.unread,'userfb: ',record.imagen);
       let foundRecord = this.contactList.filter(x => x.id == owner)[0];
+
       if (!foundRecord) {
-        let contact = {id:owner,unread:this.unread.filter(x=>x.owner==owner)[0].chatcenter};
+        let contact = {id:owner,unread:this.unread.filter(x=>x.owner==owner)[0].chatcenter,userfb:this.unread.filter(x=>x.owner==owner)[0].userfb,imagen:record.imagen};
         this.contactList.push(contact);
       }
       //adding up the record to the table
@@ -164,8 +187,12 @@ export class BotChatCenter {
       this.selectedContactId = contact;
       //setting the name of the contact
       this.selectedunread=this.unread.filter(x=>x.owner==contact)[0].chatcenter;
-      console.log(this.unread.filter(x=>x.owner==contact)[0]);
-      this.selectedContactName = contact;
+      //console.log("holi ",this.unread.filter(x=>x.owner==contact)[0]);
+      var usuario=this.unread.filter(x=>x.owner==contact)[0].userfb;
+      if (typeof usuario === "undefined"){
+        usuario="";
+      }
+      this.selectedContactName =usuario+"<br>"+contact; //contact;
       //clearing values
       this.messagesHTML = '';
       //setting up the message channel filters
@@ -186,7 +213,7 @@ export class BotChatCenter {
                   this.tableRecords[currentRowPosition].time,
                   this.tableRecords[currentRowPosition].content_type,
                 );
-            }
+            }//tipos de channel
             else
             {
                 if (this.tableRecords[currentRowPosition].channel == this.channel) {
@@ -229,9 +256,14 @@ export class BotChatCenter {
 
       }
       else {
+        var usuario=this.unread.filter(x=>x.owner==contact)[0].imagen;
+        if (typeof usuario === "undefined"){
+          usuario="assets/images/person_64.png";
+        }
+        //console.log("usuarios-foto: ",usuario);
         this.messagesHTML += '<li class="left clearfix">';
         this.messagesHTML += '<span class="chat-img pull-left">'
-    		this.messagesHTML += '<img src="assets/images/person_64.png" alt="User Avatar">'
+    		this.messagesHTML += "<img src=\""+usuario+"\" alt=\"User Avatar\">"
     	  this.messagesHTML += '</span>'
         this.messagesHTML += '<div class="chat-body clearfix">';
         this.messagesHTML += '<div class="header">';
