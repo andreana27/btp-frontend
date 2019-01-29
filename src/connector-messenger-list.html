@@ -3,22 +3,19 @@
     <h4>Existing Connectors</h4>
     <div class="connector-list">
       <ul class="connector-group">
-        <li repeat.for="connector of connectors" class="list-group-item ${connector.token === $parent.token }">
+        <li repeat.for="connector of connectors" class="list-group-item ${connector.token === $parent.token }">          
+        <div>
+        <div>
           <a if.bind="connector" route-href="route: connector-messenger-detail; params.bind: {token:connector.token}" click.delegate="$parent.selectConnector(connector)">
             <h4 class="">Token: ${connector.token}</h4>
-            <p class="">Challenge: ${connector.challenge}</p>
-          </a>
+            <p class="">Challenge: ${connector.challenge}</p>    
+          </a> 
+        </div>
+        <!-- *********************************************************************************************************** -->              
           <div><p style="border-bottom: 1px solid lightslategrey;"></p></div>
           <div>
-
-             <h4>
-            Configure the button: Get_started
-            <br>
-            <small>
-              The welcome screen of a bot can show the Start button.
-
-            </small>
-            </h4>
+            <h4>Configure the button: Get_started<br>
+            <small>The welcome screen of a bot can show the Start button.</small></h4>
             <div class="row">
               <div class="col-md-6">
               <button class="btn btn-primary" type="submit" click.delegate="viewToken(connector.token)">
@@ -29,14 +26,11 @@
             </div>
           </div>
           </div>
-
-
+        </div>
+        <!-- *********************************************************************************************************** -->
+          <!-- aca no se muestra nada-->
         </li>
       </ul>
     </div>
-    
-    
-
-
   </div>
 </template>
