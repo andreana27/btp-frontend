@@ -755,9 +755,19 @@
               </div>
             </div>
 
+          <!-- ************************************muestra de elemento captcha***********************************************-->
             <div if.bind="element.type=='captcha'"  class="timeline-item">
               <h3 class="timeline-header"><a href="#">Captcha</a></h3>
               <div class="timeline-body">
+
+                 <div class="row">
+                  <label class="col-sm-2 control-label">Content</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" value.bind="element.value" change.delegate="elementChanged($index, element)"></textarea>
+                  </div>
+                </div>
+                <br>
+
                 <div class="row">
                   <label class="col-sm-2 control-label">Retry(0 for infinity)</label>
                   <div class='col-sm-10'>
@@ -856,12 +866,12 @@
                 <div class="row">
                   <label class="col-sm-2 control-label">Button Text</label>
                   <div class='col-sm-10'>
-                    <input class="form-control" type="text" value.bind="element.button" change.delegate="changedItem($index, element)">
+                    <input class="form-control" type="text" value.bind="element.button" change.delegate="elementChanged($index, element)">
                   </div>
                   <br>
                   <label class="col-sm-2 control-label">URL</label>
                   <div class='col-sm-10'>
-                    <input class="form-control" type="text" value.bind="element.url" change.delegate="changedItem($index, element)">
+                    <input class="form-control" type="text" value.bind="element.url" change.delegate="elementChanged($index, element)">
                   </div>
                 </div>
 
@@ -1453,13 +1463,20 @@
             </div>
           </div>
         </div>
+        <!--***************************creacion elemneto captcha****************************************************** -->
         <div class="panel panel-primary" show.bind="isCaptcha">
             <div class="panel-heading">Captcha</div>
             <div class="panel-body">
               <div>
                 <h4>Use this field for generate a captcha into the bot chat</h4>
               </div>
-            
+                <div class="row">
+                <label class="col-sm-3 control-label">Content</label>
+                <div class="col-sm-9">
+                  <textarea class="form-control" rows="5" value.bind="captchaItem.value" change.delegate="changedItem($index, captchaItem)"></textarea>
+                </div>
+              </div>
+              <br>
               <div class="row">
                   <label class="col-sm-3 control-label">Retry(0 for infinity)</label>
                   <div class='col-sm-9'>

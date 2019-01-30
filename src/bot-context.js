@@ -120,6 +120,7 @@ export class BotContext {
   //captcha elements
   captchaItem = {
     message: "",
+    value:"",
     validation: 0,
     sendTo: null,
     length: 0
@@ -765,6 +766,7 @@ export class BotContext {
       newElement = {...this.captchaItem, type}
       this.captchaItem = {
         message: "",
+        value:"",
         validation: 0,
         sendTo: null,
         length: 0
