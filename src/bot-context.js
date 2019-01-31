@@ -823,7 +823,10 @@ export class BotContext {
       this.api.getContextListForQuick(this.context.bot_id,this.context.id).then(Childcontexts => {
         //Setting up the context child contexts
         this.contextChlidContexts = Childcontexts;
-        let defaultEmptyContext = {id:null,name:'No Context'}
+        this.Cuenta=Object.keys(this.contextChlidContexts).length-1;
+        this.NoContext=this.contextChlidContexts[this.Cuenta].id;
+        //console.log('contextos--: ',this.contextChlidContexts[this.Cuenta].id)
+        let defaultEmptyContext = {id:this.NoContext,name:'No Context'}
         //Adding the default empty context option at the first position of the array
         this.contextChlidContexts.unshift(defaultEmptyContext);
       });
