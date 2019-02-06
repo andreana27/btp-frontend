@@ -18,6 +18,8 @@ import * as toastr from 'toastr';
 import {
   Router
 } from 'aurelia-router';
+import $ from 'jquery';
+//import timepicker from 'jquery.timepicker';
 
 
 @inject(WebAPI, EventAggregator,Router)
@@ -80,6 +82,7 @@ export class BotContext {
   isCheckPoint=false;
   isDecisionRest=false;
   isWebView=false;
+  isCalendar=false;
   isCaptcha = false
   validationTextValue='';
   validationReplyValue='';
@@ -117,6 +120,15 @@ export class BotContext {
   webViewValue="";
   webViewButton="";
   webViewurl="";
+  //Calendar webview
+  calendarValue="";
+  calendarButton="";
+  urlCalendar="";
+  calendarMinTime="";
+  calendarMaxTime="";
+  calendarStartTime="";
+  calendarIntervalo="";
+
   //captcha elements
   captchaItem = {
     message: "",
@@ -186,6 +198,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isSA = false;
@@ -209,6 +222,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isTemplate = false;
@@ -232,6 +246,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.chatCenter = false;
@@ -255,6 +270,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isAttachment = false;
@@ -278,6 +294,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.istext = false;
@@ -301,6 +318,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isQR = false;
@@ -324,6 +342,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isEnd = false;
@@ -347,6 +366,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isRest = false;
@@ -375,6 +395,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isSmartText = false;
@@ -403,6 +424,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isSmartReply = false;
@@ -426,6 +448,7 @@ export class BotContext {
         this.isValidationReply = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isValidationText = false;
@@ -449,6 +472,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isValidationReply = false;
@@ -472,6 +496,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isCheckPoint = false;
@@ -495,6 +520,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = false
       } else {
         this.isDecisionRest = false;
@@ -518,6 +544,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isCaptcha = true;
         this.isCountValidation = false;
+        this.isCalendar = false;
         this.isWebView = false
       } else {
         this.isCaptcha = false;
@@ -541,6 +568,7 @@ export class BotContext {
         this.isValidationText = false;
         this.isCaptcha = false;
         this.isWebView = false;
+        this.isCalendar = false;
         this.isCountValidation = true
       } else {
         this.isCountValidation = true;
@@ -566,9 +594,36 @@ export class BotContext {
         this.isValidationText = false;
         this.isCaptcha = false;
         this.isCountValidation = false;
+        this.isCalendar = false;
         this.isWebView = true
       } else {
         this.isWebView = false;
+      }
+    }
+    //------------------------------------------
+    else 
+    if (selectedValType == 'viewCalendar') {
+      if (!this.isWebView) {
+        this.isValidationReply=false;
+        this.isAttachment = false;
+        this.isTemplate = false;
+        this.isSA = false;
+        this.istext = false;
+        this.isQR = false;
+        this.isEnd = false;
+        this.isRest = false;
+        this.isSmartText = false;
+        this.isSmartReply = false;
+        this.isChatCenter=false;
+        this.isCheckPoint=false;
+        this.isDecisionRest=false;
+        this.isValidationText = false;
+        this.isCaptcha = false;
+        this.isCountValidation = false;
+        this.isCalendar = true;
+        this.isWebView = false
+      } else {
+        this.isCalendar = false;
       }
     }
   }
@@ -800,6 +855,25 @@ export class BotContext {
       this.isWebView = false;
       toastr.success('WebView element added');
     }
+    else
+    if (type == 'viewCalendar') {
+      newElement.type=type;
+      newElement.content = this.calendarValue;
+      newElement.button = this.calendarButton;
+      newElement.url=this.urlCalendar;
+      newElement.mintime = this.calendarMinTime;
+      //newElement.defaulttime = this.calendarMinTime;
+      newElement.maxtime = this.calendarMaxTime;
+      newElement.starttime=this.calendarStartTime;
+      newElement.intervalo=this.calendarIntervalo;
+      this.calendarValue = "";this.calendarMinTime="";
+      this.calendarButton="";this.calendarMaxTime="";
+      this.urlCalendar="";this.calendarStartTime="";
+      this.calendarIntervalo="";
+      this.isCalendar = false;
+      toastr.success('Canlendar View element added');
+    }
+    //*******************************************************
 
     prom.then(r=>{
       arrayLength = this.json_Context[this.context.name].length;
@@ -949,7 +1023,7 @@ export class BotContext {
           else
           {
             toastr.error(`You must move or delete the intent ${response.datos[0].name}. it's related to the context ${response.cont[0].name}. The context cannot be removed!` );
-            console.log(response.datos[0]);
+            //console.log(response.datos[0]);
           }
 
         });

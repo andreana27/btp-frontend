@@ -1,6 +1,9 @@
 <template>
+
+
   <require from="resources/elements/autocomplete"></require>
   <require from="./bot-context.css"></require>
+
   <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
       <li class="" style="display:none"><a href="#intents" data-toggle="tab" aria-expanded="false">Intents</a></li>
@@ -98,6 +101,7 @@
             <i if.bind="element.type=='captcha'" class="fa fa-lock"></i>
             <i if.bind="element.type=='countValidation'" class="fa fa-list-ul"></i>
             <i if.bind="element.type=='webView'" class="fa fa-globe"></i>
+            <i if.bind="element.type=='viewCalendar'" class="fa fa-calendar"></i>
 
             <div if.bind="element.type=='text'"  class="timeline-item">
               <!--<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>-->
@@ -866,6 +870,35 @@
                 <div class="row">
                   <label class="col-sm-2 control-label">Button Text</label>
                   <div class='col-sm-10'>
+                    <input class="form-control" type="text" value.bind="element.button" change.delegate="changedItem($index, element)">
+                  </div>
+                  <br>
+                  <label class="col-sm-2 control-label">URL</label>
+                  <div class='col-sm-10'>
+                    <input class="form-control" type="text" value.bind="element.url" change.delegate="changedItem($index, element)">
+                  </div>
+                </div>
+
+              </div>
+              <div class="timeline-footer">
+                 <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <!--**************************Calendar webview show ************************************** -->
+            <div if.bind="element.type=='viewCalendar'"  class="timeline-item">
+              <h3 class="timeline-header"><a href="#">viewCalendar</a></h3>
+              <div class="timeline-body">
+                <div class="row">
+                  <label class="col-sm-2 control-label">Content</label>
+                  <div class="col-sm-10">
+                    <textarea class="form-control" rows="5" value.bind="element.content"
+                              change.delegate="elementChanged($index, element)"></textarea>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <label class="col-sm-2 control-label">Button Text</label>
+                  <div class='col-sm-10'>
                     <input class="form-control" type="text" value.bind="element.button" change.delegate="elementChanged($index, element)">
                   </div>
                   <br>
@@ -874,6 +907,30 @@
                     <input class="form-control" type="text" value.bind="element.url" change.delegate="elementChanged($index, element)">
                   </div>
                 </div>
+                <br>
+                 <div class="row">
+              <label class="col-sm-2 control-label">Min Time</label>
+                <div class='col-sm-2'>
+                  <input type="number" placeholder="Min Time" class="form-control" value.bind="element.mintime" change.delegate="elementChanged($index, element)">
+                </div>
+                <label class="col-sm-2 control-label">Max Time</label>
+                <div class='col-sm-2'>
+                  <input type="number" placeholder="Max Time" class="form-control" value.bind="element.maxtime" change.delegate="elementChanged($index, element)">
+                </div>
+             </div>
+             <br>
+             <div class="row">
+              
+               <label class="col-sm-2 control-label">Start Time</label>
+                <div class='col-sm-2'>
+                  <input type="number" placeholder="Start Time" class="form-control" value.bind="element.starttime" change.delegate="elementChanged($index, element)">
+                </div>
+                <label class="col-sm-2 control-label">Intervals</label>
+              <div class='col-sm-2'>
+                <input type="number" placeholder="intervals" class="form-control" value.bind="element.intervalo" change.delegate="elementChanged($index, element)">                
+              </div>
+             </div>
+               
 
               </div>
               <div class="timeline-footer">
@@ -1580,13 +1637,13 @@
             <div class="row">
               <label class="col-sm-2 control-label">Button text</label>
               <div class='col-sm-10'>
-                <input class="form-control" type="text" placeholder="Limit 20 characters" value.bind="webViewButton" change.delegate="changedItem($index, item)">
+                <input class="form-control" type="text" placeholder="Limit 20 characters" value.bind="webViewButton">
               </div>
               <br><br>
               <label class="col-sm-2 control-label">URL</label>
               <div class='col-sm-10'>
                 <!--change.delegate="elementChanged($index, element)"-->
-                <input type="text" placeholder="Asset URL" class="form-control" value.bind="webViewurl" change.delegate="changedItem($index, item)">
+                <input type="text" placeholder="Asset URL" class="form-control" value.bind="webViewurl">
               </div>
             </div>
             <br>
@@ -1596,6 +1653,61 @@
             <button class="btn btn-primary" click.delegate="additem('webView')">Add</button>
           </div>
         </div>
+        <!-- ************************************Calendar webview************************************* -->
+        <div class="panel panel-primary" show.bind="isCalendar">
+          <div class="panel-heading" style="background:#3b5998;">viewCalendar</div>
+          <div class="panel-body">
+            <div class="row">
+              <label class="col-sm-2 control-label">Content</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" rows="5" value.bind="calendarValue"></textarea>
+              </div>
+            </div>
+            <br>
+            <div class="row">
+              <label class="col-sm-2 control-label">Button text</label>
+              <div class='col-sm-10'>
+                <input class="form-control" type="text" placeholder="Limit 20 characters" value.bind="calendarButton" >
+              </div>
+              <br><br>
+              <label class="col-sm-2 control-label">URL</label>
+              <div class='col-sm-10'>
+                <!--change.delegate="elementChanged($index, element)"-->
+                <input type="text" placeholder="Asset URL" class="form-control" value.bind="urlCalendar" >
+              </div>
+            </div>
+            <br>
+
+             <div class="row">
+              
+              <label class="col-sm-2 control-label">Min Time</label>
+                <div class='col-sm-2'>
+                  <input type="number" placeholder="Min Time" class="form-control" value.bind="calendarMinTime" >
+                </div>
+                <label class="col-sm-2 control-label">Max Time</label>
+                <div class='col-sm-2'>
+                  <input type="number" placeholder="Max Time" class="form-control" value.bind="calendarMaxTime">
+                </div>
+             </div>
+             <br>
+             <div class="row">
+              
+               <label class="col-sm-2 control-label">Start Time</label>
+                <div class='col-sm-2'>
+                  <input type="number" placeholder="Start Time" class="form-control" value.bind="calendarStartTime" >
+                </div>
+                <label class="col-sm-2 control-label">Intervals</label>
+              <div class='col-sm-2'>
+                <input type="number" placeholder="intervals" class="form-control" value.bind="calendarIntervalo">                
+              </div>
+             </div>
+             <br>
+          </div>
+          <div class="panel-body">
+            <button class="btn btn-primary" click.delegate="additem('viewCalendar')">Add</button>
+          </div>
+        </div>
+
         <!-- ./add smart reply element-->
         <div class="box-footer">
           <div class="row">
@@ -1649,8 +1761,13 @@
               <a class="btn btn-app ${isCountValidation ? 'active' : ''}"  click.delegate="elementSelected('countValidation')">
                 <i class="fa fa-list-ul"></i> Count Validation
               </a>
+
+              <div><p style="border-bottom: 1px solid #b6bfc8;"></p></div>
               <a class="btn btn-app ${isWebView ? 'active' : ''}"  click.delegate="elementSelected('webView')">
                 <i class="fa fa-globe"></i> Webview
+              </a>
+              <a class="btn btn-app ${isCalendar ? 'active' : ''}"  click.delegate="elementSelected('viewCalendar')">
+                <i class="fa fa-calendar"></i> viewCalendar
               </a>
             </div>
           </div>
