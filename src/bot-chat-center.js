@@ -51,6 +51,9 @@ export class BotChatCenter {
   messageToClient='';
   unread=[];
   limite=0;
+  json_Context;
+  key='';
+  values='';
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
@@ -61,16 +64,32 @@ export class BotChatCenter {
   attached(){    
     var posicion = $("#divfin").offset().top;
     var altura = $(document).height();
-    //console.log("altura:", altura);
+    console.log("altura:", altura);
     $("#userchat").click(function(){
-      /*var altura = $('#final').height();
-      console.log("altura:", altura);*/
+      /*var altura = $('#final').height();*/
+      console.log("altura:", altura*posicion);
       $("#final").animate({scrollTop:(altura*posicion)+"px"});
     });
   }
 
   //Function gets called whenever the class is created
   created() {
+  }
+  additem(type){
+    var newElement = {};
+
+    var prom = new Promise(function(accept, reject){accept();});
+
+      newElement.type = type;
+      newElement.key = this.key;
+      newElement.values = this.values;
+      this.key='';
+      this.values='';
+     // toastr.success('element added');
+      this.json_Context[this.key].push(newElement);
+
+      //console.log(JSON.stringify(this.json_Context));
+      this.context.context_json = JSON.stringify(this.json_Context);
   }
 
   //Function gets called whenever the view is activated

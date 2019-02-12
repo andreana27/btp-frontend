@@ -136,16 +136,25 @@ export class UserCreate {
   crearUser(){
       this.api.validateNewUserEmail(this.register.email).then(response => {
           //if the user already exists
-          if (response.count > 0) {
+          if (response.count > 0) {            
             toastr.warning(`E-mail ${this.register.email} already registered.`);
           }
           else {
             this.api.registerUser(this.register).then(result => {
               //a valid token is generated
               if (result.data.length > 3) {
-                let login = { email:this.register.email,password:this.register.password};
+                /*console.log("se registro el usuario");
+                var descripcion="creacion del usuario "+this.register.firstName+" "+this.register.lastName;
+                this.api.setLogUser(descripcion).then(respuesta=>{
+                  //console.log(descripcion);
+                  if(respuesta.data){
+                    console.log("se creo el log");
+                  }else{
+                    console.log("Hubo un error al crear el log");
+                  }
+                });*/
+                let login = { email:this.register.email,password:this.register.password};                
                 this.router.navigate('user/manager');
-                //console.log(result.data);
               }
               else {
                 toastr.error('Registration failed.');

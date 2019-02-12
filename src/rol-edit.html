@@ -1,20 +1,23 @@
 <template>
-  <div>
-    <div style="width:800px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
-      <div class="login-logo">
-        <a href="/#/">
-          <img src="assets/images/logo-wide.png" height="40px">
-        </a>
-      </div>
+  <section class="content-header">
+    <h1>
+      Role Management
+      <small>Role Edit</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Role Management</li>
+    </ol>
+  </section>
 
-      <div class="login-box-body" style="background-color:#96e9e9; border-radius: 15px;">
-        <div clas="container-fluid" style="width:600px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+  <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Role Edit</div>
+      <div class="panel-body">
+        <div class="row">
+
+        <div clas="container-fluid" style="padding-top:1%; padding-bottom:7%; margin-right:20%; margin-left:20%;">
         
-        <div class="form-inline">
-            <i class="fa fa-drivers-license" style="font-size:32px;text-align:center;"><h2>  Roles management </h2> </i>
-        </div>
-
-         
             <label class="text-primary"><strong><h3>Role ID: ${roleInfo.id}</h3></strong></label>
             
             <div style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
@@ -51,29 +54,16 @@
 
                 <div>
                    <label><strong>Add Feature</strong></label>
-             <!-- <div class="form-inline">
-                  <label class="col-sm-2 control-label">Permission</label>
-                  <div class="col-sm-5">
-                    <select class="form-control" value.bind="permiso.name">
-                      <option value.bind="''">Option---</option>
-                      <option value.bind="'create'">create</option>
-                      <option value.bind="'read'">read</option>
-                      <option value.bind="'update'">update</option>
-                      <option value.bind="'delete'">delete</option>
-                      <option value.bind="'select'">select</option>
-                    </select>
-                  </div>
-                </div>-->
                 <br> 
                 <div class="form-inline"> 
                 <label class="col-sm-2 control-label">Modules</label>             
-                  <div class="col-sm-5">
+                  <div class="col-sm-10">
                     <select  class="form-control" value.bind="feature.grid[x].id">
                       <option repeat.for="x of numerofeature" value.bind="feature.grid[x].id">${feature.grid[x].feature_name}</option>
                     </select>
 
                     <a class="btn btn-info btn-md" click.delegate="addFeature(feature.grid[x].id)">
-                     <i class="fa fa-key" style="font-size:16px" ></i>Add feature
+                     <i class="fa fa-key" style="font-size:16px" ></i>Add
                   </a>
                   </div>
                   
@@ -99,9 +89,6 @@
                         
                         <div class="btn-toolbar" role="toolbar">
                           <div class="btn-group">
-                              <!--<button type="submit" class="btn btn-warning btn-sm" click.delegate="DeleteUserRole(memberData.data[i].id,roleInfo.id)">
-                                <span class="fa fa-minus-circle" style="font-size:16px"></span>
-                              </button>-->
                             <a  class="btn btn-warning btn-sm" click.delegate="DeleteFeature(function.data[i].auth_functionality.feature_id)" >
                                 <i class="fa fa-minus-circle" style="font-size:16px" ></i>
                               </a>
@@ -126,7 +113,7 @@
 
                 <div class="form-inline"> 
                 <label class="col-sm-2 control-label">ID User:</label>             
-                  <div class="col-sm-5">
+                  <div class="col-sm-10">
                     <select  class="form-control" value.bind="userData.data[x].id">
                       <option repeat.for="x of userCuenta" value.bind="userData.data[x].id">ID: ${userData.data[x].id+" - "+userData.data[x].first_name+" "+userData.data[x].last_name}</option>
                     </select>
@@ -134,20 +121,8 @@
                     <span class="fa fa-plus-circle" style="font-size:16px"></span> Add 
                   </button>
                   </div>
-                  
                 </div>
-
-
-
-                <!--<label><strong>ID User: </strong></label>
-                <div class="form-inline">                              
-                  <input type="text" class="form-control col-xs-5" placeholder="ID user" value.bind="idUser.id">
-                  <button type="button" class="btn btn-success btn-md"  click.delegate="Adduser(roleInfo.id)">
-                    <span class="fa fa-plus-circle" style="font-size:16px"></span> Add 
-                  </button>
-                </div>-->
-              
-              <br>
+                <br>
                 <table class="table table-striped">
                   <thead class="thead-dark">
                     <tr>
@@ -166,9 +141,6 @@
                         
                         <div class="btn-toolbar" role="toolbar">
                           <div class="btn-group">
-                              <!--<button type="submit" class="btn btn-warning btn-sm" click.delegate="DeleteUserRole(memberData.data[i].id,roleInfo.id)">
-                                <span class="fa fa-minus-circle" style="font-size:16px"></span>
-                              </button>-->
                             <a  class="btn btn-warning btn-sm" click.delegate="DeleteUserRole(memberData.data[i].id,roleInfo.id)">
                                 <i class="fa fa-minus-circle" style="font-size:16px" ></i>
                               </a>
@@ -189,9 +161,6 @@
                    <button type="submit" class="btn btn-success " click.delegate="UpdateRole()">
                       <span class="fa fa-check-square-o" style="font-size:16px"></span> Save Changes
                     </button>
-                    <!--<a class="btn btn-success btn-md" click.delegate="UpdateRoleMembership()">
-                       <i class="fa fa-check-square" style="font-size:16px" ></i>Save Changes
-                    </a>-->
                     <a class="btn btn-danger btn-md" route-href="route: user-roles;">
                        <i class="fa fa-close" style="font-size:16px" ></i>Cancel Changes
                     </a>
@@ -200,9 +169,10 @@
             </div><!-- fin div-->
           
         </div>
-        <!--<router-view class="col-md-8"></router-view>-->
-     </div> 
-   </div>
- </div>
-  </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
 </template>

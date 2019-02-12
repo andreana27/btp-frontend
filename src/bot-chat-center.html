@@ -12,139 +12,181 @@
       <li class="active">Bot Chat Center</li>
     </ol>
   </section>
-
-
+  <br>
   <section class="content">
+    <!-- section chat-->
+
     <div class="row">
+      <div class="col-sm-3">
+        <div class="row">
+          <div class="col-sm-12">
+             <div class="panel panel-info">
+              <div class="panel-heading">
+                  <div class="row">
+                    <!--<label align="right" class="col-sm-2">Bot</label>-->
+                    <div class="col-sm-9">
+                      <select value.bind="selectedBotId" class="form-control" style="border-radius: 10px;">
+                        <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
+                      </select>
+                    </div>
+                    <div class="col-sm-1">
+                      <button class="btn btn-primary " type="submit" click.delegate="getChats()"><i class="fa fa-search" style="width:10px;border-radius: 5px;"></i></button>
+                    </div>                    
+                  </div>
+              </div>
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-sm-8">
+                      <select value.bind="selectedoption" change.delegate="changeCombo()" class="form-control" style=" border-radius: 10px;">
+                        <option  model.bind='1'>Bot Only</option>
+                        <option  model.bind='2'>Active</option>
+                        <option  model.bind='3'>Closed</option>
+                      </select>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="pre-scrollable">
+                    <ul id="userchat">
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                      <li>user1</li>
+                    </ul>
+                  </div>
+                  
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-5">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                  <div class="pre-scrollable" id="final">
+                    <ul>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                      <li>conversacion</li>
+                    </ul>
+                    <div id="divfin"></div>
+                  </div>
+                </div>
+                <!--<div><p style="border-bottom: 1px solid #e6e6e6;"></p></div>-->
+                <div>
+                  <textarea class="form-control" rows="2" id="chat"></textarea>
+                </div>
+                <div class="panel-heading">
+                  <div >
+                    <a align="right" class="btn btn-md" style="border-color:#00CED1; color: dodgerblue; color:black;" >
+                     Leave/stop Chat</a>
+                    <a align="right" class="btn btn-md" style="background:#00CED1; color:black;">
+                     Send</a>
+                </div>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
 
       <div class="col-sm-4">
         <div class="row">
           <div class="col-sm-12">
-            <div class="box box-widget widget-user">
-              <!-- Add the bg color to the header using any of the bg-* classes -->
-              <div class="widget-user-header bg-aqua-active">
-                <h3 class="widget-user-username">${bot.name}</h3>
-                <h5 class="widget-user-desc">
-                  <i class="fa fa-circle ${bot.enabled===true? 'text-success' : 'text-error'}"></i>
-                  ${bot.enabled===true ? 'Online': 'Offline'}
-                </h5>
-              </div>
-              <div class="widget-user-image">
-                <img class="img-circle" src="${api.backend + 'default/download/' + bot.picture}" alt="Bot Avatar">
-              </div>
-              <div class="box-footer">
-                <div class="row">
-                  <div class="col-sm-12">
-                    <h4 class="text-center">Channels</h4>
-                    <a class="btn btn-app" click.delegate="setChannel(0)">
-                      <i class="fa fa-address-book"></i> All Channels
-                    </a>
-                    <a class="btn btn-app" click.delegate="setChannel(1)">
-                      <i class="fa fa-facebook"></i> Messenger
-                    </a>
-                    <a class="btn btn-app" click.delegate="setChannel(2)">
-                      <i class="fa fa-send"></i> Telegram
-                    </a>
-                  </div>
-                </div>
-                <!-- *************************************************************************** -->
-                 <div class="panel panel-default">
-                <div style="margin-right:6%; margin-left:6%;">
-                  <br>
-                  <div>
-                    <h4 class="text-center">Select another Bot</h4>
-                  </div>
-                  <div>
-                    <select value.bind="selectedBotId" class="form-control">
-                      <option repeat.for="bot of bot_list" model.bind="bot.id">${bot.name}</option>
-                    </select>
-                  </div>
-                  <br>
-                  <div>
-                    <center>
-                      <button class="btn btn-primary" type="submit" click.delegate="getChats()">Get Messages</button>
-                    </center>
-                  </div>
-                  <br>
-                </div>
-              </div>
-                <!-- *************************************************************************** -->
-            </div>
-          </div>
-          </div>
-        </div>
-      </div><!-- bot section -->
-      
-     
-     <div class="col-sm-3">
-        <div class="box box-widget widget-user">
-          <div class="widget-user-header bg-yellow">
-           <h3>Contacts</h3>
-            <h4 innerhtml.bind="contactGroup"><h4>
-          </div>
-          <div class="box-footer">
-             <div class="panel panel-default">
-            <div class="panel-body">
-            <div class="wrap">
-            <div class="pre-scrollable">
-              <ul class="friend-list" show.bind="botSelected" id="userchat">
-                <li class="active bounceInDown"  repeat.for="contact of contactList">
-                  <a click.delegate="getMessagerByContact(contact.id)" class="clearfix">
-                    <img src="${contact.imagen}" alt="" class="img-circle">
-                    <!--assets/images/person_64.png -->
-                    <div class="friend-name">
-                      <strong>${contact.userfb}</strong><br>${contact.id}
-                      <strong><i style="color:${contact.unread===true? 'red' : ''}"class="${contact.unread===true? 'fa fa-circle' : ''}"></i></strong>
-                    
+            <div class="panel panel-info">
+              <div class="panel-heading">User1</div>
+                <div class="panel-body">
+                  <div class="pre-scrollable" style="overflow-x:hidden;">
+                    <div class="row">
+                      <label class="col-md-5">Custom variables</label>
+                      <label class="col-md-5">Value</label>
                     </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          </div>
-          </div>
-          </div>
-        </div>
-      </div><!-- messages section -->
-
-      <div class="col-sm-5">
-        <div class="box box-widget widget-user">
-          <div class="widget-user-header bg-lime-active">
-            <h3>Message History</h3>
-            <h5 innerhtml.bind="selectedContactName"><h5>
-            
-          </div>
-
-          <div class="box-footer">
-            <div class="panel panel-default">
-              <div class="panel-body">
-                <div class="wrap">
-                  <main>
-                    <!--
-                      
-                      style="overflow-y: scroll; height: 290px"
-                     -->
-                    <div class="pre-scrollable" id="final">
-
-                      <ul class="chat" innerhtml.bind="messagesHTML">
-                      </ul>     
-                      <div id="divfin"></div>
+                    <div class="row">
+                      <ul class="friend-list">
+                        <li>
+                          <div class="col-md-5"><input type="text" class="form-control" value.bind="key"></div>
+                          <div class="col-md-4"><input type="text" class="form-control" value.bind="values"></div>
+                          <div class="col-md-1"><button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                        </li>
+                      </ul>
                     </div>
-                    <div class="scrollable" if.bind=selectedunread>
-                      <input type="text" placeholder="Send message to client" class="form-control" value.bind="messageToClient">
-                      <!--<button class="btn btn-info pull-left bg-red" click.delegate='endChat()'>End Chat</button>-->
+                    <div>
                       <br>
-                      <button class="btn btn-info pull-left" click.delegate='refreshmsg()'>Refresh</button>
-                      <button class="btn btn-info pull-right" click.delegate='sendMessage()'>Send Message</button>
+                      <button type="button" class="btn btn-default " click.delegate="additem('variable')"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
                     </div>
-                  </main>
-                </div>
+                  </div>
+                  </div>
               </div>
-            </div>
           </div>
         </div>
-      </div><!-- messages section -->
+      </div>
     </div>
   </section>
 </template>

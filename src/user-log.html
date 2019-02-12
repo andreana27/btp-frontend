@@ -1,0 +1,56 @@
+<template>
+  <require from="bootstrap/css/bootstrap.css"></require>	 
+  <require from="ionicons/css/ionicons.css"></require>
+  <require from="admin-lte/css/AdminLTE.css"></require>
+  <require from="admin-lte/css/skins/skin-black.css"></require>
+  <require from="toastr/build/toastr.css"></require>
+  <loading-indicator loading.bind="router.isNavigating || api.isRequesting"></loading-indicator>
+<section class="content-header">
+    <h1>
+      User Activity
+      <small>Log</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">User History</li>
+    </ol>
+  </section>
+<section class="content">
+	<div>
+	    <div class="panel panel-primary">
+	        <div class="panel-heading">User activity in the chatbot system</div>
+	      	<div class="panel-body">
+	      	<br>
+	      	<div class="pre-scrollable">
+	        	<div class="table-responsive-md w-auto">
+		  	        <table class="table table-striped" style="table-layout: fixed;">
+		  	        	<thead class="thead-dark">
+		  	        		 <!-- Aplicadas en las filas -->
+						  <tr class="active">
+						  	<th style="width: 10px;">No.</th>
+						  	<th style="width: 50px;">Activity Date</th>
+						  	<th style="width: 60px;">User</th>
+						    <th style="width: 130px;">Activiy Description</th>
+						  </tr>
+		  	        	</thead>
+		  				<tbody>
+						 
+		  					<!-- -->
+						  <tr repeat.for="i of logCuenta"> 
+						  	<td style="width: 10px;">${logData.data[i].id}</td>
+						  	<td style="width: 50px;">${logData.data[i].action_date}</td>
+						  	<td style="width: 60px;">${logData.data[i].responsible_user}</td>
+						    <td style="width: 130px;">${logData.data[i].description}</td>						    
+						  </tr>
+
+						  <!-- **********************************-->
+						</tbody>
+					</table>
+				</div>
+	        </div>
+	        </div>
+	      </div>
+	    </div>
+	</div>
+</section>
+</template>

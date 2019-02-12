@@ -392,13 +392,9 @@ getPolicies(name) {
     })
     .then((responseData) => {
       this.isRequesting = false;
-      try{
-        return responseData;
-      }catch(err){
-          this.logout();
-        }
+      return responseData;
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
@@ -427,14 +423,9 @@ updatePolicies(policyData) {
     })
     .then((responseData) => {
       this.isRequesting = false;
-      try{
-        return responseData;
-      }catch(err){
-          this.logout();
-        }
+      return responseData;
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
@@ -626,13 +617,9 @@ updatePolicies(policyData) {
     })
     .then((responseData) => {
       this.isRequesting = false;
-      try{
         return responseData;
-      }catch(err){
-          this.logout();
-        }
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
 
@@ -641,6 +628,26 @@ updatePolicies(policyData) {
         console.log("enumeracionUsuarios: "+algo);
         return algo;
       });*/
+  }
+  getLogUser() {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`auth_log/${sessionStorage.sessionToken}.json`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+        return data;
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+    });
   }
   //----------------------------Roles----------------------------------------------------------
   getSelectRoles(id) {    
@@ -753,13 +760,9 @@ updatePolicies(policyData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-          this.logout();
-        }
+      return data;
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -790,13 +793,9 @@ updatePolicies(policyData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-          this.logout();
-        }
+      return data;
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -827,15 +826,10 @@ getUpdateRole(roleData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-        console.error(err);
-          this.logout();
-        }
+      return data;
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
       this.logout();
     });
   }
@@ -862,15 +856,10 @@ getUpdateRole(roleData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-        console.error(err);
-          this.logout();
-        }
+      return data;
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
       this.logout();
     });
     /*
@@ -901,8 +890,8 @@ getUpdateRole(roleData) {
           this.logout();
         }
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
       this.logout();
     });
   }
@@ -929,15 +918,9 @@ getUpdateRole(roleData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-        console.error(err);
-          this.logout();
-        }
+      return data;
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
@@ -990,20 +973,33 @@ getUpdateRole(roleData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
         return data;
-      }catch(err){
-        console.error(err);
-         this.logout();
-        }
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
       this.logout();
     });
   }
     //**************************************************************************************************
-
+  /*setLogUser(descripcion) {
+     this.isRequesting = true;
+    return this.client_auth.fetch(`auth_log_insert/${sessionStorage.sessionToken}/${descripcion}.json`, {
+      method: 'POST'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+        return data;
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+    });
+  }*/
   recoverPassword(email,new_password) {
     //TODO Validation of email and renewal of password
     return true;
@@ -1038,7 +1034,7 @@ getUpdateRole(roleData) {
           this.logout();
         }
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1185,7 +1181,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
        this.logout();
     });
       /*.then(response => response.json())
@@ -3065,6 +3061,7 @@ sendMessageToBroadcast(botId,message)
           return data;
       });*/
     }
+
   //------------------------------------------------------------
   updateAdName(idbot,idad,name)
     {
@@ -3298,6 +3295,7 @@ sendMessageToBroadcast(botId,message)
       get
     }
   }
+
 
     //get bot variables
     botVariables() {
@@ -3610,4 +3608,5 @@ sendMessageToBroadcast(botId,message)
         byBotId
       }
     }
+
 }

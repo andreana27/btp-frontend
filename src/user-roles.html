@@ -4,20 +4,24 @@
   <require from="admin-lte/css/AdminLTE.css"></require>
   <require from="admin-lte/css/skins/skin-black.css"></require>
   <require from="toastr/build/toastr.css"></require>
-  <div>
-    <div style="width:1100px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
-      <div class="login-logo">
-        <a href="/#/">
-          <img src="assets/images/logo-wide.png" height="40px">
-        </a>
-      </div>
-      <div class="login-box-body" style="background-color:#96e9e9; border-radius: 15px;">
-      	<div class="form-inline">
-	      	<i class="fa fa-user-secret" style="font-size:36px;text-align:center;"><h3> Roles Manager </h3></i>
-	      		      	
-    	</div>
+  <section class="content-header">
+    <h1>
+      Role Management
+      <small>Roles</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Role Management</li>
+    </ol>
+  </section>
+
+  <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Roles</div>
+      <div class="panel-body">
+        	<div class="row">
+        		<div style="padding-top:1%; padding-bottom:7%; margin-right:10%; margin-left:10%;">
     	<div>
-	      		
     		<a class="btn btn-primary btn-md" route-href="route: role-create;">
 	      			<i class="fa fa-plus-circle" style="font-size:16px" ></i> Add Role
   			</a>
@@ -45,31 +49,9 @@
 					  	<td>${roleData.data[i].id} </td>
 					    <td>${roleData.data[i].role} </td>
 					    <td>${roleData.data[i].description} </td>
-					    <!--<td>${quantityUser(roleData.data[i].id)} </td>-->
-					    <!--<td >
-					    	
-					    	<!--
-					    	<div class="container" >
-							  <div class="panel-group" >
-							    <div class="panel panel-default" >
-							      <div class="panel-heading">
-							          <a data-toggle="collapse" href="#collapse1">Users Detail</a>
-							      </div>
-							      <div  id="collapse1" class="panel-collapse collapse" >
-							        <ul class="list-group" repeat.for="x of numero">
-							          <li class="list-group-item">${roleData.data[x].auth_user.first_name+" "+roleData.data[x].auth_user.last_name +" " +x+ " "+numero}</li>
-							        </ul>
-							      </div>
-							    </div>
-							  </div>
-							</div>
-					    </td>-->
 					    <td>
 					    	<div class="btn-toolbar" role="toolbar">
 							  <div class="btn-group">
-							    <!--<button type="button" class="btn btn-warning btn-sm">
-							      <span class="fa fa-pencil-square-o" style="font-size:16px"></span>
-							    </button>-->
 							    <a class="btn btn-warning btn-sm" route-href="route: rol-edit;  params.bind:{info:roleData.data[i]}">
 						      		<i class="fa fa-pencil-square-o" style="font-size:16px" ></i>
 					  			</a>
@@ -82,6 +64,11 @@
 			</div>
         </form>
       </div>
-    </div>
-  </div>
+        	</div>
+    	</div>
+	</div>
+</section>
+
+      
+
 </template>

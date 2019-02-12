@@ -5,16 +5,22 @@
   <require from="admin-lte/css/AdminLTE.css"></require>
   <require from="admin-lte/css/skins/skin-black.css"></require>
   <require from="toastr/build/toastr.css"></require>
-  <div>
-    <div style="width:700px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
-      <div class="login-logo">
-        <a href="/#/">
-          <img src="assets/images/logo-wide.png" height="40px">
-        </a>
-      </div>
-
-      <div class="login-box-body" style="background-color:#96e9e9; border-radius: 15px;">
-        <div clas="container-fluid" style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
+    <section class="content-header">
+    <h1>
+      Role Management
+      <small>Create Role</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Role Management</li>
+    </ol>
+  </section>
+   <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Create Role</div>
+      <div class="panel-body">
+        <div class="row">
+          <div clas="container-fluid" style="padding-top:7%; padding-bottom:7%; margin-right:30%; margin-left:30%;">
         <div class="form-inline">
             <i class="fa fa-address-book" style="font-size:32px;text-align:center;"> <h2>  Create Role  </h2></i>
         </div>
@@ -34,18 +40,6 @@
                   <button type="button" class="btn btn-success" disabled.bind="!canRegister" click.delegate="registerNewRole()">
                     <span class="fa fa-check-square-o" style="font-size:16px"></span> Save Role
                   </button>
-                  <!--<button type="submit" class="btn btn-danger" click.delegate="cancelRegistry()">
-                    <span class="fa fa-close" style="font-size:16px"></span> Cancel 
-                  </button>
-                  click.delegate="cancelarpage()"
-                  -->
-                  <!--<a class="btn btn-success btn-md" disabled.bind="!canRegister" click.delegate="registerNewRole()">
-                     <i class="fa fa-check-square-o" style="font-size:16px" ></i>Save Role
-                  </a>-->
-                  <!--<a class="btn btn-danger btn-md" route-href="route: user-roles;">
-                     <i class="fa fa-close" style="font-size:16px" ></i>Cancel Changes
-                  </a>-->
-            <!-- /.col -->
           </div>
       </div>
       <!-- *********************************************************************************************** -->
@@ -55,37 +49,21 @@
               <div class="form-inline">
                 <h4><strong>Features</strong></h4>
               </div>
-              <!--<div class="form-inline">
-                  <label class="col-sm-2 control-label">Action</label>
-                  <div class="col-sm-5">
-                    <select class="form-control" value.bind="permiso.name">
-                      <option value.bind="''">Option---</option>
-                      <option value.bind="'create'">create</option>
-                      <option value.bind="'read'">read</option>
-                      <option value.bind="'update'">update</option>
-                      <option value.bind="'delete'">delete</option>
-                      <option value.bind="'select'">select</option>
-                    </select>
-                  </div>
-                  <div>
-                    <button type="button" class="btn btn-primary btn-md"  click.trigger="ocultar()">
-                      <span class="fa fa-bookmark" style="font-size:16px"></span> Search Table
-                    </button>
-                </div>
-                </div>-->
                 <br>
                 <div>    
                 <div class="form-inline"> 
-                <label class="col-sm-2 control-label">Modules</label>             
+                <label class="col-sm-2 control-label">Modules</label>  
+                <div class="row">
                   <div class="col-sm-10">
                     <select  class="form-control" value.bind="feature.grid[x].id">
                       <option repeat.for="x of numerofeature" value.bind="feature.grid[x].id">${feature.grid[x].feature_name}</option>
                     </select>
 
                      <a class="btn btn-info btn-md" click.delegate="addFeature(feature.grid[x].id)" >
-                     <i class="fa fa-key" style="font-size:16px" ></i>Add Module
-                  </a>
+                     <i class="fa fa-key" style="font-size:16px" ></i>Add</a>
                   </div>
+                </div>           
+                  
                 </div>
                 <br>
                
@@ -103,10 +81,9 @@
             </div>
 
       </div>
+        </div>
+      </div>
     </div>
+  </section>
 
-
-
-
-  </div>
 </template>

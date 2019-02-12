@@ -133,20 +133,9 @@ export class UserEdit {
           });
   }
   DeletePermission(id,name,table){
-    /*console.log("a eliminar: "+id+" "+table+" "+name);
-    //quitar db. in table
-    //var table_name=table.substring(3);
-    //console.log("table name: "+table_name);
-    this.api.deletePermission(id,name,table).then((datos)=>{
-            //this.router.navigate('rol-edit');
-            console.log("valor a eliminar: "+datos.data);
-            toastr.success("Delete Permission");
-             window.location.reload();
-          });*/
   }
 //********************************************************
   UpdateRole(){
-    //console.log("role a actualizar: "+this.roleInfo.id+" "+this.roleInfo.access_role);
      this.api.getUpdateRole(this.roleInfo).then((resultado)=>{
       try{
           if(resultado.data==1){
@@ -157,7 +146,7 @@ export class UserEdit {
             toastr.error("Update not done");
           }
          
-        }catch(e){}
+        }catch(e){console.log(e);}
          });
         
   }
@@ -241,7 +230,7 @@ export class UserEdit {
                           toastr.error("Module not added");
                         }
                       }catch(e){
-
+                        console.log(e);
                       }
                 });
   }

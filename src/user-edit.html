@@ -1,17 +1,22 @@
 <template>
-  <div>
-    <div style="width:700px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
-      <div class="login-logo">
-        <a href="/#/">
-          <img src="assets/images/logo-wide.png" height="40px">
-        </a>
-      </div>
-
-      <div class="login-box-body" style="background-color: #8bdac0; border-radius: 15px;">
+  <section class="content-header">
+    <h1>
+      User Management
+      <small>User Edit</small>
+    </h1>
+    <ol class="breadcrumb">
+      <li><a href="../../index.html"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">User Management</li>
+    </ol>
+  </section>
+  <section class="content">
+    <div class="panel panel-primary">
+      <div class="panel-heading">User Edit</div>
+      <div class="panel-body">
+        <div class="row">
+    <div style="padding-top:1%; padding-bottom:1%; margin-right:auto; margin-left:auto;">
         <div clas="container-fluid" style="width:400px;padding-top:7%; padding-bottom:7%; margin-right:auto; margin-left:auto;">
-        <div class="form-inline">
-            <i class="fa fa-address-card-o" style="font-size:32px"> </i><br clear="left"><h2>  User management </h2>
-        </div>
+        
 
         <form submit.delegate="UpdateUserData()">
           <label class="text-primary"><strong><h3>User ID: ${userInfo.id}</h3></strong></label>
@@ -53,7 +58,10 @@
         </form>
       </div>
         <!--<router-view class="col-md-8"></router-view>-->
+    </div>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
+
 </template>

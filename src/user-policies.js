@@ -116,7 +116,7 @@ export class UserManager {
                      }else{
                       toastr.error('Unrealized policy');
                      }
-                     window.location.reload();
+                     //window.location.reload();
                     }catch(e){
                       console.log(e);
                      }
@@ -168,7 +168,8 @@ export class UserManager {
   formato(texto){
     
     //((0[1-9])|((1|2)[0-9])|(30|31))[/]((0[1-9])|10|11|12)[/]((1|2)[0-9][0-9][0-9])
-    var re = /^((0[1-9])|((1|2)[0-9])|(30|31))$/;
+    var re=/^((0[1-9])[0-9]+)$/
+    //var re = /^((0[1-9])|((1|2)[0-9])|(30|31))$/;
     //var re = /^((1|2)[0-9][0-9][0-9])-((0[1-9])|10|11|12)-((0[1-9])|((1|2)[0-9])|(30|31))$/;
     return re.test(texto);
     //return texto.replace(/^(\d{4})-(\d{2})-(\d{2})$/g,'$3/$2/$1');

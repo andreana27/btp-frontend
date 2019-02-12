@@ -29,7 +29,7 @@ created() {
       try{
             this.numerofeature=Object.keys(result.grid).length;
             this.feature=result;
-          }catch(e){}
+          }catch(e){ console.log(e);}
         });
   }
 
@@ -62,7 +62,7 @@ registerNewRole() {
               return true; 
               }
            }catch(e){
-
+              console.log(e);
             }
             });            
   }// end 

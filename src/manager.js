@@ -101,6 +101,12 @@ export class Manager {
         name: 'user-policies',
         title:'Policies'
       },
+      {
+        route: 'user/log',
+        moduleId: 'user-log',
+        name: 'user-log',
+        title:'Log'
+      },
       //*********************************
       {
         route: 'rol/roles',

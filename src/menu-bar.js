@@ -29,7 +29,7 @@ export class MenuBar {
  cancelarpage(){
     this.router.navigate('user/manager');
   }
-  metodo(nombre){
+  /*metodo(nombre){
     //this.router.navigate('user/manager');
     this.api.getSearchPermission(nombre).then(resultp => {
                         console.log("*********************"+resultp);
@@ -62,7 +62,7 @@ export class MenuBar {
                           this.api.setLocations(false);
                         }
                 });
-  }
+  }*/
   //*********************************************************
   attached() {
     console.log($('*[data-widget="tree"]').tree());

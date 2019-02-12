@@ -764,7 +764,7 @@
               <h3 class="timeline-header"><a href="#">Captcha</a></h3>
               <div class="timeline-body">
 
-                 <div class="row">
+                <div class="row">
                   <label class="col-sm-2 control-label">Content</label>
                   <div class="col-sm-10">
                     <textarea class="form-control" rows="5" value.bind="element.value" change.delegate="elementChanged($index, element)"></textarea>
@@ -802,17 +802,15 @@
                     </select>
                   </div>
                 </div>
-
+                </div>
                 <div class="timeline-footer">
-                  <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
-               </div>
+                  <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>               
               </div>
             </div>
             <!--*************************Count Validation show element**************************************** -->
             <div if.bind="element.type=='countValidation'"  class="timeline-item">
                 <h3 class="timeline-header"><a href="#">Count Validation</a></h3>
-                <div class="timeline-body">
-                  
+                <div class="timeline-body">                  
                   <div class="row">
                       <label class="col-sm-2 control-label">Limit: </label>
                       <div class='col-sm-10'>
@@ -848,12 +846,12 @@
                         </ul>
                       </div>
                   </div>
-
+                  </div>
                   <div class="timeline-footer">
                     <button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button>
                     <button class="btn btn-primary" click.delegate="editExcludeUsers(element, $index)">Edit exclude users</button>
                   </div>
-                </div>
+                
             </div>
             <!--*************************webview show element**************************************** -->
             <div if.bind="element.type=='webView'"  class="timeline-item">
@@ -908,28 +906,27 @@
                   </div>
                 </div>
                 <br>
-                 <div class="row">
-              <label class="col-sm-2 control-label">Min Time</label>
-                <div class='col-sm-2'>
-                  <input type="number" placeholder="Min Time" class="form-control" value.bind="element.mintime" change.delegate="elementChanged($index, element)">
+                <div class="row">
+                    <label class="col-sm-2 control-label">Min Time</label>
+                    <div class='col-sm-2'>
+                      <input type="number" placeholder="Min Time" class="form-control" value.bind="element.mintime" change.delegate="elementChanged($index, element)">
+                    </div>
+                    <label class="col-sm-2 control-label">Max Time</label>
+                    <div class='col-sm-2'>
+                      <input type="number" placeholder="Max Time" class="form-control" value.bind="element.maxtime" change.delegate="elementChanged($index, element)">
+                    </div>
                 </div>
-                <label class="col-sm-2 control-label">Max Time</label>
-                <div class='col-sm-2'>
-                  <input type="number" placeholder="Max Time" class="form-control" value.bind="element.maxtime" change.delegate="elementChanged($index, element)">
-                </div>
-             </div>
-             <br>
-             <div class="row">
-              
-               <label class="col-sm-2 control-label">Start Time</label>
-                <div class='col-sm-2'>
-                  <input type="number" placeholder="Start Time" class="form-control" value.bind="element.starttime" change.delegate="elementChanged($index, element)">
-                </div>
-                <label class="col-sm-2 control-label">Intervals</label>
-              <div class='col-sm-2'>
-                <input type="number" placeholder="intervals" class="form-control" value.bind="element.intervalo" change.delegate="elementChanged($index, element)">                
-              </div>
-             </div>
+                <br>
+                <div class="row">                
+                  <label class="col-sm-2 control-label">Start Time</label>
+                  <div class='col-sm-2'>
+                    <input type="number" placeholder="Start Time" class="form-control" value.bind="element.starttime" change.delegate="elementChanged($index, element)">
+                  </div>
+                  <label class="col-sm-2 control-label">Intervals</label>
+                  <div class='col-sm-2'>
+                    <input type="number" placeholder="intervals" class="form-control" value.bind="element.intervalo" change.delegate="elementChanged($index, element)">                
+                  </div>
+               </div>
                
 
               </div>
@@ -1524,10 +1521,8 @@
         <div class="panel panel-primary" show.bind="isCaptcha">
             <div class="panel-heading">Captcha</div>
             <div class="panel-body">
-              <div>
-                <h4>Use this field for generate a captcha into the bot chat</h4>
-              </div>
-                <div class="row">
+              <div><h4>Use this field for generate a captcha into the bot chat</h4></div>
+              <div class="row">
                 <label class="col-sm-3 control-label">Content</label>
                 <div class="col-sm-9">
                   <textarea class="form-control" rows="5" value.bind="captchaItem.value" change.delegate="changedItem($index, captchaItem)"></textarea>
@@ -1678,31 +1673,30 @@
             </div>
             <br>
 
-             <div class="row">
+            <div class="row">
               
               <label class="col-sm-2 control-label">Min Time</label>
-                <div class='col-sm-2'>
+              <div class='col-sm-2'>
                   <input type="number" placeholder="Min Time" class="form-control" value.bind="calendarMinTime" >
-                </div>
-                <label class="col-sm-2 control-label">Max Time</label>
-                <div class='col-sm-2'>
+              </div>
+              <label class="col-sm-2 control-label">Max Time</label>
+              <div class='col-sm-2'>
                   <input type="number" placeholder="Max Time" class="form-control" value.bind="calendarMaxTime">
-                </div>
-             </div>
-             <br>
-             <div class="row">
-              
-               <label class="col-sm-2 control-label">Start Time</label>
-                <div class='col-sm-2'>
+              </div>
+            </div>
+            <br>
+            <div class="row">              
+              <label class="col-sm-2 control-label">Start Time</label>
+              <div class='col-sm-2'>
                   <input type="number" placeholder="Start Time" class="form-control" value.bind="calendarStartTime" >
-                </div>
-                <label class="col-sm-2 control-label">Intervals</label>
+              </div>
+              <label class="col-sm-2 control-label">Intervals</label>
               <div class='col-sm-2'>
                 <input type="number" placeholder="intervals" class="form-control" value.bind="calendarIntervalo">                
               </div>
-             </div>
+            </div>
              <br>
-          </div>
+          </div><!--body1 -->
           <div class="panel-body">
             <button class="btn btn-primary" click.delegate="additem('viewCalendar')">Add</button>
           </div>
