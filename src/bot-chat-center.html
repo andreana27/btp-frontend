@@ -22,6 +22,14 @@
           <div class="col-sm-12">
              <div class="panel panel-info">
               <div class="panel-heading">
+              <div class="row">
+                <div class="col-md-12">
+                  <h4>${bot.name}</h4>
+                      <i class="fa fa-circle ${bot.enabled===true? 'text-success' : 'text-error'}"></i>
+                      ${bot.enabled===true ? 'Online': 'Offline'}
+                </div>
+              </div>
+                <div><p style="border-bottom: 1px solid lightslategrey;"></p></div>
                   <div class="row">
                     <!--<label align="right" class="col-sm-2">Bot</label>-->
                     <div class="col-sm-9">
@@ -34,7 +42,7 @@
                     </div>                    
                   </div>
               </div>
-                <div class="panel-body">
+                <div class="panel-body" style="height: 355px;">                  
                   <div class="row">
                     <div class="col-sm-8">
                       <select value.bind="selectedoption" change.delegate="changeCombo()" class="form-control" style=" border-radius: 10px;">
@@ -45,28 +53,19 @@
                     </div>
                   </div>
                   <br>
-                  <div class="pre-scrollable">
-                    <ul id="userchat">
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
-                      <li>user1</li>
+                  <div class="pre-scrollable" style="max-height: 270px;">
+                   <!-- <ul id="userchat">-->
+                    <ul class="friend-list" show.bind="botSelected" id="userchat">
+                      <li class="active bounceInDown"  repeat.for="contact of contactList">
+                        <a click.delegate="getMessagerByContact(contact.id)" class="clearfix">
+                          <img src="${contact.imagen}" alt="" class="img-circle">
+                          <!--assets/images/person_64.png -->
+                          <div class="friend-name">
+                            <strong>${contact.userfb}</strong><br>${contact.id}
+                            <strong><i style="color:${contact.unread===true? 'red' : ''}"class="${contact.unread===true? 'fa fa-circle' : ''}"></i></strong>
+                          </div>
+                        </a>
+                      </li>
                     </ul>
                   </div>
                   

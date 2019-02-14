@@ -144,13 +144,16 @@ export class BotTracking{
         this.total=keysdata.Total;
         this.isStatistics1=true;
         this.long_storage=Object.keys(this.datastorage).length;
+        //console.log(this.long_storage);
         try{
         for (var i = 0;i<=this.long_storage; i++) {
-            this.largo_cadena=this.datastorage[0].bot_internal_storage.channel_id.split(",").length;
-          this.canalT2.push(this.datastorage[0].bot_internal_storage.channel_id.split(",")[0]);
-          console.log(this.datastorage[0].bot_internal_storage.channel_id.split(",")[0]);
+            this.largo_cadena=this.datastorage[i].bot_internal_storage.channel_id.split(",").length;
+          this.canalT2.push(this.datastorage[i].bot_internal_storage.channel_id.split(",")[0]);
+          //console.log(this.datastorage[i].bot_internal_storage.channel_id.split(",")[0]);
           if(this.largo_cadena==2){
-            this.adT2.push(this.datastorage[0].bot_internal_storage.channel_id.split(",")[1]);
+            this.adT2.push(this.datastorage[i].bot_internal_storage.channel_id.split(",")[1]);
+          }else{
+            this.adT2.push('N/A');
           }
           
         }

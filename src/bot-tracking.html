@@ -153,7 +153,7 @@
               </button>
             </td>            
             <td>${canalT2[i]}</td>
-            <td>${datastorage[i].bot_internal_storage.storage_owner}</td>
+            <td>${datastorage[i].bot_internal_storage.fbuser_name=="" || datastorage[i].bot_internal_storage.fbuser_name==Null ? datastorage[i].bot_internal_storage.storage_owner:datastorage[i].bot_internal_storage.fbuser_name }</td>
             <td>${datastorage[i].bot_internal_storage.first_contact}</td>
             <td>${datastorage[i].bot_storage.storage_value}</td>
           </tr>
