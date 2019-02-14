@@ -11,6 +11,7 @@ import {
   TableFilterUpdated
 } from './messages';
 import $ from 'jquery';
+import * as toastr from 'toastr';
 
 @customElement('tag-it')
 @inject(WebAPI, EventAggregator)
@@ -25,6 +26,7 @@ export class BotChatCenter {
   selectedBotId = [];
   //bool indicator enables the bot variable table
   botSelected = false;
+  loading=true;
   //petition package size
   recordsPerPetition = 50;
   //list of contacts
@@ -54,6 +56,7 @@ export class BotChatCenter {
   json_Context;
   key='';
   values='';
+  id_usuario='';
   //Class constructor
   constructor(api, ea) {
     this.ea = ea;
@@ -70,6 +73,8 @@ export class BotChatCenter {
       console.log("altura:", altura*posicion);
       $("#final").animate({scrollTop:(altura*posicion)+"px"});
     });
+
+    //$("#cambiar").load("#cambiar")
   }
 
   //Function gets called whenever the class is created
@@ -110,6 +115,8 @@ export class BotChatCenter {
     //User defined funtcions
     //------------------------
     getChats() {
+      this.botSelected = false;
+      this.loading=true;
     //document.getElementById('final').scrollIntoView(false);
       //setting the selected bot
       this.bot = this.bot_list.filter(x => x.id == this.selectedBotId)[0];
@@ -119,18 +126,22 @@ export class BotChatCenter {
       this.totalRecords = 0;
       this.contactList = [];
       this.messagesHTML = 'Select a contact';
-      this.api.lookForMessages(this.selectedBotId).then(clients=>{
-        this.unread=clients.cont;
+      this.api.lookForMessages(this.selectedBotId).then(clients=>{//obtiene los datos de los usuarios
+        this.unread=clients;
+        if(this.unread.length <=0){
+          toastr.error('The selected bot has no users registered');
+        }
       });
-      this.api.getBotMessageRecordCount(this.selectedBotId).then(numberOfRecords => {
+      this.api.getBotMessageRecordCount(this.selectedBotId).then(numberOfRecords => {//obtiene el numero de filas de la conversacion
         this.numberOfRecords = numberOfRecords;
         this.botSelected = true;
+        console.log("numeros conversacion",this.numberOfRecords);
         if(this.numberOfRecords <= 0) {
           alert("The selected bot has no logged messages");
         }
         else {
           //setting the number of petitions to make to the backend depending of the number of records of variables
-          this.numberOfPetitions = this.toInteger(this.numberOfRecords / this.recordsPerPetition) + 1;
+          /*this.numberOfPetitions = this.toInteger(this.numberOfRecords / this.recordsPerPetition) + 1;
           if (this.numberOfPetitions == 0) {
             this.numberOfPetitions = 1;
           }
@@ -139,7 +150,7 @@ export class BotChatCenter {
             let inf_limit = this.recordsPerPetition * iteration;
             let sup_limit = inf_limit + this.recordsPerPetition;
             //console.log("limites ",inf_limit,sup_limit);
-            this.api.getBotMessages(this.selectedBotId,inf_limit,sup_limit).then(recordList => {
+            this.api.getBotMessages(this.selectedBotId,inf_limit,sup_limit).then(recordList => {//obteiene las conversaciones
               //getting all the contacts from the logged Messages
               for(let n = 0;n<recordList.length;n++) {
                 let record = recordList[n];
@@ -160,20 +171,46 @@ export class BotChatCenter {
               });
               this.totalRecords = this.tableRecords.length;
               this.hasRecords = true;
-              /*let contact = {id:'Broadcast',unread:true,userfb:'',imagen:"assets/images/person_64.png"};
+              let contact = {id:'Broadcast',unread:true,userfb:'',imagen:"assets/images/person_64.png"};
               this.unread.push({owner:'Broadcast',chatcenter:true})
               if(!this.contactList.filter(x=>x.id=='Broadcast')[0])
               {
                 this.contactList.unshift(contact);
                 this.unread.push({owner:'Broadcast',chatcenter:true});
-              }*/
+              }
             });
-          }
+         }*/
+        }
+        this.loading=false;
+      });
+    }
+    variablesUser(owner,userfb){//varaibles por usuario en bot_storage
+      if (typeof userfb === "undefined"){
+        this.selectedContactName ="";
+      }else{
+        this.selectedContactName =userfb; 
+      }
+      this.id_usuario =owner; 
+      this.api.variablesByUsers(this.selectedBotId,owner).then(keysvalue => {
+        this.key_list = keysvalue;
+        console.log(this.key_list);
+        if(this.key_list.length > 0){
+
+          this.botSelected = true;
+        }else {
+          //this.botSelected = false;
+          toastr.error('The selected bot has no variables registered');
         }
       });
-
     }
-
+    removeVariable(owner,key,value){
+      console.log(owner,key,value);
+       this.api.deleteVariables(this.selectedBotId,owner.trim(),key.trim(),value.trim()).then(borrar => {
+        this.resultado=borrar.data;
+        console.log("resultado ",this.resultado);
+      });
+    }
+/*
     addRecord(id,owner,type,content,origin,medium,message_date,message_time,content_type) {
       let record = { id:'', owner:'', ctype:'', ccontent:'',origin:'',channel:'',date:'',time:''};
       //setting the owner
@@ -190,7 +227,7 @@ export class BotChatCenter {
       record.userfb=this.unread.filter(x=>x.owner==owner)[0].userfb;
       record.imagen=this.unread.filter(x=>x.owner==owner)[0].imagen;
       //adding the Contacts
-      //console.log('probando',record.unread,'userfb: ',record.imagen);
+      console.log('probando',record.unread);
       let foundRecord = this.contactList.filter(x => x.id == owner)[0];
 
       if (!foundRecord) {
@@ -297,11 +334,13 @@ export class BotChatCenter {
 
     refreshmsg()
     {
+      this.loading=true;
       this.tableRecords = [];
       this.totalRecords = 0;
       this.api.getBotMessageRecordCount(this.selectedBotId).then(numberOfRecords => {
         this.numberOfRecords = numberOfRecords;
         this.botSelected = true;
+        
         if(this.numberOfRecords <= 0) {
           alert("The selected bot has no logged messages");
         }
@@ -336,17 +375,19 @@ export class BotChatCenter {
           });
 
         }
+        this.loading=false;
       });
     }
 
     sendMessage()
     {
       console.log(this.client);
+      this.loading=true;
       /*console.log(this.selectedContactId);
       if(this.selectedContactId=='Broadcast')
       {
         this.client=this.selectedContactId;
-      }*/
+      }*//*
       if(this.client=='telegram')
       {
         this.api.sendMessageToTelegram(this.selectedBotId,this.selectedContactId,this.messageToClient).then(response=>{
@@ -361,6 +402,7 @@ export class BotChatCenter {
           this.api.getBotMessageRecordCount(this.selectedBotId).then(numberOfRecords => {
             this.numberOfRecords = numberOfRecords;
             this.botSelected = true;
+            
             if(this.numberOfRecords <= 0) {
               alert("The selected bot has no logged messages");
             }
@@ -396,6 +438,7 @@ export class BotChatCenter {
 
             }
           });
+          this.loading=false;
         });
       }
       else
@@ -404,7 +447,7 @@ export class BotChatCenter {
         this.api.sendMessageToBroadcast(this.selectedBotId,this.messageToClient).then(response=>
           {
             console.log(response);
-          });*/
+          });*//*
       }
     }
     endChat()
@@ -478,7 +521,7 @@ export class BotChatCenter {
       this.messagesHTML = 'Select a Contact';
       this.getContactsByChannel();
       //this.getMessagerByContact(this.selectedContactId);
-    }
+    }*/
     toInteger(number){
       return Math.round(  // round to nearest integer
         Number(number)    // type cast your input

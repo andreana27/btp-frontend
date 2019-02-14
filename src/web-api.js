@@ -1046,8 +1046,11 @@ getUpdateRole(roleData) {
 
   validateNewUserEmail(email) {
     this.isRequesting = true;
-    return this.client_auth.fetch(`user/${email}.json`, {
-        method: 'GET'//GET
+    let formData = new FormData();
+    formData.append('email', email);
+    return this.client_auth.fetch(`user.json`, {
+        method: 'POST',
+        body: formData
       })
     .then((response) => {
       if (response.ok) {
@@ -1058,13 +1061,9 @@ getUpdateRole(roleData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-          this.logout();
-        }
+      return data;
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -2980,6 +2979,87 @@ getVariableList(botId) {
           return data;
       });*/
     }
+//=====================================chat center=====================================
+deleteVariables(botid,owner,key,value) {
+    this.isRequesting = true;
+    let formData = new FormData();
+    formData.append('token', sessionStorage.sessionToken);
+    formData.append('id', botid);
+    formData.append('owner', owner);
+    formData.append('key', key);
+    formData.append('value', value);
+    console.log(owner,key,value,botid,sessionStorage.sessionToken);
+    return this.client_auth.fetch(`delete_variable.json`, {
+        method: 'POST',
+        body: formData
+      })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      return data;
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+    });
+  } 
+  insertVariables(botid,owner,key,value) {//obteiene las varialbes por usuario
+    this.isRequesting = true;
+    let formData = new FormData();
+    formData.append('id', botid);
+    formData.append('owner', owner);
+    formData.append('token', sessionStorage.sessionToken);
+    formData.append('key', key);
+    formData.append('value', value);
+    return this.client_auth.fetch(`insert_variable.json`, {
+        method: 'POST',
+        body: formData
+      })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      return data;
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+    });
+  } 
+ variablesByUsers(botid,owner) {//obteiene las varialbes por usuario
+    this.isRequesting = true;
+    let formData = new FormData();
+    formData.append('id', botid);
+    formData.append('owner', owner);
+    formData.append('token', sessionStorage.sessionToken);
+    return this.client_auth.fetch(`values_users.json`, {
+        method: 'POST',
+        body: formData
+      })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+      return data.content;
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+    });
+  }    
     lookForMessages(botId)
     {//falta implementacion en el backend
       this.isRequesting = true;
@@ -2995,7 +3075,7 @@ getVariableList(botId) {
     })
     .then((data) => {
       this.isRequesting = false;
-        return data;
+        return data.cont;
     }).catch((error) => {
       console.log(error);
       //console.log("401 UNAUTHORIZED");
@@ -3089,15 +3169,10 @@ sendMessageToBroadcast(botId,message)
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-        console.error(err);
-        this.logout();
-        }
+      return data;
     }).catch((error) => {
-      //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
+      //console.log("401 UNAUTHORIZED");
       this.logout();
     });
     }

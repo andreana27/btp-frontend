@@ -1,6 +1,6 @@
 <template>
   <require from="./resources/elements/bot-chat.css"></require>
-  
+  <require from="chat-center.css"></require>
   <section class="content-header">
     <h1>
       Data
@@ -54,15 +54,17 @@
                   </div>
                   <br>
                   <div class="pre-scrollable" style="max-height: 270px;">
-                   <!-- <ul id="userchat">-->
+                    <div id="contenedor" show.bind="loading">
+                       <div class="loader" id="loader">Loading...</div>
+                    </div>
                     <ul class="friend-list" show.bind="botSelected" id="userchat">
-                      <li class="active bounceInDown"  repeat.for="contact of contactList">
-                        <a click.delegate="getMessagerByContact(contact.id)" class="clearfix">
-                          <img src="${contact.imagen}" alt="" class="img-circle">
+                      <li class="active bounceInDown"  repeat.for="contact of unread">
+                        <a click.delegate="variablesUser(contact.owner,contact.userfb)" class="clearfix">
+                         <img src="${contact.imagen}" alt="" class="img-circle">
                           <!--assets/images/person_64.png -->
                           <div class="friend-name">
-                            <strong>${contact.userfb}</strong><br>${contact.id}
-                            <strong><i style="color:${contact.unread===true? 'red' : ''}"class="${contact.unread===true? 'fa fa-circle' : ''}"></i></strong>
+                            <strong>${contact.userfb}</strong><br>${contact.owner}
+                            <!--<strong><i style="color:${contact.unread===true? 'red' : ''}"class="${contact.unread===true? 'fa fa-circle' : ''}"></i></strong>-->
                           </div>
                         </a>
                       </li>
@@ -160,19 +162,22 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="panel panel-info">
-              <div class="panel-heading">User1</div>
-                <div class="panel-body">
+              <div class="panel-heading">
+                <div class="titleuser" innerhtml.bind="selectedContactName"></div>
+                <div class="" innerhtml.bind="id_usuario"></div>
+              </div>
+                <div class="panel-body" id="cambiar">
                   <div class="pre-scrollable" style="overflow-x:hidden;">
                     <div class="row">
                       <label class="col-md-5">Custom variables</label>
                       <label class="col-md-5">Value</label>
                     </div>
                     <div class="row">
-                      <ul class="friend-list">
+                      <ul class="friend-list" repeat.for="key of key_list">
                         <li>
-                          <div class="col-md-5"><input type="text" class="form-control" value.bind="key"></div>
-                          <div class="col-md-4"><input type="text" class="form-control" value.bind="values"></div>
-                          <div class="col-md-1"><button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeElement($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                          <div class="col-md-5"><input type="text" class="form-control" value.bind="key.storage_key"></div>
+                          <div class="col-md-4"><input type="text" class="form-control" value.bind="key.storage_value"></div>
+                          <div class="col-md-1"><button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeVariable(id_usuario,key.storage_key,key.storage_value)"><i class="fa fa-trash" aria-hidden="true"></i></button></div>
                         </li>
                       </ul>
                     </div>
