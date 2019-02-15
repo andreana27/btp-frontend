@@ -19,9 +19,20 @@
 	<div>
 	    <div class="panel panel-primary">
 	        <div class="panel-heading">User activity in the chatbot system</div>
-	      	<div class="panel-body">
+	      	<div class="panel-body" style="height: 460px;">
+	      	<div class="row">
+	      		<label class="col-md-2">Rows to display</label>
+		          <div class="col-md-2">
+		           	<input type="number" name="valor" class="form-control" value.bind="numero">
+		          </div>
+		          <div class="col-md-1">
+		          	<button class="btn btn-primary" type="submit" click.delegate="mostrarfilas(numero)">
+                    <span class="fa fa-search" style="font-size:16px"></span></button>
+		          </div>
+	      	</div>
 	      	<br>
-	      	<div class="pre-scrollable">
+
+	      	<div class="pre-scrollable" style="max-height: 370px;">
 	        	<div class="table-responsive-md w-auto">
 		  	        <table class="table table-striped" style="table-layout: fixed;">
 		  	        	<thead class="thead-dark">
@@ -36,11 +47,11 @@
 		  				<tbody>
 						 
 		  					<!-- -->
-						  <tr repeat.for="i of logCuenta"> 
-						  	<td style="width: 10px;">${logData.data[i].id}</td>
-						  	<td style="width: 50px;">${logData.data[i].action_date}</td>
-						  	<td style="width: 60px;">${logData.data[i].responsible_user}</td>
-						    <td style="width: 130px;">${logData.data[i].description}</td>						    
+						  <tr repeat.for="data of logData"> 
+						  	<td style="width: 10px;">${data.id}</td>
+						  	<td style="width: 50px;">${data.action_date}</td>
+						  	<td style="width: 60px;">${data.responsible_user}</td>
+						    <td style="width: 130px;">${data.description}</td>						    
 						  </tr>
 
 						  <!-- **********************************-->

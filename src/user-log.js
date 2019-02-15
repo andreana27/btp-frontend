@@ -16,7 +16,18 @@ export class UserManager {
         this.api.getLogUser().then((datos)=>{
            try{
             this.logData=datos;
-            this.logCuenta=Object.keys(datos.data).length;
+            this.numero=30;
+            //this.logCuenta=Object.keys(datos.data).length;
+            }catch(e){
+              console.log(e);
+            }
+          });
+  }
+  mostrarfilas(filas){
+    this.api.getLogUserRows(filas).then((datos)=>{
+           try{
+            this.logData=datos;
+            //this.logCuenta=Object.keys(datos.data).length;
             }catch(e){
               console.log(e);
             }

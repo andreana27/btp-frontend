@@ -374,7 +374,7 @@ getPoliciesAll() {  //not used
     }).catch((error) => {
       console.log(error);
       this.logout();
-      /*console.log("401 UNAUTHORIZED");
+      /*console.log("error");
       this.app.setRoot('login');*/
     });
   }
@@ -463,7 +463,7 @@ updatePolicies(policyData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log("error");
       this.logout();
     });
   }
@@ -490,7 +490,7 @@ updatePolicies(policyData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log("error");
       this.logout();
     });
   }
@@ -526,7 +526,7 @@ updatePolicies(policyData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
@@ -562,7 +562,7 @@ updatePolicies(policyData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
@@ -591,15 +591,10 @@ updatePolicies(policyData) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
-        return data;
-      }catch(err){
-        console.error(err);
-        this.logout();
-        }
+      return data;
     }).catch((error) => {
+      console.log(error);
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
       this.logout();
     });
   }
@@ -643,13 +638,53 @@ updatePolicies(policyData) {
     })
     .then((data) => {
       this.isRequesting = false;
-        return data;
+        return data.data;
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+    });
+  }
+  getLogUserRows(filas) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`history_rows/${sessionStorage.sessionToken}/${filas}.json`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+        return data.data;
     }).catch((error) => {
       console.log(error);
       this.logout();
     });
   }
   //----------------------------Roles----------------------------------------------------------
+  validateUserinRole(id) {    
+    this.isRequesting = true;
+    return this.client_auth.fetch(`add_user_role/${sessionStorage.sessionToken}/${id}.json`, {
+      method: 'GET'
+    })
+    .then((response) => {
+      if (response.ok) {
+          return response.json();
+      } else {
+        throw new Error('Something went wrong');
+      }
+    })
+    .then((data) => {
+      this.isRequesting = false;
+        return data;
+    }).catch((error) => {
+      console.log(error);
+      this.logout();
+    });
+  }
   getSelectRoles(id) {    
     this.isRequesting = true;
     return this.client_auth.fetch(`group_membership/${sessionStorage.sessionToken}/${id}.json`, {
@@ -670,7 +705,7 @@ updatePolicies(policyData) {
           this.logout();
         }
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
@@ -697,7 +732,7 @@ updatePolicies(policyData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
      /* .then(response => response.json())
@@ -729,7 +764,7 @@ updatePolicies(policyData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -829,7 +864,7 @@ getUpdateRole(roleData) {
       return data;
     }).catch((error) => {
       console.log(error);
-      //console.log("401 UNAUTHORIZED");
+      //console.log(error);
       this.logout();
     });
   }
@@ -859,7 +894,7 @@ getUpdateRole(roleData) {
       return data;
     }).catch((error) => {
       console.log(error);
-      //console.log("401 UNAUTHORIZED");
+      //console.log(error);
       this.logout();
     });
     /*
@@ -891,7 +926,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       console.log(error);
-      //console.log("401 UNAUTHORIZED");
+      //console.log(error);
       this.logout();
     });
   }
@@ -946,7 +981,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
   }
@@ -976,7 +1011,7 @@ getUpdateRole(roleData) {
         return data;
     }).catch((error) => {
       console.log(error);
-      //console.log("401 UNAUTHORIZED");
+      //console.log(error);
       this.logout();
     });
   }
@@ -1093,7 +1128,7 @@ getUpdateRole(roleData) {
           this.logout();
         }
     }).catch((error) => {
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1125,7 +1160,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
        this.logout();
     });
   }
@@ -1150,7 +1185,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
        this.logout();
     });
       /*.then(response => response.json())
@@ -1222,7 +1257,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
        this.logout();
     });
       /*.then(response => response.json())
@@ -1270,7 +1305,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
        this.logout();
     });
 
@@ -1306,7 +1341,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1335,7 +1370,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1381,7 +1416,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       
@@ -1438,7 +1473,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
 
@@ -1495,7 +1530,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1532,7 +1567,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1562,7 +1597,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1607,7 +1642,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1654,7 +1689,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
 
@@ -1702,7 +1737,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*.then(response => response.json())
@@ -1734,7 +1769,7 @@ getUpdateRole(roleData) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -1767,7 +1802,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -1800,7 +1835,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -1833,7 +1868,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       
@@ -1867,7 +1902,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -1900,7 +1935,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -1933,7 +1968,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -1988,7 +2023,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2030,7 +2065,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2072,7 +2107,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2105,7 +2140,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });/*
         .then(response => response.json())
@@ -2138,7 +2173,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2179,7 +2214,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
      this.logout();
     });
         /*.then(response => response.json())
@@ -2220,7 +2255,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2261,7 +2296,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
       /*  .then(response => response.json())
@@ -2295,7 +2330,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
 
@@ -2329,7 +2364,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2389,7 +2424,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2434,7 +2469,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2479,7 +2514,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2511,7 +2546,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2542,7 +2577,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
 
@@ -2574,7 +2609,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2605,7 +2640,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2637,7 +2672,7 @@ getVariableList(botId) {
         }*/
     }).catch((error) => {
       //console.log(error);
-      //console.log("401 UNAUTHORIZED");
+      //console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2669,7 +2704,7 @@ getVariableList(botId) {
         }*/
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2701,7 +2736,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2733,7 +2768,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2765,7 +2800,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2797,7 +2832,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2840,7 +2875,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2894,7 +2929,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
 
@@ -2938,7 +2973,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -2970,7 +3005,7 @@ getVariableList(botId) {
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     });
         /*.then(response => response.json())
@@ -3078,7 +3113,7 @@ deleteVariables(botid,owner,key,value) {
         return data.cont;
     }).catch((error) => {
       console.log(error);
-      //console.log("401 UNAUTHORIZED");
+      //console.log(error);
       this.logout();
     }); 
         /*.then(response => response.json())
@@ -3121,7 +3156,7 @@ sendMessageToBroadcast(botId,message)
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
      this.logout();
     }); 
         /*.then(response => response.json())
@@ -3172,7 +3207,7 @@ sendMessageToBroadcast(botId,message)
       return data;
     }).catch((error) => {
       console.log(error);
-      //console.log("401 UNAUTHORIZED");
+      //console.log(error);
       this.logout();
     });
     }
@@ -3200,7 +3235,7 @@ sendMessageToBroadcast(botId,message)
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     }); 
     }
@@ -3228,7 +3263,7 @@ sendMessageToBroadcast(botId,message)
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     }); 
     }
@@ -3256,7 +3291,7 @@ sendMessageToBroadcast(botId,message)
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     }); 
     }
@@ -3284,7 +3319,7 @@ sendMessageToBroadcast(botId,message)
         }
     }).catch((error) => {
       console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     }); 
     }
@@ -3312,7 +3347,7 @@ sendMessageToBroadcast(botId,message)
         }
     }).catch((error) => {
       //console.log(error);
-      console.log("401 UNAUTHORIZED");
+      console.log(error);
       this.logout();
     }); 
         /*.then(response => response.json())

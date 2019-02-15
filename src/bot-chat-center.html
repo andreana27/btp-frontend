@@ -175,15 +175,26 @@
                     <div class="row">
                       <ul class="friend-list" repeat.for="key of key_list">
                         <li>
-                          <div class="col-md-5"><input type="text" class="form-control" value.bind="key.storage_key"></div>
+                          <div class="col-md-4"><input type="text" class="form-control" value.bind="key.storage_key"></div>
                           <div class="col-md-4"><input type="text" class="form-control" value.bind="key.storage_value"></div>
                           <div class="col-md-1"><button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeVariable(id_usuario,key.storage_key,key.storage_value)"><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                          <div class="col-md-1"><button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeVariable(id_usuario,key.storage_key,key.storage_value)"><i class="fa fa-plus" aria-hidden="true"></i></button></div>
+                        </li>
+
+                      </ul>
+
+                      <ul class="friend-list" >
+                        <li>
+                          <div class="col-md-4"><input type="text" class="form-control" value.bind="z"></div>
+                          <div class="col-md-4"><input type="text" class="form-control" value.bind="z"></div>
+                          <div class="col-md-1"><button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeVariable(id_usuario,key.storage_key,key.storage_value)"><i class="fa fa-trash" aria-hidden="true"></i></button></div>
+                          <div class="col-md-1"><button type="button" class="btn btn-default btn-circle btn-xl" click.delegate="removeVariable(id_usuario,key.storage_key,key.storage_value)"><i class="fa fa-plus" aria-hidden="true"></i></button></div>
                         </li>
                       </ul>
                     </div>
                     <div>
                       <br>
-                      <button type="button" class="btn btn-default " click.delegate="additem('variable')"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+                      <button type="button" class="btn btn-default " click.delegate="add('variable')"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
                     </div>
                   </div>
                   </div>

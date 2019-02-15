@@ -31,21 +31,24 @@ export class UserEdit {
   
 //********************************************************
   UpdateUserData(){    
-    //console.log(this.userInfo);
-    this.api.getUpdateUser(this.userInfo).then((resultado)=>{
+    if(this.userInfo.first_name=="" || this.userInfo.last_name==""){
+      toastr.error('Check the fields of first and last name');
+    }else{
+      this.api.getUpdateUser(this.userInfo).then((resultado)=>{
       try{
         console.log(resultado.data);
         if(resultado.data==1){
             this.router.navigate('user/manager');
         }else{
           toastr.warning('Action not done');
-        }               
-          
+        } 
         }catch(e){
-          //exception
+          console.log(e);
         }
 
          });
+    }
+    
   }
   
   handleClick(){

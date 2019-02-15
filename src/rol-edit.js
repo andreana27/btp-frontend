@@ -194,24 +194,29 @@ export class UserEdit {
   //*******************************************************************
 
   Adduser(iduser,idrole){
-    console.log("datos user: "+iduser+" role: "+idrole);
+    //verificar que el usuario no este en otro rol--------------
     this.userol.idrol=idrole;
     this.userol.iduser=iduser;
-    this.api.addUserMembership(this.userol).then((resultado)=>{
-          //console.log(resultado);
-          //ruta
-          try{
-          console.log(resultado.data);
-          if(resultado.data==='ok add'){
-            this.userol.idrol='';
-            this.userol.iduser='';
-            toastr.success("Added User ID: "+iduser);
-            window.location.reload();
+     this.api.validateUserinRole(iduser).then(response => {
+          //if the user already exists
+          if (response.count > 0) {            
+            toastr.warning('User id: '+iduser+' already registered in a role.');
           }else{
-            toastr.error(resultado.data);
-          }
-        }catch(e){}
-         });
+            this.api.addUserMembership(this.userol).then((resultado)=>{
+            try{
+              if(resultado.data==='ok add'){
+                this.userol.idrol='';
+                this.userol.iduser='';
+                toastr.success("Added User ID: "+iduser);
+                window.location.reload();
+              }else{
+                toastr.error(resultado.data);
+              }
+            }catch(e){}
+             });
+            }
+        });
+    
         
   }
   addFeature(id){

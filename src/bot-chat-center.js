@@ -207,7 +207,22 @@ export class BotChatCenter {
       console.log(owner,key,value);
        this.api.deleteVariables(this.selectedBotId,owner.trim(),key.trim(),value.trim()).then(borrar => {
         this.resultado=borrar.data;
-        console.log("resultado ",this.resultado);
+        if(this.resultado>0){
+          toastr.success('The bot variable is deleted');
+        }else{
+           toastr.error('The variable was not eliminated');
+         }
+      });
+    }
+    addVariable(owner,key,value){
+      console.log(owner,key,value);
+       this.api.insertVariables(this.selectedBotId,owner.trim(),key.trim(),value.trim()).then(borrar => {
+        this.resultado=borrar.data;
+        if(this.resultado>0){
+          toastr.success('The bot variable is added');
+        }else{
+           toastr.error('The variable was not added');
+         }
       });
     }
 /*

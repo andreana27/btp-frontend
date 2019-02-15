@@ -112,7 +112,7 @@ export class UserManager {
                      this.politicas=datosF;
                      console.log("resultado: "+this.politicas.data);
                      if(datosF.data==1){
-                        toastr.success('Policy has been update');
+                        toastr.success('Policy has been update '+name);
                      }else{
                       toastr.error('Unrealized policy');
                      }
@@ -122,7 +122,7 @@ export class UserManager {
                      }
                   });
           }else{
-              toastr.error('Day format is not correct');
+              toastr.error('Day format is not correct,only numbers up to two digits are accepted');
           }
       
       
@@ -168,7 +168,7 @@ export class UserManager {
   formato(texto){
     
     //((0[1-9])|((1|2)[0-9])|(30|31))[/]((0[1-9])|10|11|12)[/]((1|2)[0-9][0-9][0-9])
-    var re=/^((0[1-9])[0-9]+)$/
+    var re=/^(([1-9][0-9])|([1-9]))$/
     //var re = /^((0[1-9])|((1|2)[0-9])|(30|31))$/;
     //var re = /^((1|2)[0-9][0-9][0-9])-((0[1-9])|10|11|12)-((0[1-9])|((1|2)[0-9])|(30|31))$/;
     return re.test(texto);
