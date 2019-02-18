@@ -249,7 +249,7 @@ export class WebAPI {
   	// .. and set root to login.
     //this.app.setRoot('home')
   	//this.app.setRoot('login')
-    window.location="../#";
+    window.location="../index.html";
     return true;
   }
 
