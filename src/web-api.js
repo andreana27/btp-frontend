@@ -247,7 +247,9 @@ export class WebAPI {
   	// .. and from the session object
   	this.session = null;
   	// .. and set root to login.
-  	this.app.setRoot('login')
+    //this.app.setRoot('home')
+  	//this.app.setRoot('login')
+    window.location="../#";
     return true;
   }
 
