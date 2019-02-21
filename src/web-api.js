@@ -248,8 +248,8 @@ export class WebAPI {
   	this.session = null;
   	// .. and set root to login.
     //this.app.setRoot('home')
-  	//this.app.setRoot('login')
-    window.location="../index.html";
+  	this.app.setRoot('login')
+    //window.location="../index.html";
     return true;
   }
 
@@ -1882,9 +1882,9 @@ getVariableList(botId) {
     }
 
     //Gets the record count for the variables registered to a bot
-    getBotMessageRecordCount(botId) {
+    getBotMessageRecordCount(botId,owner) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_conversations_recordcount/${sessionStorage.sessionToken}/${botId}.json`, {
+      return this.client_auth.fetch(`bot_conversations_recordcount/${sessionStorage.sessionToken}/${botId}/${owner}.json`, {
         method: 'GET'
       })
       .then((response) => {
@@ -1915,9 +1915,9 @@ getVariableList(botId) {
     }
 
     //Returns a segment of the variable records stored fot the selected bot
-    getBotMessages(botId,startLimit,endLimit) {
+    getBotMessages(botId,startLimit,endLimit,owner) {
       this.isRequesting = true;
-      return this.client_auth.fetch(`bot_conversations/${sessionStorage.sessionToken}/${botId}/${startLimit}/${endLimit}.json`, {
+      return this.client_auth.fetch(`bot_conversations/${sessionStorage.sessionToken}/${botId}/${startLimit}/${endLimit}/${owner}.json`, {
         method: 'GET'
       })
       .then((response) => {
@@ -1929,12 +1929,7 @@ getVariableList(botId) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
         return data.data;
-      }catch(err){
-        console.error(err);
-        this.logout();
-        }
     }).catch((error) => {
       //console.log(error);
       console.log(error);
@@ -1962,12 +1957,8 @@ getVariableList(botId) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
         return data.data;
-      }catch(err){
-        console.error(err);
-        this.logout();
-        }
+
     }).catch((error) => {
       //console.log(error);
       console.log(error);
@@ -2869,14 +2860,8 @@ getVariableList(botId) {
     })
     .then((data) => {
       this.isRequesting = false;
-      try{
         return data;
-      }catch(err){
-        console.error(err);
-        this.logout();
-        }
     }).catch((error) => {
-      //console.log(error);
       console.log(error);
       this.logout();
     });
@@ -3045,15 +3030,16 @@ deleteVariables(botid,owner,key,value) {
       this.logout();
     });
   } 
-  insertVariables(botid,owner,key,value) {//obteiene las varialbes por usuario
+updateVariables(botid,owner,key,value) {
     this.isRequesting = true;
     let formData = new FormData();
+    formData.append('token', sessionStorage.sessionToken);
     formData.append('id', botid);
     formData.append('owner', owner);
-    formData.append('token', sessionStorage.sessionToken);
     formData.append('key', key);
     formData.append('value', value);
-    return this.client_auth.fetch(`insert_variable.json`, {
+    console.log(owner,key,value,botid,sessionStorage.sessionToken);
+    return this.client_auth.fetch(`update_variable.json`, {
         method: 'POST',
         body: formData
       })
@@ -3072,6 +3058,7 @@ deleteVariables(botid,owner,key,value) {
       this.logout();
     });
   } 
+
  variablesByUsers(botid,owner) {//obteiene las varialbes por usuario
     this.isRequesting = true;
     let formData = new FormData();
